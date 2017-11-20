@@ -11,6 +11,8 @@ var MongoStore = require('connect-mongo')(session);
 
 
 var app = express();
+var raw = require('./fromAWS/raw')
+
 //not using session in this project but good to have incase
 app.use(session(
   { secret: process.env.SESSION_SECRET,
@@ -24,6 +26,15 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 
+
+app.get("/getraw",function(req,res){
+  raw().then((response)=>{
+    res.json(response)
+  })
+  .catch((err)=>{
+    res.end(err)
+  })
+})
 //APIs Start
 var db = require('./models/db') //mongoose required common db
 

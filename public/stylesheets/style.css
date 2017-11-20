@@ -1,3 +1,48 @@
 body {
   background: white;
 }
+
+body .title {
+  text-align: center;
+  font-weight: bold;
+  font-family: "Spectral SC";
+}
+
+body #mainframe {
+  background: #efefea;
+  width: 80%;
+  margin: 0 auto;
+  display: flex;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+}
+
+body #mainframe #card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 10px;
+  width: 150px;
+  background: #ffffc9;
+  border-radius: 3px;
+  font-size: 1em;
+}
+
+body #mainframe #card #symbol {
+  color: #913232;
+  font-weight: bold;
+  font-family: "Spectral SC";
+}
+
+body #mainframe #card #strength {
+  color: #315391;
+  font-weight: bold;
+  font-family: "Berkshire Swash";
+}
+
+body #mainframe #card #events {
+  color: green;
+  font-weight: bold;
+  font-family: "Berkshire Swash";
+  cursor: pointer;
+}
