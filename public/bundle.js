@@ -45036,6 +45036,7 @@ var Strength = function (_Component) {
         var symbol = d["0"];
         var strength = Number(d["1"]).toFixed(2) + "%";
         var totalEvents = _this2.symbolEvents(symbol).length;
+        var displayEvent = totalEvents > 0 ? totalEvents > 1 ? totalEvents + " Events" : "1 Event" : "";
         return _react2.default.createElement(
           "div",
           { key: idx,
@@ -45064,8 +45065,7 @@ var Strength = function (_Component) {
           _react2.default.createElement(
             "div",
             { className: "events" },
-            totalEvents,
-            " Events"
+            displayEvent
           )
         );
       });

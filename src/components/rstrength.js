@@ -21,6 +21,7 @@ class Strength extends Component {
       let symbol = d["0"]
       let strength = (Number(d["1"])).toFixed(2)+"%"
       let totalEvents = this.symbolEvents(symbol).length
+      let displayEvent = totalEvents>0 ? (totalEvents>1 ? totalEvents + " Events" : "1 Event") :""
       return (
           <div key={idx}
            className={this.findClass(d)}
@@ -31,7 +32,7 @@ class Strength extends Component {
             <div className="symbol">{symbol}
               <span className="strength"> {strength}</span>
             </div>
-            <div className="events">{totalEvents} Events</div>
+            <div className="events">{displayEvent}</div>
           </div>
       )
     }))
