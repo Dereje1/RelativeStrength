@@ -6,39 +6,54 @@ body{
     .title{
       text-align: center;
       font-weight: bold;
-      font-family: "Spectral SC"
+      font-family: "Spectral SC";
+      &.sub{
+        color:#c45d1d;
+      }
     }
-    #mainframe{
-      background: #efefea;
-      width:80%;
-      margin:0 auto;
-      display: flex;
-      justify-content: flex-start;
-      flex-wrap: wrap;
-      #card{
+    #all{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+      .mainframe{
+        background: #efefea;
+        margin:0 auto;
         display: flex;
         flex-direction: column;
-        align-items: center;
-        margin:10px;
-        width:150px;
-        background:#ffffc9;
-        border-radius: 3px;
-        font-size: 1em;
-        #symbol{
-          color: #913232;
-          font-weight: bold;
-          font-family: "Spectral SC"
-        }
-        #strength{
-          color: #315391;
-          font-weight: bold;
-          font-family: "Berkshire Swash"
-        }
-        #events{
-          color: green;
-          font-weight: bold;
-          font-family: "Berkshire Swash";
+        justify-content: flex-start;
+        .card {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          margin:10px;
+          width:150px;
+          background:#d6e5ff;
+          border-radius: 3px;
+          font-size: 1.5em;
           cursor:pointer;
+          &.lit{
+            background: white;
+            transform: translateY(-10px);
+            transform: translatex(-2px);
+            transform: scale(1.1);
+            box-shadow: 10px 5px 5px black;
+          }
+          .symbol{
+            color: #913232;
+            font-weight: bold;
+            font-family: "Spectral SC";
+
+            .strength{
+              color: #315391;
+              font-weight: bold;
+              font-family: "Spectral SC";
+            }
+          }
+          .events{
+            color: green;
+            font-weight: bold;
+            font-family: "Spectral SC";
+          }
         }
       }
     }

@@ -25,10 +25,10 @@ function toJSON(data){
     let frame = (r.split("\n").slice(1,9))
     let frameDesc
     if(idx===1){
-      frameDesc = "24 hourly bars"
+      frameDesc = "Past 24 Hours"
     }
     else if (idx===0){
-      frameDesc = "168 hourly bars"
+      frameDesc = "Past Week"
     }
     else{
       frameDesc = "Past Year"

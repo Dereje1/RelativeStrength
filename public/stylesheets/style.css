@@ -8,41 +8,58 @@ body .title {
   font-family: "Spectral SC";
 }
 
-body #mainframe {
-  background: #efefea;
-  width: 80%;
-  margin: 0 auto;
-  display: flex;
-  justify-content: flex-start;
-  flex-wrap: wrap;
+body .title.sub {
+  color: #c45d1d;
 }
 
-body #mainframe #card {
+body #all {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+body #all .mainframe {
+  background: #efefea;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+body #all .mainframe .card {
   display: flex;
   flex-direction: column;
   align-items: center;
   margin: 10px;
   width: 150px;
-  background: #ffffc9;
+  background: #d6e5ff;
   border-radius: 3px;
-  font-size: 1em;
+  font-size: 1.5em;
+  cursor: pointer;
 }
 
-body #mainframe #card #symbol {
+body #all .mainframe .card.lit {
+  background: white;
+  transform: translateY(-10px);
+  transform: translatex(-2px);
+  transform: scale(1.1);
+  box-shadow: 10px 5px 5px black;
+}
+
+body #all .mainframe .card .symbol {
   color: #913232;
   font-weight: bold;
   font-family: "Spectral SC";
 }
 
-body #mainframe #card #strength {
+body #all .mainframe .card .symbol .strength {
   color: #315391;
   font-weight: bold;
-  font-family: "Berkshire Swash";
+  font-family: "Spectral SC";
 }
 
-body #mainframe #card #events {
+body #all .mainframe .card .events {
   color: green;
   font-weight: bold;
-  font-family: "Berkshire Swash";
-  cursor: pointer;
+  font-family: "Spectral SC";
 }
