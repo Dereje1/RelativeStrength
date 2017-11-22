@@ -14,29 +14,48 @@ class Home extends Component {
       hovered:"",
       hoverClass:"card",
       displayModal:false,
-      currecnyInfo:""
+      currecnyInfo:"",
+      secondsSinceUpdate:0
     }
   }
   componentDidMount() {
-    if(!this.freshData()){
-      axios.get('/api/getraw')
-      .then((response)=>{
-        this.setState({
-          data:[response.data],
-          highImpact:this.filterEvents(response.data.weeklyevents.event),
-        },()=>this.storeLocal())
-
+    if(!this.freshData()){this.updateData()}
+    this.Interval = setInterval(()=>{
+      this.setState({
+        secondsSinceUpdate:this.state.secondsSinceUpdate-1
       })
-    }
+      if (this.state.secondsSinceUpdate<-1200){//20 minutes = 15 min MT4 + 5 min AWS cycles
+        this.updateData()
+      }
+    },1000)
+  }
+  componentWillUnmount() {
+    clearInterval(this.Interval)
+  }
+  updateData(){
+    axios.get('/api/getraw')
+    .then((response)=>{
+      this.setState({
+        data:[response.data],
+        highImpact:this.filterEvents(response.data.weeklyevents.event),
+        secondsSinceUpdate:this.mt4LastPush(response.data.updated)
+      },()=>this.storeLocal())
+    })
+  }
+  mt4LastPush(lastUpdate){
+    //this.state.data[0].updated
+    let inSecs = moment(lastUpdate,"YYYY.MM.DD h:mm:ss").diff(moment())/1000
+    return Math.floor(inSecs)
   }
   storeLocal(){
-  localStorage.setItem('fullState', JSON.stringify(this.state));
+    localStorage.setItem('fullState', JSON.stringify(this.state));
   }
   freshData(){
     if(!localStorage.getItem('fullState')){return false}
     let previousUpdate= JSON.parse(localStorage.getItem('fullState'))
     let elapsedTime = moment(previousUpdate.data[0].updated,"YYYY.MM.DD h:mm:ss").diff(moment())
     if(elapsedTime>-900000){
+      previousUpdate.secondsSinceUpdate=this.mt4LastPush(previousUpdate.data[0].updated)
       this.setState(previousUpdate)
       return true
     }
@@ -49,7 +68,8 @@ class Home extends Component {
       let eDay = e.date[0]
       let eTime=e.time[0]
       let when = eDay + "," + eTime
-      let elapsed = moment(when,"MM-DD-YYYY,h:mmA").diff(moment())
+      var gmtDateTime = moment.utc(when, "MM-DD-YYYY,h:mmA")
+      let elapsed = gmtDateTime.local().diff(moment())
       return (elapsed>0 && e.impact[0]==="High")
     })
     return (fEvents)
@@ -79,11 +99,12 @@ class Home extends Component {
       );
     }
     else{
+
       return(
         <div>
           <Well >
             <h3 className="title"> Relative Strength of Major Currencies Against the USD</h3>
-            <h4 className="title sub">Updated {moment(this.state.data[0].updated,"YYYY.MM.DD h:mm:ss").fromNow()}</h4>
+            <h4 className="title sub">Updated {Math.floor(-1*this.state.secondsSinceUpdate/60)} Minutes Ago</h4>
           </Well>
           <div id="all">
             <Strength alldata={this.state}
@@ -91,10 +112,11 @@ class Home extends Component {
              hovStart={(d)=>this.startHover(d)}
              hovEnd={(d)=>this.stopHover(d)}
              hoveredSymbol= {this.state.hovered}
+             displayEvents={true}
              zoomed={(c)=>this.onZoom(c)}
              />
              <Strength alldata={this.state}
-              timeframe="Past Week"
+              timeframe="Past 10 Days"
               hovStart={(d)=>this.startHover(d)}
               hovEnd={(d)=>this.stopHover(d)}
               hoveredSymbol= {this.state.hovered}
@@ -114,6 +136,7 @@ class Home extends Component {
           currency={this.state.currecnyInfo}
           zoomInfo={this.state.highImpact}
           />
+            <div id="gitsource"><a href="https://github.com/Dereje1/RelativeStrength" target="_blank"> <i className="fa fa-github" aria-hidden="true"></i> Github</a></div>
         </div>
       )
     }

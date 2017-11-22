@@ -39,7 +39,8 @@ class Zoom extends Component {
       let eDay = n.date[0]
       let eTime=n.time[0]
       let when = eDay + "," + eTime
-      let happens = moment(when,"MM-DD-YYYY,h:mmA").fromNow()
+      var gmtDateTime = moment.utc(when, "MM-DD-YYYY,h:mmA")
+      let happens = gmtDateTime.local().fromNow()
       return(
         <p key={idx}>{n.title[0] + " - " + happens}</p>
       )

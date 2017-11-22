@@ -28,7 +28,7 @@ function toJSON(data){
       frameDesc = "Past 24 Hours"
     }
     else if (idx===0){
-      frameDesc = "Past Week"
+      frameDesc = "Past 10 Days"
     }
     else{
       frameDesc = "Past Year"

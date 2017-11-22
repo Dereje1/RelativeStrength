@@ -32,9 +32,12 @@ body #all .mainframe .card {
   align-items: center;
   margin: 10px;
   width: 150px;
-  background: #d6e5ff;
+  background: #d9dde3;
   border-radius: 3px;
   font-size: 1.5em;
+}
+
+body #all .mainframe .card.day {
   cursor: pointer;
 }
 
@@ -44,6 +47,10 @@ body #all .mainframe .card.lit {
   transform: translatex(-2px);
   transform: scale(1.1);
   box-shadow: 10px 5px 5px black;
+}
+
+body #all .mainframe .card.usd {
+  background: #f0d8b9;
 }
 
 body #all .mainframe .card .symbol {
@@ -59,7 +66,22 @@ body #all .mainframe .card .symbol .strength {
 }
 
 body #all .mainframe .card .events {
-  color: green;
+  color: #9e3008;
   font-weight: bold;
-  font-family: "Spectral SC";
+  font-family: 'Fredoka One', cursive;
+  cursor: pointer;
+}
+
+body #gitsource {
+  padding-top: 50px;
+  text-align: center;
+  text-decoration: none;
+  text-transform: full-width;
+  font-weight: 900;
+  font-size: 18px;
+  color: a;
+}
+
+body #gitsource :hover {
+  text-decoration: none;
 }
