@@ -57,7 +57,7 @@ class Zoom extends Component {
       >
       <Modal.Header closeButton>
         <Modal.Title id="contained-modal-title-zoom">
-          {this.props.currency} High Impact Events Coming Up This Week
+          <span className="currency">{this.props.currency}</span> High Impact Events Coming Up This Week
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>

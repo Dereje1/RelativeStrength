@@ -52894,7 +52894,11 @@ var Zoom = function (_Component) {
           _react2.default.createElement(
             _reactBootstrap.Modal.Title,
             { id: 'contained-modal-title-zoom' },
-            this.props.currency,
+            _react2.default.createElement(
+              'span',
+              { className: 'currency' },
+              this.props.currency
+            ),
             ' High Impact Events Coming Up This Week'
           )
         ),

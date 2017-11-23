@@ -30,9 +30,7 @@ body{
           background:#d9dde3;
           border-radius: 3px;
           font-size: 1.5em;
-          &.day{
-            cursor: pointer;
-          }
+          cursor: default;
           &.lit{
             background: white;
             transform: translateY(-10px);
@@ -73,6 +71,22 @@ body{
       color:
       a:hover{
         text-decoration: none;
+      }
+    }
+    @media screen and (max-width: 640px){
+      #all{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+    }
+  }
+  .modal{
+    #contained-modal-title-zoom{
+      text-align: center;
+      .currency{
+        font-weight: bold;
       }
     }
   }

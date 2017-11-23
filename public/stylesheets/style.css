@@ -35,10 +35,7 @@ body #all .mainframe .card {
   background: #d9dde3;
   border-radius: 3px;
   font-size: 1.5em;
-}
-
-body #all .mainframe .card.day {
-  cursor: pointer;
+  cursor: default;
 }
 
 body #all .mainframe .card.lit {
@@ -84,4 +81,21 @@ body #gitsource {
 
 body #gitsource :hover {
   text-decoration: none;
+}
+
+@media screen and (max-width: 640px) {
+  body #all {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+}
+
+.modal #contained-modal-title-zoom {
+  text-align: center;
+}
+
+.modal #contained-modal-title-zoom .currency {
+  font-weight: bold;
 }
