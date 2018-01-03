@@ -27,13 +27,14 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 
-app.get("/getraw",function(req,res){
-  raw().then((response)=>{
-    res.json(response)
-  })
-  .catch((err)=>{
-    res.end(err)
-  })
+app.get("/getraw",function(req,res){//raw data access route
+      console.log(req.session.authenticated)
+      raw().then((response)=>{
+        res.json(response)
+      })
+      .catch((err)=>{
+        res.end(err)
+      })
 })
 //APIs Start
 var db = require('./models/db') //mongoose required common db

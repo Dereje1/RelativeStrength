@@ -42,7 +42,7 @@ class Zoom extends Component {
       var gmtDateTime = moment.utc(when, "MM-DD-YYYY,h:mmA")
       let happens = gmtDateTime.local().fromNow()
       return(
-        <p key={idx}>{n.title[0] + " - " + happens}</p>
+        <p key={idx} className="event">{n.title[0]}<span className="time"> {"  " + happens}</span></p>
       )
     })
     return <div>{formatted}</div>
@@ -57,10 +57,10 @@ class Zoom extends Component {
       >
       <Modal.Header closeButton>
         <Modal.Title id="contained-modal-title-zoom">
-          <span className="currency">{this.props.currency}</span> High Impact Events Coming Up This Week
+          <span className="currency">{this.props.currency}</span> - High Impact Events Coming Up This Week
         </Modal.Title>
       </Modal.Header>
-      <Modal.Body>
+      <Modal.Body id="mbody">
         {this.processCalendar()}
       </Modal.Body>
       <Modal.Footer id="zoomfooter">

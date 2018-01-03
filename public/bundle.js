@@ -52867,8 +52867,14 @@ var Zoom = function (_Component) {
         var happens = gmtDateTime.local().fromNow();
         return _react2.default.createElement(
           'p',
-          { key: idx },
-          n.title[0] + " - " + happens
+          { key: idx, className: 'event' },
+          n.title[0],
+          _react2.default.createElement(
+            'span',
+            { className: 'time' },
+            ' ',
+            "  " + happens
+          )
         );
       });
       return _react2.default.createElement(
@@ -52899,12 +52905,12 @@ var Zoom = function (_Component) {
               { className: 'currency' },
               this.props.currency
             ),
-            ' High Impact Events Coming Up This Week'
+            ' - High Impact Events Coming Up This Week'
           )
         ),
         _react2.default.createElement(
           _reactBootstrap.Modal.Body,
-          null,
+          { id: 'mbody' },
           this.processCalendar()
         ),
         _react2.default.createElement(_reactBootstrap.Modal.Footer, { id: 'zoomfooter' })

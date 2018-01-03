@@ -43,12 +43,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Dereje1/Book-Trading.git"
+    "url": "git+https://github.com/Dereje1/RelativeStrengthRelativeStrength.git"
   },
   "author": "Dereje Getahun",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Dereje1/Book-Trading/issues"
+    "url": "https://github.com/Dereje1/RelativeStrength/issues"
   },
-  "homepage": "https://github.com/Dereje1/Book-Trading#readme"
+  "homepage": "https://github.com/Dereje1/RelativeStrength#readme"
 }
