@@ -28,7 +28,7 @@ app.use(cookieParser());
 
 
 app.get("/getraw",function(req,res){//raw data access route
-      console.log(req.session.authenticated)
+      //console.log(req.session.authenticated)
       raw().then((response)=>{
         res.json(response)
       })

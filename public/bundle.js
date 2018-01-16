@@ -52122,6 +52122,8 @@ var _moment = __webpack_require__(0);
 
 var _moment2 = _interopRequireDefault(_moment);
 
+var _reactBootstrap = __webpack_require__(260);
+
 var _rstrength = __webpack_require__(393);
 
 var _rstrength2 = _interopRequireDefault(_rstrength);
@@ -52130,15 +52132,17 @@ var _modalzoom = __webpack_require__(394);
 
 var _modalzoom2 = _interopRequireDefault(_modalzoom);
 
-var _reactBootstrap = __webpack_require__(260);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } // neeed for time conversion
+// displays strenngth data for different tfs
+
+
+//modal zoom for
 
 var Home = function (_Component) {
   _inherits(Home, _Component);
@@ -52149,13 +52153,13 @@ var Home = function (_Component) {
     var _this = _possibleConstructorReturn(this, (Home.__proto__ || Object.getPrototypeOf(Home)).call(this, props));
 
     _this.state = {
-      data: [],
-      highImpact: [],
-      hovered: "",
+      data: [], //for entire data from api
+      highImpact: [], // for high impact events
+      hovered: "", //Stores hovered currency name
       hoverClass: "card",
-      displayModal: false,
+      displayModal: false, // modal show/not show on event click
       currecnyInfo: "",
-      secondsSinceUpdate: 0
+      secondsSinceUpdate: 0 //seconds since last mt4 Update
     };
     return _this;
   }
@@ -52167,8 +52171,9 @@ var Home = function (_Component) {
 
       if (!this.freshData()) {
         this.updateData();
-      }
+      } //on first mount check if data is new, if not update
       this.Interval = setInterval(function () {
+        //start timer interval update every sec
         _this2.setState({
           secondsSinceUpdate: _this2.state.secondsSinceUpdate - 1
         });
@@ -52176,7 +52181,7 @@ var Home = function (_Component) {
           //20 minutes = 15 min MT4 + 5 min AWS cycles
           _this2.updateData();
         }
-      }, 1000);
+      }, 60000);
     }
   }, {
     key: 'componentWillUnmount',
@@ -52188,7 +52193,10 @@ var Home = function (_Component) {
     value: function updateData() {
       var _this3 = this;
 
-      _axios2.default.get('/api/getraw').then(function (response) {
+      //use to update the data
+      _axios2.default.get('/api/getraw') //fetch from backend
+      .then(function (response) {
+        //set state then store state in localStorage
         _this3.setState({
           data: [response.data],
           highImpact: _this3.filterEvents(response.data.weeklyevents.event),
@@ -52201,47 +52209,58 @@ var Home = function (_Component) {
   }, {
     key: 'mt4LastPush',
     value: function mt4LastPush(lastUpdate) {
-      //this.state.data[0].updated
+      //returns the number of seconds since last update
       var inSecs = (0, _moment2.default)(lastUpdate, "YYYY.MM.DD h:mm:ss").diff((0, _moment2.default)()) / 1000;
-      return Math.floor(inSecs);
+      var gmtUpdateTime = _moment2.default.utc(lastUpdate, "YYYY.MM.DD h:mm:ss"); //Changed mt4 to time stamp with gmt instead of eastern
+      var elapsedSinceUpdate = gmtUpdateTime.diff(_moment2.default.utc()) / 1000; // elapsed time in secs since update
+      return Math.floor(elapsedSinceUpdate);
     }
   }, {
     key: 'storeLocal',
     value: function storeLocal() {
+      //stores state in localStorage
       localStorage.setItem('fullState', JSON.stringify(this.state));
     }
   }, {
     key: 'freshData',
     value: function freshData() {
+      //returns true / false if current data has been updated since last mt4 cycle
       if (!localStorage.getItem('fullState')) {
         return false;
-      }
-      var previousUpdate = JSON.parse(localStorage.getItem('fullState'));
+      } //if not in local storage then data has never been pulled
+      var previousUpdate = JSON.parse(localStorage.getItem('fullState')); //last stored update
+      //returns elapsed time in milliseconds from current time
       var elapsedTime = (0, _moment2.default)(previousUpdate.data[0].updated, "YYYY.MM.DD h:mm:ss").diff((0, _moment2.default)());
       if (elapsedTime > -900000) {
+        //if it has been updated in last 15 minutes data is fresh
+        //records the seconds since update and set state
         previousUpdate.secondsSinceUpdate = this.mt4LastPush(previousUpdate.data[0].updated);
         this.setState(previousUpdate);
         return true;
       } else {
+        //data not fresh
         return false;
       }
     }
   }, {
     key: 'filterEvents',
     value: function filterEvents(events) {
+      //filters high impact events from forex factory
+      //events = all events
       var fEvents = events.filter(function (e) {
         var eDay = e.date[0];
         var eTime = e.time[0];
         var when = eDay + "," + eTime;
-        var gmtDateTime = _moment2.default.utc(when, "MM-DD-YYYY,h:mmA");
-        var elapsed = gmtDateTime.local().diff((0, _moment2.default)());
-        return elapsed > 0 && e.impact[0] === "High";
+        var gmtDateTime = _moment2.default.utc(when, "MM-DD-YYYY,h:mmA"); //ff event data comes in gmt
+        var elapsed = gmtDateTime.diff(_moment2.default.utc()); //if elapsed < 0 , event has already occured.
+        return elapsed > 0 && e.impact[0] === "High"; //filter high impact events that have not occured yet
       });
       return fEvents;
     }
   }, {
     key: 'startHover',
     value: function startHover(d) {
+      //onMouseEnter from Strength component set hovered state to symbol
       this.setState({
         hovered: d[0]
       });
@@ -52249,6 +52268,7 @@ var Home = function (_Component) {
   }, {
     key: 'stopHover',
     value: function stopHover() {
+      //onMouseLeave from Strength Component
       this.setState({
         hovered: ""
       });
@@ -52256,6 +52276,7 @@ var Home = function (_Component) {
   }, {
     key: 'onZoom',
     value: function onZoom(c) {
+      //on event click to zoom to open madal with events
       if (c[1] === 0) {
         return;
       }
@@ -52628,7 +52649,7 @@ webpackContext.id = 392;
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-
+ //creates and displays strength data for each currency for any given tf
 
 Object.defineProperty(exports, "__esModule", {
   value: true
@@ -52639,6 +52660,10 @@ var _createClass = function () { function defineProperties(target, props) { for 
 var _react = __webpack_require__(1);
 
 var _react2 = _interopRequireDefault(_react);
+
+var _moment = __webpack_require__(0);
+
+var _moment2 = _interopRequireDefault(_moment);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -52658,11 +52683,13 @@ var Strength = function (_Component) {
   }
 
   _createClass(Strength, [{
-    key: "findClass",
+    key: 'findClass',
     value: function findClass(d) {
+      //sets className for hovered symbol
       if (d[0] === this.props.hoveredSymbol) {
         return "card lit";
       } else {
+        //USD is base so add different class
         if (d[0] === "USD") {
           return "card usd";
         }
@@ -52670,27 +52697,43 @@ var Strength = function (_Component) {
       }
     }
   }, {
-    key: "symbolEvents",
+    key: 'symbolEvents',
     value: function symbolEvents(symbol) {
+      //returns all highimpact events for a particular symbol
       var symbEvent = this.props.alldata.highImpact.filter(function (h) {
         return h.country[0] === symbol;
       });
-      return symbEvent;
+      var soonEvent = false; //check for events within the next 24 hours
+      symbEvent.forEach(function (ev) {
+        if (!soonEvent) {
+          var eDay = ev.date[0];
+          var eTime = ev.time[0];
+          var when = eDay + "," + eTime;
+          var gmtDateTime = _moment2.default.utc(when, "MM-DD-YYYY,h:mmA");
+          var elapsed = gmtDateTime.diff(_moment2.default.utc());
+          soonEvent = elapsed < 86400000 ? true : false;
+        }
+      });
+      return [symbEvent, soonEvent];
     }
   }, {
-    key: "buildData",
+    key: 'buildData',
     value: function buildData() {
       var _this2 = this;
 
-      var strengthData = this.props.alldata.data[0][this.props.timeframe];
+      var strengthData = this.props.alldata.data[0][this.props.timeframe]; //extract data for given time frame (tf)
       if (this.props.displayEvents) {
+        //events are only displayed for shortest (24hr) tf
         return strengthData.map(function (d, idx) {
+          //parse thru each symbol
           var symbol = d["0"];
           var strength = Number(d["1"]).toFixed(2) + "%";
-          var totalEvents = _this2.symbolEvents(symbol).length;
+          var events = _this2.symbolEvents(symbol);
+          var totalEvents = events[0].length; //total # of events for symbol
           var displayEvent = totalEvents > 0 ? totalEvents > 1 ? totalEvents + " Events" : "1 Event" : "";
+          var eventClass = events[1] ? "events soon" : "events";
           return _react2.default.createElement(
-            "div",
+            'div',
             { key: idx,
               className: _this2.findClass(d),
               onMouseEnter: function onMouseEnter() {
@@ -52704,19 +52747,19 @@ var Strength = function (_Component) {
               }
             },
             _react2.default.createElement(
-              "div",
-              { className: "symbol" },
+              'div',
+              { className: 'symbol' },
               symbol,
               _react2.default.createElement(
-                "span",
-                { className: "strength" },
-                " ",
+                'span',
+                { className: 'strength' },
+                ' ',
                 strength
               )
             ),
             _react2.default.createElement(
-              "div",
-              { className: "events" },
+              'div',
+              { className: eventClass },
               displayEvent
             )
           );
@@ -52726,7 +52769,7 @@ var Strength = function (_Component) {
           var symbol = d["0"];
           var strength = Number(d["1"]).toFixed(2) + "%";
           return _react2.default.createElement(
-            "div",
+            'div',
             { key: idx,
               className: _this2.findClass(d),
               onMouseEnter: function onMouseEnter() {
@@ -52737,13 +52780,13 @@ var Strength = function (_Component) {
               }
             },
             _react2.default.createElement(
-              "div",
-              { className: "symbol" },
+              'div',
+              { className: 'symbol' },
               symbol,
               _react2.default.createElement(
-                "span",
-                { className: "strength" },
-                " ",
+                'span',
+                { className: 'strength' },
+                ' ',
                 strength
               )
             )
@@ -52752,19 +52795,19 @@ var Strength = function (_Component) {
       }
     }
   }, {
-    key: "render",
+    key: 'render',
     value: function render() {
       return _react2.default.createElement(
-        "div",
+        'div',
         null,
         _react2.default.createElement(
-          "h4",
-          { className: "title" },
+          'h4',
+          { className: 'title' },
           this.props.timeframe
         ),
         _react2.default.createElement(
-          "div",
-          { className: "mainframe" },
+          'div',
+          { className: 'mainframe' },
           this.buildData()
         )
       );
@@ -52781,7 +52824,7 @@ exports.default = Strength;
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
- //displays pin zoom modal
+ //displays event zoom modal
 
 Object.defineProperty(exports, "__esModule", {
   value: true
@@ -52856,7 +52899,9 @@ var Zoom = function (_Component) {
     value: function processCalendar() {
       var _this3 = this;
 
+      //gets calendar detail events and formats for modal
       var filtered = this.props.zoomInfo.filter(function (n) {
+        //filter all event currency for those that match with clicked
         return n.country[0] === _this3.props.currency;
       });
       var formatted = filtered.map(function (n, idx) {
@@ -52864,7 +52909,7 @@ var Zoom = function (_Component) {
         var eTime = n.time[0];
         var when = eDay + "," + eTime;
         var gmtDateTime = _moment2.default.utc(when, "MM-DD-YYYY,h:mmA");
-        var happens = gmtDateTime.local().fromNow();
+        var happens = gmtDateTime.utc().fromNow(); //momemnet from now computes when the event is to take place
         return _react2.default.createElement(
           'p',
           { key: idx, className: 'event' },

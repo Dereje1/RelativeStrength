@@ -1,4 +1,4 @@
-"use strict" //displays pin zoom modal
+"use strict" //displays event zoom modal
 import React, { Component } from 'react';
 import {Button,Modal} from 'react-bootstrap'
 import moment from 'moment'
@@ -31,8 +31,8 @@ class Zoom extends Component {
     },()=>this.props.reset());
   }
 
-  processCalendar(){
-    let filtered=this.props.zoomInfo.filter((n)=>{
+  processCalendar(){//gets calendar detail events and formats for modal
+    let filtered=this.props.zoomInfo.filter((n)=>{//filter all event currency for those that match with clicked
       return n.country[0]===this.props.currency
     })
     let formatted=filtered.map((n,idx)=>{
@@ -40,7 +40,7 @@ class Zoom extends Component {
       let eTime=n.time[0]
       let when = eDay + "," + eTime
       var gmtDateTime = moment.utc(when, "MM-DD-YYYY,h:mmA")
-      let happens = gmtDateTime.local().fromNow()
+      let happens = gmtDateTime.utc().fromNow()//momemnet from now computes when the event is to take place
       return(
         <p key={idx} className="event">{n.title[0]}<span className="time"> {"  " + happens}</span></p>
       )
