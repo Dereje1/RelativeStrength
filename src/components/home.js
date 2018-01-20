@@ -29,7 +29,7 @@ class Home extends Component {
       if (this.state.secondsSinceUpdate<-1200){//20 minutes = 15 min MT4 + 5 min AWS cycles
         this.updateData()
       }
-    },60000)
+    },1000)
   }
   componentWillUnmount() {
     clearInterval(this.Interval)
@@ -111,7 +111,7 @@ class Home extends Component {
         <div>
           <Well >
             <h3 className="title"> Relative Strength of Major Currencies Against the USD</h3>
-            <h4 className="title sub">Updated {Math.floor(-1*this.state.secondsSinceUpdate/60)} Minutes Ago</h4>
+            <h4 className="title sub">Updated {(-1*this.state.secondsSinceUpdate)} Seconds Ago</h4>
           </Well>
           <div id="all">
             <Strength alldata={this.state}
