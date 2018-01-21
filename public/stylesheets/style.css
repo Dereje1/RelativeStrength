@@ -8,8 +8,12 @@ body .title {
   font-family: "Spectral SC";
 }
 
-body .title.sub {
+body .title.valid {
   color: #c45d1d;
+}
+
+body .title.expired {
+  color: red;
 }
 
 body #all {

@@ -99,7 +99,7 @@ class Home extends Component {
     })
   }
   render() {
-
+    let expiryClass = this.state.secondsSinceUpdate < -1200 ? "title expired" : "title valid"
     if(!this.state.data.length){
       return (
         null
@@ -111,7 +111,7 @@ class Home extends Component {
         <div>
           <Well >
             <h3 className="title"> Relative Strength of Major Currencies Against the USD</h3>
-            <h4 className="title sub">Updated {(-1*this.state.secondsSinceUpdate)} Seconds Ago</h4>
+            <h4 className={expiryClass}>Updated {(-1*this.state.secondsSinceUpdate)} Seconds Ago</h4>
           </Well>
           <div id="all">
             <Strength alldata={this.state}

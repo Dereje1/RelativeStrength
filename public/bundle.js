@@ -52290,6 +52290,7 @@ var Home = function (_Component) {
     value: function render() {
       var _this4 = this;
 
+      var expiryClass = this.state.secondsSinceUpdate < -1200 ? "title expired" : "title valid";
       if (!this.state.data.length) {
         return null;
       } else {
@@ -52307,7 +52308,7 @@ var Home = function (_Component) {
             ),
             _react2.default.createElement(
               'h4',
-              { className: 'title sub' },
+              { className: expiryClass },
               'Updated ',
               -1 * this.state.secondsSinceUpdate,
               ' Seconds Ago'
