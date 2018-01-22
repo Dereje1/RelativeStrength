@@ -52177,7 +52177,7 @@ var Home = function (_Component) {
         _this2.setState({
           secondsSinceUpdate: _this2.state.secondsSinceUpdate - 1
         });
-        if (_this2.state.secondsSinceUpdate < -1200) {
+        if (_this2.state.secondsSinceUpdate < -900) {
           //20 minutes = 15 min MT4 + 5 min AWS cycles
           _this2.updateData();
         }
@@ -52290,7 +52290,7 @@ var Home = function (_Component) {
     value: function render() {
       var _this4 = this;
 
-      var expiryClass = this.state.secondsSinceUpdate < -1200 ? "title expired" : "title valid";
+      var expiryClass = this.state.secondsSinceUpdate < -900 ? "title expired" : "title valid";
       if (!this.state.data.length) {
         return null;
       } else {
