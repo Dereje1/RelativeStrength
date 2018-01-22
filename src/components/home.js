@@ -26,7 +26,7 @@ class Home extends Component {
       this.setState({
         secondsSinceUpdate:this.state.secondsSinceUpdate-1
       })
-      if (this.state.secondsSinceUpdate<-1200){//20 minutes = 15 min MT4 + 5 min AWS cycles
+      if (this.state.secondsSinceUpdate<-900){//20 minutes = 15 min MT4 + 5 min AWS cycles
         this.updateData()
       }
     },1000)
@@ -99,7 +99,7 @@ class Home extends Component {
     })
   }
   render() {
-    let expiryClass = this.state.secondsSinceUpdate < -1200 ? "title expired" : "title valid"
+    let expiryClass = this.state.secondsSinceUpdate < -900 ? "title expired" : "title valid"
     if(!this.state.data.length){
       return (
         null
