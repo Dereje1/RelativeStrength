@@ -25,7 +25,7 @@ class Strength extends Component {
         let when = eDay + "," + eTime
         var gmtDateTime = moment.utc(when, "MM-DD-YYYY,h:mmA")
         let elapsed = gmtDateTime.diff(moment.utc())
-        soonEvent = (elapsed < 86400000) ? true : false
+        soonEvent = (elapsed < 43200000) ? true : false
       }
     })
     return [symbEvent,soonEvent]

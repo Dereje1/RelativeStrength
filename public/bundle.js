@@ -63972,7 +63972,7 @@ var Strength = function (_Component) {
           var when = eDay + "," + eTime;
           var gmtDateTime = _moment2.default.utc(when, "MM-DD-YYYY,h:mmA");
           var elapsed = gmtDateTime.diff(_moment2.default.utc());
-          soonEvent = elapsed < 86400000 ? true : false;
+          soonEvent = elapsed < 43200000 ? true : false;
         }
       });
       return [symbEvent, soonEvent];
