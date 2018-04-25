@@ -17,8 +17,9 @@ class Home extends Component {
       hoverClass:"card",
       displayModal:false, // modal show/not show on event click
       currecnyInfo:"",
-      secondsSinceUpdate:0 //seconds since last mt4 Update
+      secondsSinceUpdate:0, //seconds since last mt4 Update
     }
+    this.setTables = this.setTables.bind(this)
   }
   componentDidMount() {
     if(!this.freshData()){this.updateData()} //on first mount check if data is new, if not update
@@ -98,8 +99,26 @@ class Home extends Component {
       currecnyInfo:c[0]
     })
   }
+  setTables(){
+    return ["Past 24 Hours","Past 10 Days","Past Year"].map((tf,idx)=>{
+      const eventDisplay = idx===0 ? true : false
+      return(
+        <Strength alldata={this.state}
+             key={tf}
+             timeframe={tf}
+             hovStart={(d)=>this.startHover(d)}
+             hovEnd={(d)=>this.stopHover(d)}
+             hoveredSymbol= {this.state.hovered}
+             displayEvents={eventDisplay}
+             zoomed={(c)=>this.onZoom(c)}
+        />
+      )
+    })
+  }
   render() {
-    let expiryClass = this.state.secondsSinceUpdate < -900 ? "title expired" : "title valid"
+    let updateInformation = this.state.secondsSinceUpdate < -900 ? 
+      <h4 className="title expired">Requesting Fresh Data...{-1*(this.state.secondsSinceUpdate + 900)}s</h4>:
+      <h4 className="title valid">Updated {(-1*this.state.secondsSinceUpdate)} Seconds Ago</h4>
     if(!this.state.data.length){
       return (
         null
@@ -111,31 +130,10 @@ class Home extends Component {
         <div>
           <Well >
             <h3 className="title"> Relative Strength of Major Currencies Against the USD</h3>
-            <h4 className={expiryClass}>Updated {(-1*this.state.secondsSinceUpdate)} Seconds Ago</h4>
+            {updateInformation}
           </Well>
           <div id="all">
-            <Strength alldata={this.state}
-             timeframe="Past 24 Hours"
-             hovStart={(d)=>this.startHover(d)}
-             hovEnd={(d)=>this.stopHover(d)}
-             hoveredSymbol= {this.state.hovered}
-             displayEvents={true}
-             zoomed={(c)=>this.onZoom(c)}
-             />
-             <Strength alldata={this.state}
-              timeframe="Past 10 Days"
-              hovStart={(d)=>this.startHover(d)}
-              hovEnd={(d)=>this.stopHover(d)}
-              hoveredSymbol= {this.state.hovered}
-              zoomed={(c)=>this.onZoom(c)}
-              />
-              <Strength alldata={this.state}
-               timeframe="Past Year"
-               hovStart={(d)=>this.startHover(d)}
-               hovEnd={(d)=>this.stopHover(d)}
-               hoveredSymbol= {this.state.hovered}
-               zoomed={(c)=>this.onZoom(c)}
-               />
+            {this.setTables()}
           </div>
           <Zoom
           message={this.state.displayModal}
