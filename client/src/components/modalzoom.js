@@ -1,6 +1,6 @@
-"use strict" //displays event zoom modal
+//displays event zoom modal
 import React, { Component } from 'react';
-import {Button,Modal} from 'react-bootstrap'
+import {Modal} from 'react-bootstrap'
 import moment from 'moment'
 class Zoom extends Component {
   constructor(props) {

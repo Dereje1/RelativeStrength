@@ -1,4 +1,3 @@
-"use strict"
 //root of the frontend get /set primary store vars here
 import React from 'react';
 import {connect} from 'react-redux'

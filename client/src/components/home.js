@@ -1,4 +1,4 @@
-"use strict" //home page for both authorized and unauthorized users
+//home page for both authorized and unauthorized users
 import React, { Component } from 'react';
 import axios from 'axios'
 import moment from 'moment' // neeed for time conversion
@@ -47,7 +47,7 @@ class Home extends Component {
     })
   }
   mt4LastPush(lastUpdate){//returns the number of seconds since last update
-    let inSecs = moment(lastUpdate,"YYYY.MM.DD h:mm:ss").diff(moment())/1000
+    //let inSecs = moment(lastUpdate,"YYYY.MM.DD h:mm:ss").diff(moment())/1000
     let gmtUpdateTime = moment.utc(lastUpdate,"YYYY.MM.DD h:mm:ss")//Changed mt4 to time stamp with gmt instead of eastern
     let elapsedSinceUpdate = gmtUpdateTime.diff(moment.utc())/1000 // elapsed time in secs since update
     return Math.floor(elapsedSinceUpdate)
@@ -141,7 +141,7 @@ class Home extends Component {
           currency={this.state.currecnyInfo}
           zoomInfo={this.state.highImpact}
           />
-            <div id="gitsource"><a href="https://github.com/Dereje1/RelativeStrength" target="_blank"> <i className="fa fa-github" aria-hidden="true"></i> Github</a></div>
+            <div id="gitsource"><a href="https://github.com/Dereje1/RelativeStrength" target="_blank" rel="noopener noreferrer"> <i className="fa fa-github" aria-hidden="true"></i> Github</a></div>
         </div>
       )
     }

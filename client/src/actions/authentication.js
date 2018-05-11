@@ -1,4 +1,4 @@
-"use strict" //only getuser action dispatches to store
+//only getuser action dispatches to store
 import axios from 'axios';
 
 export function getUser(){

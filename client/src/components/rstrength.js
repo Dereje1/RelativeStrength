@@ -1,4 +1,4 @@
-"use strict" //creates and displays strength data for each currency for any given tf
+//creates and displays strength data for each currency for any given tf
 import React, { Component } from 'react';
 import moment from 'moment'
 

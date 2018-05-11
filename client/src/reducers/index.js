@@ -1,4 +1,4 @@
-"use strict"//unifies all reducers
+//unifies all reducers
 import {combineReducers} from 'redux';
 
 // HERE IMPORT REDUCERS TO BE COMBINED
