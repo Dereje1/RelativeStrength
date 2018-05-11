@@ -3,7 +3,9 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www  | node apiserver.js"
+    "client": "cd client && yarn start",
+    "start": "nodemon ./bin/www  | nodemon apiserver.js",
+    "dev": "concurrently --kill-others-on-fail \"yarn start\" \"yarn client\""
   },
   "dependencies": {
     "axios": "latest",
@@ -39,6 +41,7 @@
     "xml2js": "^0.4.19"
   },
   "devDependencies": {
+    "concurrently": "^3.5.1",
     "redux-logger": "^3.0.6",
     "webpack": "^3.7.1"
   },
