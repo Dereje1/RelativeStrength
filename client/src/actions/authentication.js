@@ -1,11 +1,11 @@
-"use strict" //only getuser action dispatches to store
+//only getuser action dispatches to store
 import axios from 'axios';
 
 export function getUser(){
   // action gets user authentication status from /profile that is generated
   //and updates store
   return function (dispatch){
-    axios.get('/profile')
+    axios.get('/auth/profile')
       .then(function(response){
           dispatch(
               {
