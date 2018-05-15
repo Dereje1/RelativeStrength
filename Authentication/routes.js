@@ -1,9 +1,8 @@
 // main authentication router
-
 module.exports = function(app, passport) {
 
     //wether a user is logged in or not json data will show up on the profile page
-    app.get('/profile', isLoggedIn, function(req, res) {
+    app.get('/auth/profile', isLoggedIn, function(req, res) {
       req.session.authenticated = true;
       let headerObject = req.headers //need for ip
       let ip = (headerObject['x-forwarded-for']||req.socket.remoteAddress).split(",")[0];
@@ -16,7 +15,7 @@ module.exports = function(app, passport) {
             });
     });
     // route for logging out
-    app.get('/logout', function(req, res) {
+    app.get('/auth/logout', function(req, res) {
         req.session.authenticated = false;
         req.logout();
         res.redirect('/');

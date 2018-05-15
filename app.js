@@ -2,23 +2,25 @@
 var express = require('express');
 var path = require('path');
 
-var app = module.exports = express();
+var app = express();
 
-var httpProxy = require('http-proxy');
-// Set up PROXY server with the module from above
-const apiProxy = httpProxy.createProxyServer(
-  {target:"http://localhost:3001"}
-)
-//apply middleware that intercepts all requests to the /api and retrieves the resources from the prxy
+var raw = require('./fromAWS/raw')
+var db = require('./models/db')
+require('./Authentication/authserver')(app)//add authentication
 
-app.use('/api',function(req,res){
-  apiProxy.web(req,res)
+app.get("/api/test",(req,res)=>{//test session 
+  res.json(req.session)
 })
 
-//end proxy setup
-var db = require('./models/db')
+app.get("/api/getraw",function(req,res){//raw data access route
+  raw().then((response)=>{
+    res.json(response)
+  })
+  .catch((err)=>{
+    res.end(err)
+  })
+})
 
-require('./authserver')//add authentication
 
 //server primary route
 app.use(express.static(path.join(__dirname, 'public')));
