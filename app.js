@@ -23,10 +23,10 @@ app.get("/api/getraw",function(req,res){//raw data access route
 
 
 //server primary route
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'client/build')));
 
 app.get('*', function(req, res){
-   res.sendFile(path.resolve(__dirname, 'public', 'index.html'))
+   res.sendFile(path.resolve(__dirname, 'client/build', 'index.html'))
   });
 
 // catch 404 and forward to error handler

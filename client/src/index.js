@@ -9,6 +9,7 @@ import React from 'react'
 import {render} from 'react-dom'
 import {Provider} from 'react-redux'
 import {Router, Route, IndexRoute,browserHistory} from 'react-router';
+import { unregister } from "./registerServiceWorker";
 
 import './stylesheets/style.css';
 //Import all Created react components that are associated with the router
@@ -38,3 +39,4 @@ const Routes = (
 )
 // render routes
 render (Routes,document.getElementById('root'))
+unregister();
