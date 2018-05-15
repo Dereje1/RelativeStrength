@@ -1,4 +1,4 @@
-# Relative strength
+# Relative strength -
 https://relative-strength.glitch.me/
 <ul>
 <li>Purpose: Display strength of major currencies against the USD</li>
