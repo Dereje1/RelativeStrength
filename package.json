@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "client": "cd client && yarn start",
-    "start": "nodemon ./bin/www",
+    "start": "node ./bin/www",
     "dev": "concurrently --kill-others-on-fail \"yarn start\" \"yarn client\""
   },
   "dependencies": {
