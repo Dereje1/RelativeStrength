@@ -3,9 +3,10 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "client": "cd client && yarn start",
+    "devclient": "cd client && yarn start",
     "start": "node ./bin/www",
-    "dev": "concurrently --kill-others-on-fail \"yarn start\" \"yarn client\""
+    "devserver": "nodemon ./bin/www",
+    "dev": "concurrently --kill-others-on-fail \"yarn devserver\" \"yarn devclient\""
   },
   "dependencies": {
     "axios": "latest",
@@ -20,7 +21,7 @@
     "mongoose": "^4.9.0",
     "morgan": "~1.9.0",
     "passport": "latest",
-    "passport-twitter": "latest",
+    "passport-google-oauth": "^1.0.0",
     "xml2js": "^0.4.19"
   },
   "devDependencies": {

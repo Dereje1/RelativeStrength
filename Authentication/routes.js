@@ -3,20 +3,18 @@ module.exports = function(app, passport) {
 
     //wether a user is logged in or not json data will show up on the profile page
     app.get('/auth/profile', isLoggedIn, function(req, res) {
-      req.session.authenticated = true;
       let headerObject = req.headers //need for ip
       let ip = (headerObject['x-forwarded-for']||req.socket.remoteAddress).split(",")[0];
       ip = (ip === "::1") ? "local" : ip
       res.json({
                 authenticated: true,
                 userip: ip,
-                username: req.user.twitter.username,
-                displayname: req.user.twitter.displayName
+                username: req.user.google.id,
+                displayname: req.user.google.displayName
             });
     });
     // route for logging out
     app.get('/auth/logout', function(req, res) {
-        req.session.authenticated = false;
         req.logout();
         res.redirect('/');
     });
@@ -25,11 +23,13 @@ module.exports = function(app, passport) {
     // TWITTER ROUTES ======================
     // =====================================
     // route for twitter authentication and login
-    app.get('/auth/twitter', passport.authenticate('twitter'));
-
+    //app.get('/auth/google', passport.authenticate('google'));
+    app.get('/auth/google', passport.authenticate('google', {
+        scope: ['profile', 'email']
+      }));
     // handle the callback after twitter has authenticated the user, just go back to home in my case
-    app.get('/auth/twitter/callback',
-        passport.authenticate('twitter', {
+    app.get('/auth/google/redirect',
+        passport.authenticate('google', {
             successRedirect : '/',
             failureRedirect : '/'
         }));
@@ -42,8 +42,6 @@ function isLoggedIn(req, res, next) {
     if (req.isAuthenticated()){
           return next();
     }
-
-    req.session.authenticated = false;
     // if they aren't populate the profile page accordingly
     let headerObject = req.headers
      //the x-forwarded-for property of the header does not appear for local host so add an alternative or will
