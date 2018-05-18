@@ -3,25 +3,11 @@ var express = require('express');
 var path = require('path');
 
 var app = express();
-
-var raw = require('./fromAWS/raw')
+var mainroute= require('./routes')
 var db = require('./models/db')
 require('./Authentication/authserver')(app)//add authentication
 
-app.get("/api/test",(req,res)=>{//test session 
-  res.json(req.session)
-})
-
-app.get("/api/getraw",function(req,res){//raw data access route
-  raw().then((response)=>{
-    res.json(response)
-  })
-  .catch((err)=>{
-    res.end(err)
-  })
-})
-
-
+app.use(mainroute)
 //server primary route
 app.use(express.static(path.join(__dirname, 'client/build')));
 
