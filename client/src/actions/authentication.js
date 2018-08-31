@@ -1,21 +1,23 @@
-//only getuser action dispatches to store
+// only getuser action dispatches to store
 import axios from 'axios';
 
-export function getUser(){
+const getUser = () =>
   // action gets user authentication status from /profile that is generated
-  //and updates store
-  return function (dispatch){
+  // and updates store
+  (dispatch) => {
     axios.get('/auth/profile')
-      .then(function(response){
-          dispatch(
-              {
-                type:"GET_USER_STATUS",
-                payload:response.data
-              }
-            )
-        })
-      .catch(function(err){
-        dispatch({type:"GET_USER_STATUS_REJECTED",payload:err})
+      .then((response) => {
+        dispatch({
+          type: 'GET_USER_STATUS',
+          payload: response.data,
+        });
       })
-    }
-}
+      .catch((err) => {
+        dispatch({
+          type: 'GET_USER_STATUS_REJECTED',
+          payload: err,
+        });
+      });
+  };
+
+export default getUser;

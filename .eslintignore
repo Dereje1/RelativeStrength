@@ -4,5 +4,5 @@ dist/bundle.js
 # ignore node_modules obviously
 node_modules
 
-# Concepts
-/client/Concepts/
+# ignore build
+/client/build/
