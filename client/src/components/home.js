@@ -111,7 +111,7 @@ class Home extends Component {
       const when = `${eDay},${eTime}`;
       const gmtDateTime = moment.utc(when, 'MM-DD-YYYY,h:mmA');// ff event data comes in gmt
       const elapsed = gmtDateTime.diff(moment.utc()); // if elapsed < 0 , event has already occured.
-      return (elapsed > 0 && e.impact[0] === 'Low'); // filter high impact events that have not occured yet
+      return (elapsed > 0 && e.impact[0] === 'High'); // filter high impact events that have not occured yet
     });
     return (fEvents);
   }

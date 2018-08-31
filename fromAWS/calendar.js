@@ -1,16 +1,16 @@
-"use Strict" //get forex faxtory calendar events for the week
-var axios = require('axios')
-var parseString = require('xml2js').parseString; //parses ff xml to json
-module.exports =  function(){
-  return new Promise((resolve,reject)=>{
-    axios.get("https://cdn-nfs.forexfactory.net/ff_calendar_thisweek.xml")
-    .then((response)=>{
-      parseString(response.data, function (err, result) {
-        resolve(result)
+// get forex faxtory calendar events for the week
+const axios = require('axios');
+const parser = require('xml2js'); // parses ff xml to json
+
+module.exports = () =>
+  new Promise((resolve, reject) => {
+    axios.get('https://cdn-nfs.forexfactory.net/ff_calendar_thisweek.xml')
+      .then((response) => {
+        parser.parseString(response.data, (err, result) => {
+          resolve(result);
+        });
+      })
+      .catch((err) => {
+        reject(err);
       });
-    })
-    .catch((err)=>{
-      reject(err)
-    })
-  })
-}
+  });
