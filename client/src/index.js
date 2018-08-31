@@ -8,14 +8,13 @@ import thunk from 'redux-thunk';
 import React from 'react';
 import { render } from 'react-dom';
 import { Provider } from 'react-redux';
-import { Router, Route, IndexRoute, browserHistory } from 'react-router';
 
 import './stylesheets/style.css';
 // Import all Created react components that are associated with the router
 // standard menu (non-authenticated) components
-import Main from './main';
+import AppRouter from './routers/AppRouter';
 
-import Home from './components/home';
+
 // import combined reducer to pass to store here
 import reducers from './reducers/index';
 
@@ -24,16 +23,9 @@ import reducers from './reducers/index';
 const middleware = applyMiddleware(thunk, logger);
 const store = createStore(reducers, middleware);
 
-// decalre all routes of application below note that /profileadd,/passchange ,/mybooks actually
-// do not have a link going to them , instead they are included in the routes for serving
-// authneticating/authenticated actions
 const Routes = (
   <Provider store={store}>
-    <Router history={browserHistory}>
-      <Route path="/" component={Main}>
-        <IndexRoute component={Home} />
-      </Route>
-    </Router>
+    <AppRouter />
   </Provider>
 );
 // render routes

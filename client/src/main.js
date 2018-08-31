@@ -3,7 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-
+import Home from './components/home';
 
 // action gets user info on every mount of this component
 import getUser from './actions/authentication';
@@ -15,11 +15,7 @@ class Main extends React.Component {
     this.props.getUser();
   }
   render() {
-    return (
-      <div>
-        {this.props.children}
-      </div>
-    );
+    return <Home />;
   }
 
 }
@@ -36,11 +32,9 @@ function mapDispatchToProps(dispatch) {
 
 Main.defaultProps = {
   getUser: {},
-  children: {},
 };
 
 Main.propTypes = {
   getUser: PropTypes.func,
-  children: PropTypes.objectOf(PropTypes.any),
 };
 export default connect(mapStateToProps, mapDispatchToProps)(Main);
