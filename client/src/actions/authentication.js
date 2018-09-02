@@ -4,8 +4,8 @@ import axios from 'axios';
 const getUser = () =>
   // action gets user authentication status from /profile that is generated
   // and updates store
-  (dispatch) => {
-    axios.get('/auth/profile')
+  async (dispatch) => {
+    await axios.get('/auth/profile')
       .then((response) => {
         dispatch({
           type: 'GET_USER_STATUS',
