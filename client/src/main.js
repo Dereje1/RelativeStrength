@@ -3,7 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import Home from './components/home';
+import Landing from './components/Landing/landing';
 import Header from './components/Header/header';
 
 // action gets user info on every mount of this component
@@ -67,7 +67,7 @@ class Main extends React.Component {
     return (
       <div>
         <Header secondsSinceUpdate={this.state.secondsSinceUpdate} />
-        <Home />
+        <Landing />
       </div>
     );
   }

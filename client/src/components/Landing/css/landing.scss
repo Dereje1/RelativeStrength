@@ -1,0 +1,32 @@
+#all{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+  .mainframe{
+    background: #efefea;
+    margin:0 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+  }
+}
+#gitsource{
+  padding-top: 50px;
+  text-align: center;
+  text-decoration: none;
+  text-transform: full-width;
+  font-weight: 900;
+  font-size: 18px;
+  color:
+  a:hover{
+    text-decoration: none;
+  }
+}
+@media screen and (max-width: 640px){
+  #all{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+}

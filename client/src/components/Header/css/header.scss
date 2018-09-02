@@ -1,0 +1,18 @@
+.header{
+  .description{
+    .title{
+      text-align: center;
+      font-weight: bold;
+      font-family: "Spectral SC";
+      &.valid{
+        color:#c45d1d;
+      }
+      &.expired{
+        color:red;
+      }
+    }
+  }
+  .login{
+    color: blue;
+  }
+}

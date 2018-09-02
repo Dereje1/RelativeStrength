@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
+import './css/rstrength.css';
 
 class Strength extends Component {
 

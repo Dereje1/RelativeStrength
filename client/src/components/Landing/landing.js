@@ -1,4 +1,4 @@
-// home page for both authorized and unauthorized users
+// Landing page for both authorized and unauthorized users
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -6,9 +6,11 @@ import { connect } from 'react-redux';
 import Strength from './rstrength'; // displays strenngth data for different tfs
 import Zoom from './modalzoom'; // modal zoom for
 
+import './css/landing.css';
+
 const mapStateToProps = state => state;
 
-class Home extends Component {
+class Landing extends Component {
 
   constructor(props) {
     super(props);
@@ -77,12 +79,12 @@ class Home extends Component {
 
 }
 
-Home.defaultProps = {
+Landing.defaultProps = {
   forexData: {},
 };
 
-Home.propTypes = {
+Landing.propTypes = {
   forexData: PropTypes.objectOf(PropTypes.any),
 };
 
-export default connect(mapStateToProps)(Home);
+export default connect(mapStateToProps)(Landing);

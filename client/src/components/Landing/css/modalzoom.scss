@@ -1,0 +1,27 @@
+.modal{
+    #contained-modal-title-zoom{
+      text-align: center;
+      font-size: 22px;
+      font-family: 'Abril Fatface', cursive;
+      .currency{
+        font-weight: bold;
+        color:blue;
+      }
+    }
+    #mbody{
+      display: flex;
+      flex-direction: column;
+      align-items:stretch;
+      background: #dfedfb;
+      .event{
+        width:100%;
+        background: rgba(231, 233, 234,.5);
+        color: #191717;
+        font-size: 16px;
+        font-family: 'Abril Fatface', cursive;
+      }
+      .time{
+        color:#60709e
+      }
+    }
+  }

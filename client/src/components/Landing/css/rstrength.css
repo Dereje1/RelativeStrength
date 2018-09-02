@@ -1,0 +1,63 @@
+.card {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  margin: 10px;
+  width: 150px;
+  background: #d9dde3;
+  border-radius: 3px;
+  font-size: 1.5em;
+  cursor: default;
+}
+
+.card.lit {
+  background: white;
+  -webkit-transform: translateY(-10px);
+          transform: translateY(-10px);
+  -webkit-transform: translatex(-2px);
+          transform: translatex(-2px);
+  -webkit-transform: scale(1.1);
+          transform: scale(1.1);
+  -webkit-box-shadow: 10px 5px 5px black;
+          box-shadow: 10px 5px 5px black;
+}
+
+.card.usd {
+  background: #f0d8b9;
+}
+
+.card .symbol {
+  color: #913232;
+  font-weight: bold;
+  font-family: "Spectral SC";
+}
+
+.card .symbol .strength {
+  color: #315391;
+  font-weight: bold;
+  font-family: "Spectral SC";
+}
+
+.card .events {
+  color: #9e3008;
+  font-weight: bold;
+  font-family: 'Fredoka One', cursive;
+  cursor: pointer;
+}
+
+.card .events.soon {
+  -webkit-animation-name: example;
+          animation-name: example;
+  -webkit-animation-duration: 1s;
+          animation-duration: 1s;
+  -webkit-animation-iteration-count: infinite;
+          animation-iteration-count: infinite;
+}
+/*# sourceMappingURL=rstrength.css.map */

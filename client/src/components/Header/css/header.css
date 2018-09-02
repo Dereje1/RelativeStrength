@@ -1,0 +1,18 @@
+.header .description .title {
+  text-align: center;
+  font-weight: bold;
+  font-family: "Spectral SC";
+}
+
+.header .description .title.valid {
+  color: #c45d1d;
+}
+
+.header .description .title.expired {
+  color: red;
+}
+
+.header .login {
+  color: blue;
+}
+/*# sourceMappingURL=header.css.map */

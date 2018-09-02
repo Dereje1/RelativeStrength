@@ -1,0 +1,37 @@
+.modal #contained-modal-title-zoom {
+  text-align: center;
+  font-size: 22px;
+  font-family: 'Abril Fatface', cursive;
+}
+
+.modal #contained-modal-title-zoom .currency {
+  font-weight: bold;
+  color: blue;
+}
+
+.modal #mbody {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: stretch;
+      -ms-flex-align: stretch;
+          align-items: stretch;
+  background: #dfedfb;
+}
+
+.modal #mbody .event {
+  width: 100%;
+  background: rgba(231, 233, 234, 0.5);
+  color: #191717;
+  font-size: 16px;
+  font-family: 'Abril Fatface', cursive;
+}
+
+.modal #mbody .time {
+  color: #60709e;
+}
+/*# sourceMappingURL=modalzoom.css.map */
