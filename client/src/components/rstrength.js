@@ -30,7 +30,7 @@ class Strength extends Component {
 
   buildData() {
     // extract data for given time frame (tf)
-    const strengthData = this.props.alldata.data[0][this.props.timeframe];
+    const strengthData = this.props.alldata.aws[this.props.timeframe];
     if (this.props.displayEvents) { // events are only displayed for shortest (24hr) tf
       return (strengthData.map((d, idx) => { // parse thru each symbol
         const symbol = d['0'];
@@ -105,10 +105,7 @@ Strength.defaultProps = {
 
 Strength.propTypes = {
   hoveredSymbol: PropTypes.string,
-  alldata: PropTypes.shape({
-    highImpact: PropTypes.arrayOf(PropTypes.shape),
-    data: PropTypes.arrayOf(PropTypes.any),
-  }),
+  alldata: PropTypes.objectOf(PropTypes.any),
   timeframe: PropTypes.string,
   displayEvents: PropTypes.bool,
   hovStart: PropTypes.func,

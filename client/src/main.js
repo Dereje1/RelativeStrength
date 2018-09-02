@@ -26,6 +26,10 @@ class Main extends React.Component {
     this.initialize();
   }
 
+  componentWillUnmount() {
+    clearInterval(this.Interval);
+  }
+
   initialize = async () => {
     await this.props.getUser();
 
@@ -58,7 +62,8 @@ class Main extends React.Component {
   }
 
   render() {
-    return <Home />;
+    if (!Object.keys(this.props.forexData).length) return null;
+    return <Home secondsSinceUpdate={this.state.secondsSinceUpdate} />;
   }
 
 }
