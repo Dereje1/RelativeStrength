@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import Home from './components/home';
+import Header from './components/Header/header';
 
 // action gets user info on every mount of this component
 import getUser from './actions/authentication';
@@ -63,7 +64,12 @@ class Main extends React.Component {
 
   render() {
     if (!Object.keys(this.props.forexData).length) return null;
-    return <Home secondsSinceUpdate={this.state.secondsSinceUpdate} />;
+    return (
+      <div>
+        <Header secondsSinceUpdate={this.state.secondsSinceUpdate} />
+        <Home />
+      </div>
+    );
   }
 
 }
