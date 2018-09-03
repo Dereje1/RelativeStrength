@@ -66,7 +66,10 @@ class Main extends React.Component {
     if (!Object.keys(this.props.forexData).length) return null;
     return (
       <div>
-        <Header secondsSinceUpdate={this.state.secondsSinceUpdate} />
+        <Header
+          secondsSinceUpdate={this.state.secondsSinceUpdate}
+          loggedIn={this.props.user.authenticated}
+        />
         <Landing />
       </div>
     );
@@ -88,6 +91,7 @@ Main.defaultProps = {
   getForexData: {},
   setForexData: {},
   forexData: {},
+  user: {},
 };
 
 Main.propTypes = {
@@ -95,5 +99,6 @@ Main.propTypes = {
   getForexData: PropTypes.func,
   setForexData: PropTypes.func,
   forexData: PropTypes.objectOf(PropTypes.any),
+  user: PropTypes.objectOf(PropTypes.any),
 };
 export default connect(mapStateToProps, mapDispatchToProps)(Main);

@@ -53,11 +53,35 @@
 }
 
 .card .events.soon {
-  -webkit-animation-name: example;
-          animation-name: example;
+  -webkit-animation-name: flash;
+          animation-name: flash;
   -webkit-animation-duration: 1s;
           animation-duration: 1s;
   -webkit-animation-iteration-count: infinite;
           animation-iteration-count: infinite;
+}
+
+.title {
+  text-align: center;
+  font-weight: bold;
+  font-family: "Spectral SC";
+}
+
+@-webkit-keyframes flash {
+  from {
+    color: #d9dde3;
+  }
+  to {
+    color: #9e3008;
+  }
+}
+
+@keyframes flash {
+  from {
+    color: #d9dde3;
+  }
+  to {
+    color: #9e3008;
+  }
 }
 /*# sourceMappingURL=rstrength.css.map */

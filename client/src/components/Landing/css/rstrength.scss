@@ -36,9 +36,19 @@
       cursor: pointer;
 
       &.soon{
-        animation-name: example;
+        animation-name: flash;
         animation-duration: 1s;
         animation-iteration-count: infinite;
       }
     }
   }
+  .title{
+    text-align: center;
+    font-weight: bold;
+    font-family: "Spectral SC";
+  }
+
+  @keyframes flash {
+    from {color: #d9dde3;}
+    to {color: #9e3008;}
+}

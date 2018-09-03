@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Well } from 'react-bootstrap';
+import { Well, Button } from 'react-bootstrap';
 import './css/header.css';
 
-const Header = ({ secondsSinceUpdate }) => (
+const Header = ({ secondsSinceUpdate, loggedIn }) => (
   <Well className="header">
     <div className="description">
       <h3 className="title"> Relative Strength of Major Currencies Against the USD</h3>
@@ -13,15 +13,27 @@ const Header = ({ secondsSinceUpdate }) => (
         <h4 className="title valid">Updated {(-1 * secondsSinceUpdate)} Seconds Ago</h4>
       }
     </div>
-    <a className="login" href="auth/google">Login</a>
+    {loggedIn ?
+      <div className="login">
+        <Button>Profile</Button>
+        <Button href="auth/logout">Logout</Button>
+      </div>
+      :
+      <div className="login">
+        <Button href="auth/google">Login</Button>
+      </div>
+    }
+
   </Well>
 );
 
 Header.defaultProps = {
   secondsSinceUpdate: 0,
+  loggedIn: false,
 };
 
 Header.propTypes = {
   secondsSinceUpdate: PropTypes.number,
+  loggedIn: PropTypes.bool,
 };
 export default Header;
