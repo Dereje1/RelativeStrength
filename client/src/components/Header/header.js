@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { NavLink, withRouter } from 'react-router-dom';
-import { Well, Button } from 'react-bootstrap';
+import { Button } from 'reactstrap';
 import './css/header.css';
 
 const Header = ({ secondsSinceUpdate, loggedIn }) => (
-  <Well className="header">
+  <div className="header">
     <div className="description">
       <h3 className="title"> Relative Strength of Major Currencies Against the USD</h3>
       {secondsSinceUpdate < -900 ?
@@ -16,11 +16,9 @@ const Header = ({ secondsSinceUpdate, loggedIn }) => (
     </div>
     {loggedIn ?
       <div className="login">
-        <Button>
-          <NavLink activeClassName="is-active" to="/profile">
+        <NavLink activeClassName="is-active" to="/profile">
               Profile
-          </NavLink>
-        </Button>
+        </NavLink>
         <Button href="auth/logout">Logout</Button>
       </div>
       :
@@ -29,7 +27,7 @@ const Header = ({ secondsSinceUpdate, loggedIn }) => (
       </div>
     }
 
-  </Well>
+  </div>
 );
 
 Header.defaultProps = {

@@ -84,7 +84,7 @@ class Strength extends Component {
   render() {
     return (
       <div>
-        <h4 className="title">{this.props.timeframe}</h4>
+        <h6 className="title">{this.props.timeframe}</h6>
         <div className="mainframe">
           {this.buildData()}
         </div>

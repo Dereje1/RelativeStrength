@@ -7,7 +7,7 @@ import { SingleDatePicker } from 'react-dates';
 import 'react-dates/initialize';
 import 'react-dates/lib/css/_datepicker.css';
 
-//custom functions
+// custom functions
 import getUser from '../../actions/authentication';
 
 const mapStateToProps = state => state;

@@ -1,7 +1,7 @@
 // displays event zoom modal
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Modal } from 'react-bootstrap';
+import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import moment from 'moment';
 import './css/modalzoom.css';
 
@@ -56,20 +56,16 @@ class Zoom extends Component {
   render() {
     return (
       <Modal
-        show={this.state.show}
-        onHide={this.close}
-        container={this}
-        aria-labelledby="contained-modal-title"
+        isOpen={this.state.show}
+        toggle={this.close}
       >
-        <Modal.Header closeButton>
-          <Modal.Title id="contained-modal-title-zoom">
-            <span className="currency">{this.props.currency}</span> - High Impact Events Coming Up This Week
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body id="mbody">
+        <ModalHeader>
+          <span className="currency">{this.props.currency}</span> - High Impact Events Coming Up This Week
+        </ModalHeader>
+        <ModalBody id="mbody">
           {this.processCalendar()}
-        </Modal.Body>
-        <Modal.Footer id="zoomfooter" />
+        </ModalBody>
+        <ModalFooter id="zoomfooter" />
       </Modal>
     );
   }

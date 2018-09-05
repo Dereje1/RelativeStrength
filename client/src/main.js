@@ -43,14 +43,15 @@ class Main extends React.Component {
       });
     }
 
+    const checkInterval = 30; // in secs
     this.Interval = setInterval(() => { // start timer interval update every sec
       this.setState({
-        secondsSinceUpdate: this.state.secondsSinceUpdate - 1,
+        secondsSinceUpdate: this.state.secondsSinceUpdate - checkInterval,
       });
       if (this.state.secondsSinceUpdate < -900) { // 20 minutes = 15 min MT4 + 5 min AWS cycles
         this.updateForexData();
       }
-    }, 1000);
+    }, checkInterval * 1000);
   }
 
   updateForexData = async () => {

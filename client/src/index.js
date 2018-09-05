@@ -14,6 +14,7 @@ import './stylesheets/style.css';
 // standard menu (non-authenticated) components
 import AppRouter from './routers/AppRouter';
 
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 // import combined reducer to pass to store here
 import reducers from './reducers/index';
