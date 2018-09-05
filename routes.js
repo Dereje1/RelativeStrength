@@ -2,6 +2,7 @@
 const router = require('express').Router();
 const raw = require('./fromAWS/raw');
 const User = require('./models/user');
+const Trades = require('./models/trades');
 
 const verification = (req, res, next) => {
   const requestingUserID = req.query.googleid;
@@ -33,5 +34,12 @@ router.get('/api/getraw', (req, res) => { // raw data access route
     });
 });
 
+router.post('/api/newtrade', (req, res) => {
+  const newTrade = req.body;
+  Trades.create(newTrade, (err, trade) => {
+    if (err) throw err;
+    res.json(trade);
+  });
+});
 module.exports = router;
 
