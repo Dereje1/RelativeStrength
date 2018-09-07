@@ -9,6 +9,7 @@ import { Col, Form, FormGroup, Label, Input } from 'reactstrap';
 
 const inputSize = 10;
 const labelSize = 2;
+
 const EntryForm = props => (
   <Form>
     <FormGroup row>
@@ -19,6 +20,8 @@ const EntryForm = props => (
           name="symbol"
           id="symbol"
           onChange={event => props.sendFormValue(event)}
+          {...props.validity('symbol')}
+          autoComplete="off"
         />
       </Col>
     </FormGroup>
@@ -27,12 +30,12 @@ const EntryForm = props => (
       <Col sm={inputSize}>
         <Input
           type="select"
-          name="long"
+          name="direction"
           id="direction"
           onChange={event => props.sendFormValue(event)}
         >
-          <option>true</option>
-          <option>false</option>
+          <option>Long</option>
+          <option>Short</option>
         </Input>
       </Col>
     </FormGroup>
@@ -44,11 +47,13 @@ const EntryForm = props => (
           name="stop"
           id="stop"
           onChange={event => props.sendFormValue(event)}
+          {...props.validity('stop')}
+          autoComplete="off"
         />
       </Col>
     </FormGroup>
     <FormGroup row>
-      <Label for="symbol" sm={labelSize}>Date</Label>
+      <Label for="entrydate" sm={labelSize}>Date</Label>
       <Col sm={inputSize}>
         <SingleDatePicker
           date={props.date} // momentPropTypes.momentObj or null
@@ -68,6 +73,8 @@ const EntryForm = props => (
           name="size"
           id="positionsize"
           onChange={event => props.sendFormValue(event)}
+          {...props.validity('size')}
+          autoComplete="off"
         />
       </Col>
     </FormGroup>
@@ -79,17 +86,21 @@ const EntryForm = props => (
           name="price"
           id="price"
           onChange={event => props.sendFormValue(event)}
+          {...props.validity('price')}
+          autoComplete="off"
         />
       </Col>
     </FormGroup>
     <FormGroup row>
-      <Label for="comments" sm={labelSize}>Comments</Label>
+      <Label for="comments" sm={labelSize}>Notes</Label>
       <Col sm={inputSize}>
         <Input
           type="text"
           name="comments"
           id="comments"
           onChange={event => props.sendFormValue(event)}
+          {...props.validity('comments')}
+          autoComplete="off"
         />
       </Col>
     </FormGroup>
@@ -99,6 +110,7 @@ const EntryForm = props => (
 EntryForm.defaultProps = {
   sendFormValue: {},
   onDateFocus: {},
+  validity: {},
   focused: false,
   date: {},
 };
@@ -106,6 +118,7 @@ EntryForm.defaultProps = {
 EntryForm.propTypes = {
   sendFormValue: PropTypes.func,
   onDateFocus: PropTypes.func,
+  validity: PropTypes.func,
   focused: PropTypes.bool,
   date: PropTypes.objectOf(PropTypes.any),
 };
