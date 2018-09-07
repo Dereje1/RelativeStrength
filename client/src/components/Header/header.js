@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { NavLink, withRouter } from 'react-router-dom';
-import { Button } from 'reactstrap';
 import './css/header.css';
 
 const Header = ({ secondsSinceUpdate, loggedIn }) => (
@@ -19,14 +18,16 @@ const Header = ({ secondsSinceUpdate, loggedIn }) => (
         <NavLink activeClassName="is-active" to="/profile">
               Profile
         </NavLink>
-        <Button href="auth/logout">Logout</Button>
+        <a href="auth/logout">
+              Logout
+        </a>
       </div>
       :
       <div className="login">
-        <Button href="auth/google">Login</Button>
+        <a href="auth/google">Login</a>
       </div>
     }
-
+    <hr />
   </div>
 );
 
