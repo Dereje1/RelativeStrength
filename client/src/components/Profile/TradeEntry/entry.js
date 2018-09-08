@@ -5,6 +5,7 @@ import moment from 'moment';
 import { Col, Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 
 import EntryForm from './entryForm';
+import Confirmation from './confirmation';
 import { symbolList, postNewTrade } from '../../../utilitiy/orders';
 
 import './css/entry.css';
@@ -13,18 +14,29 @@ class TradeEntry extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {
-      symbol: ['', false], // pattern [value, validity]
-      direction: ['Long', true],
-      date: [moment(), true],
-      stop: [0, false],
-      size: [0, false],
-      price: [0, false],
-      comments: ['', false],
-      dateFocus: false,
-      readyToSubmit: true,
-    };
+    this.state = {};
   }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.show !== this.props.show) this.initializeForm();
+  }
+
+initializeForm = () => {
+  const emptyForm = {
+    symbol: ['', false], // pattern [value, validity]
+    direction: ['Long', true],
+    date: [moment(), true],
+    stop: ['', false],
+    size: ['', false],
+    price: ['', false],
+    comments: ['', false],
+    dateFocus: false,
+    readyToSubmit: false,
+    confirm: false,
+    tradeModel: {},
+  };
+  this.setState(emptyForm);
+}
 
 checkValidity = (field, value) => {
   let isValid = false;
@@ -83,7 +95,7 @@ submitReady = () => {
   this.setState({ readyToSubmit: buttonState });
 }
 
-submitTrade = () => {
+confirmTrade = () => {
   const tradeModel = {
     userId: this.props.userId,
     tradeStatusOpen: true, // true = Open
@@ -99,45 +111,74 @@ submitTrade = () => {
       },
     ],
   };
-  postNewTrade(tradeModel);
+  console.log(tradeModel);
+  this.setState({ confirm: true, tradeModel });
 }
 
-submitButtonState = () => (this.state.readyToSubmit ? { active: true } : { disabled: true })
+confirmButtonState = () => (this.state.readyToSubmit ? { disabled: false } : { disabled: true })
+
+cancelTrade = () => {
+  if (!this.state.confirm) {
+    this.setState({ confirm: false }, () => this.props.onToggle());
+    return;
+  }
+  this.setState({ confirm: false });
+}
+
+enterTrade = async () => {
+  await postNewTrade(this.state.tradeModel);
+  this.setState({ confirm: false }, () => this.props.onToggle());
+}
 
 render() {
+  if (!Object.keys(this.state).length) return null;
   return (
     <Modal
       isOpen={this.props.show}
     >
       <ModalHeader >
-         Trade Entry
+        {this.state.confirm ? 'Confirm Trade' : 'Trade Entry'}
       </ModalHeader>
       <ModalBody id="mbody">
-        <EntryForm
-          sendFormValue={fv => this.processNewTrade(fv)}
-          date={this.state.date[0]}
-          focused={this.state.dateFocus}
-          onDateFocus={() => this.setState({ dateFocus: !this.state.dateFocus })}
-          validity={name => this.inputValidity(name)}
-        />
+        {this.state.confirm ?
+          <Confirmation model={this.state.tradeModel} />
+          :
+          <EntryForm
+            sendFormValue={fv => this.processNewTrade(fv)}
+            date={this.state.date[0]}
+            focused={this.state.dateFocus}
+            onDateFocus={() => this.setState({ dateFocus: !this.state.dateFocus })}
+            validity={name => this.inputValidity(name)}
+            currentState={this.state}
+          />
+        }
       </ModalBody>
       <ModalFooter>
         <Col sm={6}>
           <Button
             color="danger"
             className="float-left"
-            onClick={this.props.onToggle}
+            onClick={this.cancelTrade}
           >Cancel
           </Button>
         </Col>
         <Col sm={6}>
-          <Button
-            color="success"
-            className="float-right"
-            onClick={this.submitTrade}
-            {...this.submitButtonState()}
-          >Enter Trade
-          </Button>
+          {this.state.confirm ?
+            <Button
+              color="success"
+              className="float-right"
+              onClick={this.enterTrade}
+            >Enter Trade
+            </Button>
+            :
+            <Button
+              color="success"
+              className="float-right"
+              onClick={this.confirmTrade}
+              {...this.confirmButtonState()}
+            >Confirm Trade
+            </Button>
+          }
         </Col>
       </ModalFooter>
     </Modal>

@@ -38,9 +38,8 @@ class Main extends React.Component {
       this.updateForexData();
     } else {
       await this.props.setForexData(); // set store with locally stored data
-      this.setState({
-        secondsSinceUpdate: mt4LastPush(this.props.forexData.aws.updated),
-      });
+      if (mt4LastPush(this.props.forexData.aws.updated) < -900) this.updateForexData();
+      else this.setState({ secondsSinceUpdate: mt4LastPush(this.props.forexData.aws.updated) });
     }
 
     const checkInterval = 30; // in secs
