@@ -1,27 +1,10 @@
 
 const router = require('express').Router();
 const raw = require('./fromAWS/raw');
-const User = require('./models/user');
 const Trades = require('./models/trades');
+const isLoggedIn = require('./Authentication/verify');
 
-const verification = (req, res, next) => {
-  const requestingUserID = req.query.googleid;
-  const passportSessionUserId = Object.keys(req.session.passport).length === 0 ? null
-    : req.session.passport.user;
-
-  if (passportSessionUserId) {
-    User.findById(passportSessionUserId, (err, user) => {
-      if (err) throw err;
-      if (requestingUserID === String(user._id)) return next();
-      res.end('Authentication can not be Verified!!');
-      return null;
-    });
-  } else {
-    res.end('Not Authenticated!!');
-  }
-};
-
-router.get('/api/test', verification, (req, res) => { // test session
+router.get('/api/test', isLoggedIn, (req, res) => { // test session
   res.json(req.session);
 });
 
@@ -34,7 +17,7 @@ router.get('/api/getraw', (req, res) => { // raw data access route
     });
 });
 
-router.post('/api/newtrade', (req, res) => {
+router.post('/api/newtrade', isLoggedIn, (req, res) => {
   const newTrade = req.body;
   Trades.create(newTrade, (err, trade) => {
     if (err) throw err;

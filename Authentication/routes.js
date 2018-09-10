@@ -1,5 +1,6 @@
 // main authentication router
-
+const isLoggedIn = require('./verify');
+/*
 // route middleware, the main function that checks if a user is logged in
 function isLoggedIn(req, res, next) {
   // if user is authenticated in the session, carry on
@@ -20,7 +21,7 @@ function isLoggedIn(req, res, next) {
   });
   return false;
 }
-
+*/
 module.exports = (app, passport) => {
   // wether a user is logged in or not json data will show up on the profile page
   app.get('/auth/profile', isLoggedIn, (req, res) => {
