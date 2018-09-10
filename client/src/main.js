@@ -54,7 +54,6 @@ class Main extends React.Component {
   }
 
   updateForexData = async () => {
-    if (this.state.secondsSinceUpdate > -900) return;
     await this.props.getForexData();
     localStorage.setItem('forexData', JSON.stringify(this.props.forexData));
     this.setState({

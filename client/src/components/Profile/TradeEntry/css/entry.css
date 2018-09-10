@@ -2,8 +2,7 @@
   text-transform: uppercase;
 }
 
-#entrydata {
-  background: #e4d8a1;
+.confirmation {
   white-space: pre-wrap;
   /* CSS3 */
   white-space: -moz-pre-wrap;
@@ -15,25 +14,26 @@
   word-wrap: break-word;
   /* IE */
   font-weight: bold;
-  border-radius: 3px;
-  padding: 5px;
-  margin-bottom: 5px;
 }
 
-#entrycomments {
-  background: #ddd9d9;
-  white-space: pre-wrap;
-  /* CSS3 */
-  white-space: -moz-pre-wrap;
-  /* Firefox */
-  white-space: -pre-wrap;
-  /* Opera <7 */
-  white-space: -o-pre-wrap;
-  /* Opera 7 */
-  word-wrap: break-word;
-  /* IE */
+.confirmation .entrydata {
+  background: #e4d8a1;
+  margin-bottom: 5px;
   border-radius: 3px;
   padding: 5px;
-  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+.confirmation .entrycomments {
+  background: #ddd9d9;
+  margin-bottom: 5px;
+  border-radius: 3px;
+  padding: 5px;
+}
+
+.confirmation .entryrisk {
+  background: #da5a5a;
+  margin-bottom: 5px;
+  border-radius: 3px;
+  padding: 5px;
 }
 /*# sourceMappingURL=entry.css.map */

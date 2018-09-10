@@ -3,17 +3,34 @@ import PropTypes from 'prop-types';
 import { Col } from 'reactstrap';
 import moment from 'moment';
 
-const Confirmation = ({ model }) => (
-  <Col sm={12}>
-    <div id="entrydata">
+import { getPips, getDollarsPerPip } from '../../../utilitiy/orders';
+
+const Confirmation = ({
+  model: { long },
+  model: { stop },
+  model: { symbol },
+  model: { date },
+  model: { size },
+  model: { price },
+  model: { comments },
+  lastPrices,
+}) => (
+  <Col sm={12} className="confirmation">
+    <div className="entrydata">
       {
-        `${model.long ? 'Bought ' : 'Sold '}${model.entry[model.entry.length - 1].size} of ${model.symbol} @ ${model.entry[model.entry.length - 1].price} with a stop of ${model.stop} on ${moment(model.entry[model.entry.length - 1].date).format('L')}`
+        `${long ? 'Bought ' : 'Sold '}${size / 100000} Lots of ${symbol} @ ${price} with a stop of ${stop} on ${moment(date).format('L')}`
       }
       <br />
     </div>
-    <div id="entrycomments">
+    <div className="entrycomments">
       {
-        `${model.entry[model.entry.length - 1].comments}`
+        `${comments}`
+      }
+    </div>
+    <div className="entryrisk">
+      {
+        `Risk in Pips = ${getPips(symbol, stop - price)}
+Risk in Dollars = $${getDollarsPerPip(symbol, lastPrices) * getPips(symbol, stop - price) * (size / 100000)}`
       }
     </div>
   </Col>
@@ -21,5 +38,6 @@ const Confirmation = ({ model }) => (
 
 Confirmation.propTypes = {
   model: PropTypes.objectOf(PropTypes.any).isRequired,
+  lastPrices: PropTypes.objectOf(PropTypes.any).isRequired,
 };
 export default Confirmation;

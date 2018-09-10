@@ -1,18 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 // bootstrap
 import { Button } from 'reactstrap';
 // custom functions
-import getUser from '../../actions/authentication';
 import TradeEntry from './TradeEntry/entry';
 
 const mapStateToProps = state => state;
-const mapDispatchToProps = dispatch =>
-  bindActionCreators({
-    getUser,
-  }, dispatch);
 class Profile extends Component {
 
   constructor(props) {
@@ -20,10 +14,6 @@ class Profile extends Component {
     this.state = {
       showEntry: false,
     };
-  }
-
-  componentDidMount() {
-    if (!Object.keys(this.props.user).length) this.props.getUser();
   }
 
   entryModal = () => {
@@ -46,23 +36,19 @@ class Profile extends Component {
             show={this.state.showEntry}
             onToggle={() => this.setState({ showEntry: false })}
             userId={this.props.user.username}
+            fxLastPrices={this.props.forexData.aws.lastPrices}
           />
         </div>
       );
     }
-    return null;
+    return window.location.assign('/');
   }
 
 }
 
-Profile.defaultProps = {
-  getUser: {},
-  user: {},
-};
-
 Profile.propTypes = {
-  getUser: PropTypes.func,
-  user: PropTypes.objectOf(PropTypes.any),
+  user: PropTypes.objectOf(PropTypes.any).isRequired,
+  forexData: PropTypes.objectOf(PropTypes.any).isRequired,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Profile);
+export default connect(mapStateToProps)(Profile);

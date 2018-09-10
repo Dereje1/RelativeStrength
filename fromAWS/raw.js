@@ -2,7 +2,20 @@
 const axios = require('axios');
 const calendar = require('./calendar'); // gets ff calendar
 
-function toJSON(data) { // converts Rstrength mt4 data into json
+const getLastPrices = (arr) => {
+  const priceObject = {};
+  arr.forEach((line) => {
+    const x = (line.split('\t'))[0];
+    if (Number(x)) {
+      const symbol = line.split('\t')[1];
+      const price = line.split('\t')[8];
+      priceObject[symbol] = Number(price);
+    }
+  });
+  return priceObject;
+};
+
+const toJSON = (data) => { // converts Rstrength mt4 data into json
   const allstrength = data.split('Relative Strength against USD');
   // get updated property
   const obj = { updated: allstrength[0].split('Performance Range')[0].split('Generated')[1].trim() };
@@ -27,9 +40,10 @@ function toJSON(data) { // converts Rstrength mt4 data into json
     });
     // collect all info into obj
     obj[frameDesc] = frameCollection;
+    obj.lastPrices = getLastPrices(data.split('\n').slice(3, 34));
   });
   return obj;
-}
+};
 
 module.exports = () =>
   new Promise((resolve, reject) => {

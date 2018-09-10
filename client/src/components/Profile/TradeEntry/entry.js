@@ -34,6 +34,7 @@ initializeForm = () => {
     readyToSubmit: false,
     confirm: false,
     tradeModel: {},
+    confirmationModel: {},
   };
   this.setState(emptyForm);
 }
@@ -51,7 +52,10 @@ checkValidity = (field, value) => {
       if (Number.isInteger(Number(value)) && (value)) isValid = true;
       break;
     case 'stop':
-      if (Number(value)) isValid = true;
+      if (Number(value)) {
+        if (this.state.direction[0] === 'Long' && Number(value) < this.state.price[0]) isValid = true;
+        if (this.state.direction[0] === 'Short' && Number(value) > this.state.price[0]) isValid = true;
+      }
       break;
     case 'price':
       if (Number(value)) isValid = true;
@@ -67,7 +71,7 @@ checkValidity = (field, value) => {
 
 inputValidity = field => (this.state[field][1] ? { valid: true } : { invalid: true });
 
-processNewTrade = (event) => {
+handleChange = (event) => {
   if (Object.prototype.hasOwnProperty.call(event, '_isAMomentObject')) {
     this.setState({
       date: [event, true],
@@ -78,9 +82,16 @@ processNewTrade = (event) => {
 
   const inputIsValid = ((name === 'direction') || (name === 'date')) ? true : this.checkValidity(name, value);
 
-  this.setState({
-    [name]: [value, inputIsValid],
-  }, () => this.submitReady());
+  if ((name === 'direction') || (name === 'price') || (name === 'symbol')) {
+    this.setState({
+      [name]: [value, inputIsValid],
+      stop: ['', false],
+    }, () => this.submitReady());
+  } else {
+    this.setState({
+      [name]: [value, inputIsValid],
+    }, () => this.submitReady());
+  }
 }
 
 submitReady = () => {
@@ -111,8 +122,16 @@ confirmTrade = () => {
       },
     ],
   };
-  console.log(tradeModel);
-  this.setState({ confirm: true, tradeModel });
+  const confirmationModel = {
+    symbol: this.state.symbol[0].toUpperCase(),
+    long: this.state.direction[0] === 'Long', // true = long
+    stop: Number(this.state.stop[0]),
+    date: Date.parse(this.state.date[0]._d),
+    size: parseInt(this.state.size[0], 10),
+    price: Number(this.state.price[0]),
+    comments: this.state.comments[0],
+  };
+  this.setState({ confirm: true, tradeModel, confirmationModel });
 }
 
 confirmButtonState = () => (this.state.readyToSubmit ? { disabled: false } : { disabled: true })
@@ -141,10 +160,13 @@ render() {
       </ModalHeader>
       <ModalBody id="mbody">
         {this.state.confirm ?
-          <Confirmation model={this.state.tradeModel} />
+          <Confirmation
+            model={this.state.confirmationModel}
+            lastPrices={this.props.fxLastPrices}
+          />
           :
           <EntryForm
-            sendFormValue={fv => this.processNewTrade(fv)}
+            sendFormValue={fv => this.handleChange(fv)}
             date={this.state.date[0]}
             focused={this.state.dateFocus}
             onDateFocus={() => this.setState({ dateFocus: !this.state.dateFocus })}
@@ -195,5 +217,6 @@ TradeEntry.propTypes = {
   onToggle: PropTypes.func.isRequired,
   show: PropTypes.bool.isRequired,
   userId: PropTypes.string.isRequired,
+  fxLastPrices: PropTypes.objectOf(PropTypes.any).isRequired,
 };
 export default TradeEntry;

@@ -1,26 +1,29 @@
 #symbol{
     text-transform: uppercase;
 }
-#entrydata{
-    background: rgb(228, 216, 161);
+.confirmation{
     white-space: pre-wrap;      /* CSS3 */   
     white-space: -moz-pre-wrap; /* Firefox */    
     white-space: -pre-wrap;     /* Opera <7 */   
     white-space: -o-pre-wrap;   /* Opera 7 */    
     word-wrap: break-word;      /* IE */
     font-weight: bold;
-    border-radius: 3px;
-    padding: 5px;
-    margin-bottom: 5px;
-}
-#entrycomments{
-    background: rgb(221, 217, 217);
-    white-space: pre-wrap;      /* CSS3 */   
-    white-space: -moz-pre-wrap; /* Firefox */    
-    white-space: -pre-wrap;     /* Opera <7 */   
-    white-space: -o-pre-wrap;   /* Opera 7 */    
-    word-wrap: break-word;      /* IE */
-    border-radius: 3px;
-    padding: 5px;
-    font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif
+    .entrydata{
+        background: rgb(228, 216, 161);
+        margin-bottom: 5px;
+        border-radius: 3px;
+        padding: 5px;
+    }
+    .entrycomments{
+        background: rgb(221, 217, 217);
+        margin-bottom: 5px;
+        border-radius: 3px;
+        padding: 5px;
+    }
+    .entryrisk{
+        background: rgb(218, 90, 90);
+        margin-bottom: 5px;
+        border-radius: 3px;
+        padding: 5px;
+    }
 }
