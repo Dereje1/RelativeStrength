@@ -1,1 +1,13 @@
-/* No CSS *//*# sourceMappingURL=profile.css.map */
+.profile_header {
+  text-align: center;
+  padding: 5px;
+}
+
+.profile_items {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+}
+/*# sourceMappingURL=profile.css.map */

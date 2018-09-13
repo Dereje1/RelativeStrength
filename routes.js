@@ -24,5 +24,16 @@ router.post('/api/newtrade', isLoggedIn, (req, res) => {
     res.json(trade);
   });
 });
+
+router.get('/api/getopentrades', isLoggedIn, (req, res) => {
+  const traderGoogleId = req.user.google.id;
+  Trades.find({ userId: traderGoogleId, tradeStatusOpen: true })
+    .sort('-entry.date')
+    .exec((err, openTrades) => {
+      if (err) throw err;
+      res.json(openTrades);
+    });
+});
+
 module.exports = router;
 

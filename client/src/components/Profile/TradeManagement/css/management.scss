@@ -1,0 +1,33 @@
+.opentradesbody{
+    font-size: 4vw;
+}
+.opentradescaption{
+    text-align: center;
+    font-size: 4vw;
+    white-space: pre-line;
+}
+.directionalArrowUp{
+    color: green
+}
+
+.directionalArrowDown{
+    color:red
+}
+
+.profit{
+    color: green
+}
+
+.loss{
+    color:red
+}
+
+
+@media screen and (min-width: 700px) {
+    .opentradesbody {
+        font-size: 24px;
+    }
+    .opentradescaption{
+        font-size: 24px;
+    }
+}
