@@ -7,12 +7,16 @@ import moment from 'moment';
 import './css/management.css';
 import { findGain, openTradesCummulative } from '../../../utilitiy/orders';
 
+import TradeModification from './modify';
+
 class TradeManagement extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
+      showModification: false,
       gainUnits: 'pips',
+      tradeDetail: {},
     };
   }
 
@@ -63,12 +67,19 @@ class TradeManagement extends Component {
             <FontAwesomeIcon
               className="fas fa-cog"
               icon={faCog}
-              onClick={() => console.log('Hello I\'m a Cog!!')}
+              onClick={() => this.modificationModal(t)}
             />
           </th>
         </tr>
       ));
     return <tbody className="opentradesbody">{rowValues}</tbody>;
+  }
+
+  modificationModal = (t) => {
+    this.setState({
+      showModification: !this.state.showModification,
+      tradeDetail: t,
+    });
   }
   render() {
     return (
@@ -76,6 +87,12 @@ class TradeManagement extends Component {
         <caption className="opentradescaption">{this.getCummulative()}
         </caption>
         {this.tableBody()}
+        <TradeModification
+          show={this.state.showModification}
+          trade={this.state.tradeDetail}
+          fxLastPrices={this.props.fxLastPrices}
+          onToggle={() => this.setState({ showModification: false })}
+        />
       </Table>
     );
   }

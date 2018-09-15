@@ -24,6 +24,39 @@
   color: red;
 }
 
+.tradedetail {
+  white-space: pre-line;
+  font-weight: bold;
+}
+
+.tradedetail .tradedata {
+  background: #e4d8a1;
+  margin-bottom: 5px;
+  border-radius: 3px;
+  padding: 5px;
+}
+
+.tradedetail .entrycomments {
+  background: #ddd9d9;
+  margin-bottom: 5px;
+  border-radius: 3px;
+  padding: 5px;
+}
+
+.tradedetail .gainrisk {
+  margin-bottom: 5px;
+  border-radius: 3px;
+  padding: 5px;
+}
+
+.tradedetail .gainrisk.profitable {
+  background: #42d655;
+}
+
+.tradedetail .gainrisk.loser {
+  background: #ec5f55;
+}
+
 @media screen and (min-width: 700px) {
   .opentradesbody {
     font-size: 24px;

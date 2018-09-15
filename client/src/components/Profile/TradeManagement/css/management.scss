@@ -22,7 +22,33 @@
     color:red
 }
 
-
+.tradedetail{
+    white-space: pre-line;
+    font-weight: bold;  
+    .tradedata{
+        background: rgb(228, 216, 161);
+        margin-bottom: 5px;
+        border-radius: 3px;
+        padding: 5px;
+    }
+    .entrycomments{
+        background: rgb(221, 217, 217);
+        margin-bottom: 5px;
+        border-radius: 3px;
+        padding: 5px;
+    }
+    .gainrisk{
+        margin-bottom: 5px;
+        border-radius: 3px;
+        padding: 5px;
+        &.profitable{
+            background: rgb(66, 214, 85);
+        }
+        &.loser{
+            background: rgb(236, 95, 85);
+        }
+    }
+}
 @media screen and (min-width: 700px) {
     .opentradesbody {
         font-size: 24px;
