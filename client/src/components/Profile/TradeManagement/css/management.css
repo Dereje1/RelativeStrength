@@ -24,6 +24,16 @@
   color: red;
 }
 
+.CustomModalHeader .modal-title {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  width: 100%;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+
 .tradedetail {
   white-space: pre-line;
   font-weight: bold;

@@ -35,5 +35,12 @@ router.get('/api/getopentrades', isLoggedIn, (req, res) => {
     });
 });
 
+router.put('/api/movestop', (req, res) => {
+  const { tradeId, newStop } = req.body;
+  Trades.findByIdAndUpdate(tradeId, { stop: newStop }, { new: true }, (err, updated) => {
+    if (err) throw err;
+    res.json(updated);
+  });
+});
 module.exports = router;
 
