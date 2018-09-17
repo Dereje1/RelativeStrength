@@ -42,5 +42,18 @@ router.put('/api/movestop', (req, res) => {
     res.json(updated);
   });
 });
+
+router.put('/api/closetrade', (req, res) => {
+  const { tradeId, exitInfo } = req.body;
+  Trades.findByIdAndUpdate(
+    tradeId,
+    { tradeStatusOpen: false, exit: exitInfo },
+    { new: true },
+    (err, updated) => {
+      if (err) throw err;
+      res.json(updated);
+    },
+  );
+});
 module.exports = router;
 

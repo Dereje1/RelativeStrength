@@ -13,7 +13,7 @@ const labelSize = 2;
 const EntryForm = props => (
   <Form>
     <FormGroup row>
-      <Label for="entrydate" sm={labelSize}>Date</Label>
+      <Label for="exitdate" sm={labelSize}>Date</Label>
       <Col sm={inputSize}>
         <SingleDatePicker
           date={props.date} // momentPropTypes.momentObj or null
@@ -106,7 +106,7 @@ const EntryForm = props => (
       <Label for="comments" sm={labelSize}>Notes</Label>
       <Col sm={inputSize}>
         <Input
-          type="text"
+          type="textarea"
           name="comments"
           id="comments"
           value={props.currentState.comments[0]}

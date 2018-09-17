@@ -67,6 +67,11 @@
   background: #ec5f55;
 }
 
+#comments {
+  height: 5em;
+  width: 100%;
+}
+
 @media screen and (min-width: 700px) {
   .opentradesbody {
     font-size: 24px;

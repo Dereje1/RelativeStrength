@@ -1,15 +1,17 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-
+import moment from 'moment';
 // bootstrap
 import { Col, Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowUp, faArrowDown } from '@fortawesome/free-solid-svg-icons';
-import './css/management.css';
 
 import TradeDetail from './tradedetail';
-import ModifyStop from './modifyStop';
-import { setStop } from '../../../utilitiy/orders';
+import ModifyStop from './modifyStopForm';
+import ExitForm from './exitTradeForm';
+import { setStop, closeTrade } from '../../../utilitiy/orders';
+
+import './css/management.css';
 
 class TradeModification extends Component {
 
@@ -29,15 +31,33 @@ class TradeModification extends Component {
         stop: [this.props.trade.stop, false],
         submit: true,
       },
+      exitTrade: {
+        displayForm: false,
+        // no clue why date picker needs to call moment as a function here but not in entry!!
+        date: [moment(), true],
+        price: [this.props.fxLastPrices[this.props.trade.symbol], false],
+        comments: ['', false],
+        submit: true,
+      },
       controlButtons: {
         full: true,
         moveStop: false,
         closeTrade: false,
       },
+      dateFocus: false,
     };
     this.setState(emptyForm);
   }
 
+  // Stop Adjustment
+  stopAdjustment = () => {
+    const copyOfState = JSON.parse(JSON.stringify(this.state));
+    copyOfState.moveStop.displayForm = true;
+    copyOfState.moveStop.submit = false;
+    copyOfState.controlButtons.moveStop = true;
+    copyOfState.controlButtons.full = false;
+    this.setState(copyOfState);
+  }
   handleStopChange = (event) => {
     const { value } = event.target;
     const validity = this.checkStopValidity(value);
@@ -60,15 +80,6 @@ class TradeModification extends Component {
   moveStopButtonState = () => (this.state.moveStop.submit ?
     { disabled: false } : { disabled: true })
 
-  stopAdjustment = () => {
-    const copyOfState = JSON.parse(JSON.stringify(this.state));
-    copyOfState.moveStop.displayForm = true;
-    copyOfState.moveStop.submit = false;
-    copyOfState.controlButtons.moveStop = true;
-    copyOfState.controlButtons.full = false;
-    this.setState(copyOfState);
-  }
-
   submitNewStop = async () => {
     const newStopObject = {
       tradeId: this.props.trade._id,
@@ -77,6 +88,87 @@ class TradeModification extends Component {
     await setStop(newStopObject);
     window.location.assign('/');
   }
+  /* end stop Adjustment */
+
+  // Exiting Trades
+  exitTrade = () => {
+    const copyOfState = JSON.parse(JSON.stringify(this.state));
+    copyOfState.exitTrade.displayForm = true;
+    copyOfState.exitTrade.submit = false;
+    copyOfState.exitTrade.date = [moment(), true];
+    copyOfState.controlButtons.closeTrade = true;
+    copyOfState.controlButtons.full = false;
+    copyOfState.exitTrade.submit = false;
+    this.setState(copyOfState);
+  }
+
+  handleExitChange = (event) => {
+    const copyOfState = JSON.parse(JSON.stringify(this.state));
+    if (Object.prototype.hasOwnProperty.call(event, '_isAMomentObject')) {
+      copyOfState.exitTrade.date = [event, true];
+      this.setState(copyOfState);
+      return;
+    }
+    const { name, value } = event.target;
+    const inputIsValid = this.checkExitValidity(name, value);
+    copyOfState.exitTrade[name] = [value, inputIsValid];
+    copyOfState.exitTrade.date = [this.state.exitTrade.date[0], true];
+    this.setState(copyOfState, () => this.exitButton());
+  }
+
+  checkExitValidity = (field, value) => {
+    let isValid = false;
+    switch (field) {
+      case 'price':
+        if (Number(value)) isValid = true;
+        break;
+      case 'comments':
+        if (value) isValid = true;
+        break;
+      default:
+        break;
+    }
+    return isValid;
+  }
+
+  exitButton = () => {
+    const copyOfState = JSON.parse(JSON.stringify(this.state));
+    const stateKeys = Object.keys(this.state.exitTrade);
+    const validatedInputs = ['price', 'comments'];
+    let buttonState = true;
+    stateKeys.forEach((k) => {
+      if (validatedInputs.includes(k) && !this.state.exitTrade[k][1]) {
+        buttonState = false;
+      }
+    });
+    copyOfState.exitTrade.submit = buttonState;
+    copyOfState.exitTrade.date = [this.state.exitTrade.date[0], true];
+    this.setState(copyOfState);
+  }
+
+  inputExitValidity = field => (this.state.exitTrade[field][1] ?
+    { valid: true } : { invalid: true });
+
+  exitButtonState = () => (this.state.exitTrade.submit ?
+    { disabled: false } : { disabled: true })
+
+  submitExit = async () => {
+    const exitObject = {
+      tradeId: this.props.trade._id,
+      exitInfo: [
+        {
+          date: Date.parse(this.state.exitTrade.date[0]._d),
+          size: parseInt(this.props.trade.entry[0].size, 10),
+          price: Number(this.state.exitTrade.price[0]),
+          comments: this.state.exitTrade.comments[0],
+        },
+      ],
+    };
+    await closeTrade(exitObject);
+    window.location.assign('/');
+  }
+
+  /* End Exit trade */
 
   cancelModify = () => {
     if (this.state.moveStop.displayForm) {
@@ -89,19 +181,37 @@ class TradeModification extends Component {
     } else this.props.onToggle();
   };
 
-  modalBodyRender = () => (
-    this.state.moveStop.displayForm ?
-      <ModifyStop
-        sendStopValue={fv => this.handleStopChange(fv)}
-        formVal={this.state.moveStop.stop}
-        validity={() => this.inputStopValidity()}
-      />
-      :
+  modalBodyRender = () => {
+    // lastPrice={this.props.fxLastPrices[this.props.trade.symbol]}
+    if (this.state.moveStop.displayForm) {
+      return (
+        <ModifyStop
+          sendStopValue={fv => this.handleStopChange(fv)}
+          formVal={this.state.moveStop.stop}
+          validity={() => this.inputStopValidity()}
+        />
+      );
+    } else if (this.state.exitTrade.displayForm) {
+      return (
+        <ExitForm
+          sendFormValue={fv => this.handleExitChange(fv)}
+          date={this.state.exitTrade.date[0]}
+          focused={this.state.dateFocus}
+          onDateFocus={() => this.setState({ dateFocus: !this.state.dateFocus })}
+          validity={name => this.inputExitValidity(name)}
+          price={this.state.exitTrade.price[0]}
+          comments={this.state.exitTrade.comments[0]}
+        />
+      );
+    }
+
+    return (
       <TradeDetail
         trade={this.props.trade}
         fxLastPrices={this.props.fxLastPrices}
       />
-  );
+    );
+  };
 
   controlButtonsRender = () => {
     if (this.state.controlButtons.full) {
@@ -120,7 +230,7 @@ class TradeModification extends Component {
             <Button
               color="warning"
               className="float-right"
-              onClick={this.confirmTrade}
+              onClick={this.exitTrade}
             >Close Trade
             </Button>
           </Col>
@@ -145,11 +255,13 @@ class TradeModification extends Component {
 
     return (
       <React.Fragment>
-        <Col sm={8}>
+        <Col sm={12}>
           <Button
             color="success"
             className="float-right"
-            onClick={this.confirmTrade}
+            onClick={this.submitExit}
+            {...this.exitButtonState()}
+            block
           >Close Trade
           </Button>
         </Col>

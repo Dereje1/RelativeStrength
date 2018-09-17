@@ -27,6 +27,11 @@ export const setStop = newStop =>
   axios.put('/api/movestop', newStop)
     .then(response => (response.data))
     .catch(error => error);
+
+export const closeTrade = exitInfo =>
+  axios.put('/api/closetrade', exitInfo)
+    .then(response => (response.data))
+    .catch(error => error);
 // end api commands
 
 export const getPips = (symb, change) => {
