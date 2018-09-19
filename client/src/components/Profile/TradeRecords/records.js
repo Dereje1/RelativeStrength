@@ -2,26 +2,34 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Table } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCog, faArrowUp, faArrowDown } from '@fortawesome/free-solid-svg-icons';
+import { faInfoCircle, faArrowUp, faArrowDown } from '@fortawesome/free-solid-svg-icons';
 import moment from 'moment';
-import './css/management.css';
+
 import { findGain, getProfits } from '../../../utilitiy/orders';
 
-import TradeModification from './modify';
+import TradeInfo from './tradeInfo';
+import './css/records.css';
 
-class TradeManagement extends Component {
+class TradeRecords extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      showModification: false,
+      showTradeDetail: false,
       gainUnits: 'pips',
       tradeDetail: {},
     };
   }
 
-  getGain = (symbol, long, costBasis, size) => {
-    const gain = findGain(symbol, long, costBasis, size, this.props.fxLastPrices);
+  getGain = (singleTrade) => {
+    const {
+      symbol, long, entry, exit,
+    } = singleTrade;
+
+    const gain = findGain(
+      symbol, long, entry[0].price, entry[0].size, this.props.fxLastPrices,
+      { closePrice: exit[0].price, closedPipVal: exit[0].pipValue },
+    );
     const gainresult = {
       pips: `${gain.pips} pips`,
       dollars: gain.dollars < 0 ? `$(${Math.abs(gain.dollars)})` : `$${gain.dollars}`,
@@ -30,15 +38,23 @@ class TradeManagement extends Component {
   }
 
   getCummulative = () => {
-    const cummulative = getProfits(this.props.trades, this.props.fxLastPrices);
+    const cummulative = getProfits(this.props.trades, this.props.fxLastPrices, true);
     return (
       this.state.gainUnits === 'pips' ?
-        ` Total Gain = ${cummulative.totalPips} Pips
-         Open Risk = ${cummulative.openRiskPips} Pips`
+        ` Total Gain = ${cummulative.totalPips} Pips`
         :
-        `Total Gain = $${cummulative.totalDollars}
-        Open Risk = $${cummulative.openRiskDollars}`
+        `Total Gain = $${cummulative.totalDollars}`
     );
+  }
+
+  formatExitDate = (t) => {
+    const entry = moment(t.entry[0].date).format('MMM D');
+    const exit = moment(t.exit[0].date).format('MMM D');
+
+    const formattedDate = entry === exit ? moment(t.entry[0].date).format('MMM D') :
+      `${moment(t.entry[0].date).format('MMM D')}-${moment(t.exit[0].date).format('D')}`;
+
+    return formattedDate;
   }
 
   toggleGain = () => {
@@ -56,17 +72,17 @@ class TradeManagement extends Component {
               icon={t.long ? faArrowUp : faArrowDown}
             />
           </th>
-          <th>{moment(t.entry[0].date).format('MMM D')}</th>
+          <th>{this.formatExitDate(t)}</th>
           <th
-            className={this.getGain(t.symbol, t.long, t.entry[0].price, t.entry[0].size)[1] ? 'profit' : 'loss'}
+            className={this.getGain(t)[1] ? 'profit' : 'loss'}
             onClick={this.toggleGain}
           >
-            {this.getGain(t.symbol, t.long, t.entry[0].price, t.entry[0].size)[0]}
+            {this.getGain(t)[0]}
           </th>
           <th>
             <FontAwesomeIcon
               className="fas fa-cog"
-              icon={faCog}
+              icon={faInfoCircle}
               onClick={() => this.modificationModal(t)}
             />
           </th>
@@ -77,21 +93,21 @@ class TradeManagement extends Component {
 
   modificationModal = (t) => {
     this.setState({
-      showModification: !this.state.showModification,
+      showTradeDetail: !this.state.showModification,
       tradeDetail: t,
     });
   }
   render() {
     return (
-      <Table responsive>
+      <Table responsive striped>
         <caption className="opentradescaption">{this.getCummulative()}
         </caption>
         {this.tableBody()}
-        <TradeModification
-          show={this.state.showModification}
+        <TradeInfo
+          show={this.state.showTradeDetail}
           trade={this.state.tradeDetail}
           fxLastPrices={this.props.fxLastPrices}
-          onToggle={() => this.setState({ showModification: false })}
+          onToggle={() => this.setState({ showTradeDetail: false })}
         />
       </Table>
     );
@@ -99,9 +115,9 @@ class TradeManagement extends Component {
 
 }
 
-TradeManagement.propTypes = {
+TradeRecords.propTypes = {
   trades: PropTypes.arrayOf(PropTypes.any).isRequired,
   fxLastPrices: PropTypes.objectOf(PropTypes.any).isRequired,
 };
 
-export default TradeManagement;
+export default TradeRecords;

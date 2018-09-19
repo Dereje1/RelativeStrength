@@ -9,7 +9,7 @@ import { faArrowUp, faArrowDown } from '@fortawesome/free-solid-svg-icons';
 import TradeDetail from './tradedetail';
 import ModifyStop from './modifyStopForm';
 import ExitForm from './exitTradeForm';
-import { setStop, closeTrade, getDollarsPerPip } from '../../../utilitiy/orders';
+import { setStop, closeTrade } from '../../../utilitiy/orders';
 
 import './css/management.css';
 
@@ -160,7 +160,6 @@ class TradeModification extends Component {
           date: Date.parse(this.state.exitTrade.date[0]._d),
           size: parseInt(this.props.trade.entry[0].size, 10),
           price: Number(this.state.exitTrade.price[0]),
-          pipValue: getDollarsPerPip(this.props.trade.symbol, this.props.fxLastPrices),
           comments: this.state.exitTrade.comments[0],
         },
       ],

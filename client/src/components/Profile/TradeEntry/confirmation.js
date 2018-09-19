@@ -30,7 +30,7 @@ const Confirmation = ({
     <div className="entryrisk">
       {
         `Risk in Pips = ${getPips(symbol, stop - price)}
-Risk in Dollars = $${getDollarsPerPip(symbol, lastPrices) * getPips(symbol, stop - price) * (size / 100000)}`
+Risk in Dollars = $${Math.ceil(getDollarsPerPip(symbol, lastPrices) * getPips(symbol, stop - price) * (size / 100000))}`
       }
     </div>
   </Col>

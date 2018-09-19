@@ -36,4 +36,89 @@
   border-radius: 3px;
   padding: 5px;
 }
+
+.lastprice {
+  font-weight: bold;
+  text-align: center;
+}
+
+.formLabels {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  direction: row;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+  margin-bottom: 5px;
+}
+
+.dateSymbol {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  direction: row;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+  margin-bottom: 10px;
+}
+
+.dateSymbol #Trade_Entry_Date {
+  width: 50%;
+  text-align: center;
+  margin-right: 5px;
+}
+
+.dateSymbol #symbol {
+  width: 50%;
+}
+
+.directionPrice {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  direction: row;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+  margin-bottom: 10px;
+}
+
+.directionPrice #direction {
+  width: 50%;
+  margin-right: 5px;
+  text-align: center;
+}
+
+.directionPrice #price {
+  width: 50%;
+  text-align: center;
+}
+
+.sizeStop {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  direction: row;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+  margin-bottom: 10px;
+}
+
+.sizeStop #stop {
+  width: 50%;
+}
+
+.sizeStop #positionsize {
+  width: 50%;
+  margin-right: 5px;
+}
+
+.comments {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  direction: row;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+  margin-bottom: 10px;
+}
 /*# sourceMappingURL=entry.css.map */

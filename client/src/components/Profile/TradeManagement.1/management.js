@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCog, faArrowUp, faArrowDown } from '@fortawesome/free-solid-svg-icons';
 import moment from 'moment';
 import './css/management.css';
-import { findGain, getProfits } from '../../../utilitiy/orders';
+import { findGain, openTradesCummulative } from '../../../utilitiy/orders';
 
 import TradeModification from './modify';
 
@@ -30,7 +30,7 @@ class TradeManagement extends Component {
   }
 
   getCummulative = () => {
-    const cummulative = getProfits(this.props.trades, this.props.fxLastPrices);
+    const cummulative = openTradesCummulative(this.props.trades, this.props.fxLastPrices);
     return (
       this.state.gainUnits === 'pips' ?
         ` Total Gain = ${cummulative.totalPips} Pips

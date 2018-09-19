@@ -21,6 +21,7 @@ const tradeSchema = mongoose.Schema({
       size: { type: Number, required: true },
       price: { type: Number, required: true },
       comments: { type: String, required: true },
+      pipValue: { type: Number, required: true },
     },
   ],
 });

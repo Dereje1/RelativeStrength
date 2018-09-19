@@ -9,28 +9,29 @@ export const symbolList = [
 /*
 Api coomands
 */
-export const postNewTrade = async (entry) => {
-  await axios.post('/api/newtrade', entry).then((response) => {
-    console.log(response.data, 'data succesfully posted!!');
-  })
-    .catch((e) => {
-      console.log(e, 'error with this request!!');
-    });
-};
+export const postNewTrade = entry =>
+  axios.post('/api/newtrade', entry)
+    .then(response => response.data)
+    .catch(error => error);
 
 export const getOpenTrades = () =>
   axios.get('/api/getopentrades')
-    .then(response => (response.data))
+    .then(response => response.data)
+    .catch(error => error);
+
+export const getClosedTrades = () =>
+  axios.get('/api/getclosedtrades')
+    .then(response => response.data)
     .catch(error => error);
 
 export const setStop = newStop =>
   axios.put('/api/movestop', newStop)
-    .then(response => (response.data))
+    .then(response => response.data)
     .catch(error => error);
 
 export const closeTrade = exitInfo =>
   axios.put('/api/closetrade', exitInfo)
-    .then(response => (response.data))
+    .then(response => response.data)
     .catch(error => error);
 // end api commands
 
@@ -58,14 +59,14 @@ export const getDollarsPerPip = (symb, allPairPrices) => {
   else if (baseAgainstUSD[0].indexOf('USD') === 3) multiplier = (usdPairs[baseAgainstUSD[0]]);
   else multiplier = (1 / usdPairs[baseAgainstUSD[0]]);
 
-  return symb.indexOf('JPY') === -1 ? Math.ceil(multiplier * 10) : Math.ceil(multiplier * 1000);
+  return symb.indexOf('JPY') === -1 ? (multiplier * 10) : (multiplier * 1000);
 };
 
-export const findGain = (symb, long, costBasis, avSize, allPairPrices) => {
-  const lastPrice = allPairPrices[symb];
+export const findGain = (symb, long, costBasis, avSize, allPairPrices, closed = false) => {
+  const lastPrice = !closed ? allPairPrices[symb] : closed.closePrice;
   const pipGain = getPips(symb, long ? (lastPrice - costBasis) : (costBasis - lastPrice));
   const dollarGain = Math.round(pipGain
-     * getDollarsPerPip(symb, allPairPrices)
+     * (!closed ? getDollarsPerPip(symb, allPairPrices) : closed.closedPipVal)
      * (avSize / 100000));
   return {
     pips: pipGain,
@@ -74,7 +75,7 @@ export const findGain = (symb, long, costBasis, avSize, allPairPrices) => {
   };
 };
 
-export const openTradesCummulative = (opentrades, allPairPrices) => {
+export const getProfits = (opentrades, allPairPrices, closed = false) => {
   const cummulative = opentrades.reduce((accum, current) => {
     const accumCopy = { ...accum }; // because of no assign-param eslint rule
     accumCopy.totalPips += findGain(
@@ -83,6 +84,8 @@ export const openTradesCummulative = (opentrades, allPairPrices) => {
       current.entry[0].price,
       current.entry[0].size,
       allPairPrices,
+      !closed ? false :
+        { closePrice: current.exit[0].price, closedPipVal: current.exit[0].pipValue },
     ).pips;
     accumCopy.totalDollars += findGain(
       current.symbol,
@@ -90,6 +93,8 @@ export const openTradesCummulative = (opentrades, allPairPrices) => {
       current.entry[0].price,
       current.entry[0].size,
       allPairPrices,
+      !closed ? false :
+        { closePrice: current.exit[0].price, closedPipVal: current.exit[0].pipValue },
     ).dollars;
 
     const openRisk = current.long ?
@@ -103,7 +108,7 @@ export const openTradesCummulative = (opentrades, allPairPrices) => {
       openRiskPips * (current.entry[0].size / 100000) : 0;
 
     accumCopy.openRiskPips += openRiskPips;
-    accumCopy.openRiskDollars += openRiskDollars;
+    accumCopy.openRiskDollars += Math.ceil(openRiskDollars);
     return accumCopy;
   }, {
     totalPips: 0,

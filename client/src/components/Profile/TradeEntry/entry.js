@@ -35,6 +35,7 @@ initializeForm = () => {
     confirm: false,
     tradeModel: {},
     confirmationModel: {},
+    lastPrice: '',
   };
   this.setState(emptyForm);
 }
@@ -46,6 +47,13 @@ checkValidity = (field, value) => {
       if ((/^[a-zA-Z]+$/.test(value)) &&
       symbolList.includes(value.toUpperCase())) {
         isValid = true;
+        this.setState({
+          lastPrice: this.props.fxLastPrices[value.toUpperCase()],
+        });
+      } else {
+        this.setState({
+          lastPrice: '',
+        });
       }
       break;
     case 'size':
@@ -146,7 +154,7 @@ cancelTrade = () => {
 
 enterTrade = async () => {
   await postNewTrade(this.state.tradeModel);
-  this.setState({ confirm: false }, () => this.props.onToggle());
+  window.location.assign('/');
 }
 
 render() {

@@ -35,6 +35,16 @@ router.get('/api/getopentrades', isLoggedIn, (req, res) => {
     });
 });
 
+router.get('/api/getclosedtrades', isLoggedIn, (req, res) => {
+  const traderGoogleId = req.user.google.id;
+  Trades.find({ userId: traderGoogleId, tradeStatusOpen: false })
+    .sort('-entry.date')
+    .exec((err, closedTrades) => {
+      if (err) throw err;
+      res.json(closedTrades);
+    });
+});
+
 router.put('/api/movestop', (req, res) => {
   const { tradeId, newStop } = req.body;
   Trades.findByIdAndUpdate(tradeId, { stop: newStop }, { new: true }, (err, updated) => {

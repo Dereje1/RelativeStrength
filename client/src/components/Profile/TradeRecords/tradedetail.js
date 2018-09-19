@@ -5,16 +5,14 @@ import { getProfits } from '../../../utilitiy/orders';
 
 const TradeDetail = (props) => {
   const {
-    stop,
     entry,
+    exit,
   } = props.trade;
 
   const {
     totalPips,
     totalDollars,
-    openRiskPips,
-    openRiskDollars,
-  } = getProfits([props.trade], props.fxLastPrices);
+  } = getProfits([props.trade], props.fxLastPrices, true);
 
   return (
     <div className="tradedetail">
@@ -30,11 +28,20 @@ const TradeDetail = (props) => {
           `${entry[0].comments}`
         }
       </div>
+      <div className="tradedata">
+        {
+          `Exit Date: ${moment(exit[0].date).format('L')}
+        Cost Basis: ${exit[0].price}`
+        }
+      </div>
+      <div className="entrycomments">
+        {
+          `${exit[0].comments}`
+        }
+      </div>
       <div className={`gainrisk ${totalDollars > 0 ? 'profitable' : 'loser'}`}>
         {
-          `Stop: ${stop}
-          Gain: ${totalPips} Pips, $${totalDollars}
-          Open Risk: ${openRiskPips} Pips, $${openRiskDollars}`
+          `${totalDollars > 0 ? 'Gain:' : 'Loss:'} ${totalPips} Pips, $${totalDollars}`
         }
       </div>
     </div>

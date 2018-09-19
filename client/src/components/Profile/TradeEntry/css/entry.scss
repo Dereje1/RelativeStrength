@@ -1,3 +1,5 @@
+$inputBottomMargin: 10px;
+
 #symbol{
     text-transform: uppercase;
 }
@@ -26,4 +28,69 @@
         border-radius: 3px;
         padding: 5px;
     }
+}
+
+.lastprice{
+    font-weight: bold;
+    text-align: center;
+}
+
+.formLabels{
+    display: flex;
+    direction: row;
+    justify-content: space-around;
+    margin-bottom: 5px;
+}
+
+.dateSymbol{
+    display: flex;
+    direction: row;
+    justify-content: space-around;
+    margin-bottom: $inputBottomMargin;
+    #Trade_Entry_Date{
+        width:50%;
+        text-align: center;
+        margin-right:5px;
+    }
+    #symbol{
+        width:50%;
+    }
+}
+
+.directionPrice{
+    display: flex;
+    direction: row;
+    justify-content: space-around;
+    margin-bottom: $inputBottomMargin;
+    
+    #direction{
+        width:50%;
+        margin-right:5px;
+        text-align: center;
+    }
+    #price{
+        width:50%;
+        text-align: center;
+    }
+}
+
+.sizeStop{
+    display: flex;
+    direction: row;
+    justify-content: space-around;
+    margin-bottom: $inputBottomMargin;
+    #stop{
+        width:50%;
+    }
+    #positionsize{
+        width:50%;
+        margin-right:5px;
+    }
+}
+
+.comments{
+    display: flex;
+    direction: row;
+    justify-content: space-around;
+    margin-bottom: $inputBottomMargin;
 }

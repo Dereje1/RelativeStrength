@@ -1,0 +1,71 @@
+.opentradesbody{
+    font-size: 4vw;
+}
+.opentradescaption{
+    text-align: center;
+    font-size: 4vw;
+    white-space: pre-line;
+}
+.directionalArrowUp{
+    color: green
+}
+
+.directionalArrowDown{
+    color:red
+}
+
+.profit{
+    color: green
+}
+
+.loss{
+    color:red
+}
+
+.CustomModalHeader{
+    .modal-title{
+        display: flex;
+        width: 100%;
+        justify-content: space-between;
+    }
+}
+.tradedetail{
+    white-space: pre-line;
+    font-weight: bold;  
+    .tradedata{
+        background: rgb(228, 216, 161);
+        margin-bottom: 5px;
+        border-radius: 3px;
+        padding: 5px;
+    }
+    .entrycomments{
+        background: rgb(221, 217, 217);
+        margin-bottom: 5px;
+        border-radius: 3px;
+        padding: 5px;
+    }
+    .gainrisk{
+        margin-bottom: 5px;
+        border-radius: 3px;
+        padding: 5px;
+        &.profitable{
+            background: rgb(66, 214, 85);
+        }
+        &.loser{
+            background: rgb(236, 95, 85);
+        }
+    }
+}
+
+#comments{
+    height: 5em;
+    width:100%;
+}
+@media screen and (min-width: 700px) {
+    .opentradesbody {
+        font-size: 24px;
+    }
+    .opentradescaption{
+        font-size: 24px;
+    }
+}

@@ -6,8 +6,9 @@ import { Button } from 'reactstrap';
 // custom functions
 import TradeEntry from './TradeEntry/entry';
 import TradeManagement from './TradeManagement/management';
+import TradeRecords from './TradeRecords/records';
 
-import { getOpenTrades } from '../../utilitiy/orders';
+import { getOpenTrades, getClosedTrades } from '../../utilitiy/orders';
 
 import './css/profile.css';
 
@@ -19,16 +20,23 @@ class Profile extends Component {
     this.state = {
       showEntry: false,
       openTrades: [],
+      closedTrades: [],
     };
   }
 
   componentDidMount() {
     this.findOpenTrades();
+    this.findClosedTrades();
   }
 
   findOpenTrades = async () => {
     const openTrades = await getOpenTrades();
     this.setState({ openTrades });
+  }
+
+  findClosedTrades = async () => {
+    const closedTrades = await getClosedTrades();
+    this.setState({ closedTrades });
   }
 
   entryModal = () => {
@@ -62,6 +70,16 @@ class Profile extends Component {
             this.state.openTrades.length ?
               <TradeManagement
                 trades={this.state.openTrades}
+                fxLastPrices={this.props.forexData.aws.lastPrices}
+              />
+              :
+              null
+          }
+          <hr />
+          {
+            this.state.closedTrades.length ?
+              <TradeRecords
+                trades={this.state.closedTrades}
                 fxLastPrices={this.props.forexData.aws.lastPrices}
               />
               :

@@ -5,16 +5,16 @@ import { SingleDatePicker } from 'react-dates';
 import 'react-dates/initialize';
 import 'react-dates/lib/css/_datepicker.css';
 // bootstrap
-import { Col, Form, FormGroup, Label, Input } from 'reactstrap';
-
-const inputSize = 10;
-const labelSize = 2;
+import { Input } from 'reactstrap';
 
 const EntryForm = props => (
-  <Form>
-    <FormGroup row>
-      <Label for="exitdate" sm={labelSize}>Date</Label>
-      <Col sm={inputSize}>
+  <React.Fragment>
+    <div className="formLabels">
+      <span>Date</span>
+      <span>Symbol</span>
+    </div>
+    <div className="dateSymbol">
+      <div id="Trade_Entry_Date">
         <SingleDatePicker
           date={props.date} // momentPropTypes.momentObj or null
           onDateChange={date => props.sendFormValue(date)} // PropTypes.func.isRequired
@@ -22,101 +22,84 @@ const EntryForm = props => (
           onFocusChange={() => props.onDateFocus()} // PropTypes.func.isRequired
           numberOfMonths={1}
           isOutsideRange={() => false}
-          id="Trade_Entry_Date"
+          block
         />
-      </Col>
-    </FormGroup>
+      </div>
+      <Input
+        type="text"
+        name="symbol"
+        id="symbol"
+        value={props.currentState.symbol[0]}
+        onChange={event => props.sendFormValue(event)}
+        {...props.validity('symbol')}
+        autoComplete="off"
+      />
+    </div>
+    <div className="formLabels">
+      <span>Direction</span>
+      <span>Price <strong>{props.currentState.lastPrice}</strong></span>
+    </div>
+    <div className="directionPrice">
+      <Input
+        type="select"
+        name="direction"
+        id="direction"
+        value={props.currentState.direction[0]}
+        onChange={event => props.sendFormValue(event)}
+      >
+        <option>Long</option>
+        <option>Short</option>
+      </Input>
+      <Input
+        type="text"
+        name="price"
+        id="price"
+        value={props.currentState.price[0]}
+        onChange={event => props.sendFormValue(event)}
+        {...props.validity('price')}
+        autoComplete="off"
+      />
+    </div>
+    <div className="formLabels">
+      <span>Size</span>
+      <span>Stop</span>
+    </div>
+    <div className="sizeStop">
+      <Input
+        type="text"
+        name="size"
+        id="positionsize"
+        value={props.currentState.size[0]}
+        onChange={event => props.sendFormValue(event)}
+        {...props.validity('size')}
+        autoComplete="off"
+      />
+      <Input
+        type="text"
+        name="stop"
+        id="stop"
+        value={props.currentState.stop[0]}
+        onChange={event => props.sendFormValue(event)}
+        {...props.validity('stop')}
+        autoComplete="off"
+      />
+    </div>
+    <div className="formLabels">
+      <span>Notes</span>
+    </div>
+    <div className="comments">
+      <Input
+        type="textarea"
+        name="comments"
+        id="comments"
+        value={props.currentState.comments[0]}
+        onChange={event => props.sendFormValue(event)}
+        {...props.validity('comments')}
+        autoComplete="off"
+      />
+    </div>
+  </React.Fragment>
 
-    <FormGroup row>
-      <Label for="symbol" sm={labelSize}>Symbol</Label>
-      <Col sm={inputSize}>
-        <Input
-          type="text"
-          name="symbol"
-          id="symbol"
-          value={props.currentState.symbol[0]}
-          onChange={event => props.sendFormValue(event)}
-          {...props.validity('symbol')}
-          autoComplete="off"
-        />
-      </Col>
-    </FormGroup>
-
-    <FormGroup row>
-      <Label for="direction" sm={labelSize}>Direction</Label>
-      <Col sm={inputSize}>
-        <Input
-          type="select"
-          name="direction"
-          id="direction"
-          value={props.currentState.direction[0]}
-          onChange={event => props.sendFormValue(event)}
-        >
-          <option>Long</option>
-          <option>Short</option>
-        </Input>
-      </Col>
-    </FormGroup>
-
-    <FormGroup row>
-      <Label for="price" sm={labelSize}>Price</Label>
-      <Col sm={inputSize}>
-        <Input
-          type="text"
-          name="price"
-          id="price"
-          value={props.currentState.price[0]}
-          onChange={event => props.sendFormValue(event)}
-          {...props.validity('price')}
-          autoComplete="off"
-        />
-      </Col>
-    </FormGroup>
-    <FormGroup row>
-      <Label for="positionsize" sm={labelSize}>Size</Label>
-      <Col sm={inputSize}>
-        <Input
-          type="text"
-          name="size"
-          id="positionsize"
-          value={props.currentState.size[0]}
-          onChange={event => props.sendFormValue(event)}
-          {...props.validity('size')}
-          autoComplete="off"
-        />
-      </Col>
-    </FormGroup>
-
-    <FormGroup row>
-      <Label for="stop" sm={labelSize}>Stop</Label>
-      <Col sm={inputSize}>
-        <Input
-          type="text"
-          name="stop"
-          id="stop"
-          value={props.currentState.stop[0]}
-          onChange={event => props.sendFormValue(event)}
-          {...props.validity('stop')}
-          autoComplete="off"
-        />
-      </Col>
-    </FormGroup>
-
-    <FormGroup row>
-      <Label for="comments" sm={labelSize}>Notes</Label>
-      <Col sm={inputSize}>
-        <Input
-          type="textarea"
-          name="comments"
-          id="comments"
-          value={props.currentState.comments[0]}
-          onChange={event => props.sendFormValue(event)}
-          {...props.validity('comments')}
-          autoComplete="off"
-        />
-      </Col>
-    </FormGroup>
-  </Form>
 );
 
 EntryForm.propTypes = {

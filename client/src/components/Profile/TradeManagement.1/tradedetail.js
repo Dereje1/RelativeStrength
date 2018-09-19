@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import { getProfits } from '../../../utilitiy/orders';
+import { openTradesCummulative } from '../../../utilitiy/orders';
 
 const TradeDetail = (props) => {
   const {
@@ -14,7 +14,7 @@ const TradeDetail = (props) => {
     totalDollars,
     openRiskPips,
     openRiskDollars,
-  } = getProfits([props.trade], props.fxLastPrices);
+  } = openTradesCummulative([props.trade], props.fxLastPrices);
 
   return (
     <div className="tradedetail">
