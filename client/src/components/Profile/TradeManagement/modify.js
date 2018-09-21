@@ -277,7 +277,7 @@ class TradeModification extends Component {
       <Modal
         isOpen={this.props.show}
       >
-        <ModalHeader className="CustomModalHeader">
+        <ModalHeader className="CustomModalHeader" toggle={this.cancelModify}>
           <div>
             {`${this.props.trade.symbol} `}
             <FontAwesomeIcon
@@ -285,12 +285,6 @@ class TradeModification extends Component {
               icon={this.props.trade.long ? faArrowUp : faArrowDown}
             />
           </div>
-          <Button
-            color="danger"
-            className="float-left"
-            onClick={this.cancelModify}
-          >Cancel
-          </Button>
         </ModalHeader>
         <ModalBody id="mbody">
           {this.modalBodyRender()}

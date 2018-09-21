@@ -37,14 +37,14 @@ $inputBottomMargin: 10px;
 
 .formLabels{
     display: flex;
-    direction: row;
+    flex-direction: row;
     justify-content: space-around;
     margin-bottom: 5px;
 }
 
 .dateSymbol{
     display: flex;
-    direction: row;
+    flex-direction: row;
     justify-content: space-around;
     margin-bottom: $inputBottomMargin;
     #Trade_Entry_Date{
@@ -59,7 +59,7 @@ $inputBottomMargin: 10px;
 
 .directionPrice{
     display: flex;
-    direction: row;
+    flex-direction: row;
     justify-content: space-around;
     margin-bottom: $inputBottomMargin;
     
@@ -76,7 +76,7 @@ $inputBottomMargin: 10px;
 
 .sizeStop{
     display: flex;
-    direction: row;
+    flex-direction: row;
     justify-content: space-around;
     margin-bottom: $inputBottomMargin;
     #stop{
@@ -90,7 +90,40 @@ $inputBottomMargin: 10px;
 
 .comments{
     display: flex;
-    direction: row;
+    flex-direction: row;
     justify-content: space-around;
     margin-bottom: $inputBottomMargin;
+}
+
+.savedmodels{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    margin-bottom: $inputBottomMargin;
+    flex-wrap: wrap;
+    h4{
+        cursor: pointer;
+        font-size: 120%;
+    }
+}
+
+.entryfooter{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .clearform{
+        color: red;
+        font-size: 10vw;
+        width:5%;
+        margin-right: 5%;
+        cursor: pointer;
+    }
+    button{
+        cursor: not-allowed;
+    }
+}
+
+
+.modal-header{
+    button:focus {outline:0;}
 }

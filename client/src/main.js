@@ -62,7 +62,8 @@ class Main extends React.Component {
   }
 
   render() {
-    if (!Object.keys(this.props.forexData).length) return null;
+    if (!Object.keys(this.props.forexData).length) return <div className="Loading" />;
+    if (!this.state.secondsSinceUpdate) return <div className="Loading" />;
     return (
       <div>
         <Header

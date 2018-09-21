@@ -83,7 +83,7 @@ class Profile extends Component {
                 fxLastPrices={this.props.forexData.aws.lastPrices}
               />
               :
-              null
+              <div className="Loading" />
           }
         </div>
       );

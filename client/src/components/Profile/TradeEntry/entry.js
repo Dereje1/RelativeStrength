@@ -2,10 +2,13 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 // bootstrap
-import { Col, Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrash } from '@fortawesome/free-solid-svg-icons';
 
 import EntryForm from './entryForm';
 import Confirmation from './confirmation';
+import SavedModels from './savedmodels';
 import { symbolList, postNewTrade } from '../../../utilitiy/orders';
 
 import './css/entry.css';
@@ -36,6 +39,7 @@ initializeForm = () => {
     tradeModel: {},
     confirmationModel: {},
     lastPrice: '',
+    savedModels: JSON.parse(localStorage.getItem('tradeideas')),
   };
   this.setState(emptyForm);
 }
@@ -131,6 +135,7 @@ confirmTrade = () => {
     ],
   };
   const confirmationModel = {
+    tempId: Date.now(),
     symbol: this.state.symbol[0].toUpperCase(),
     long: this.state.direction[0] === 'Long', // true = long
     stop: Number(this.state.stop[0]),
@@ -152,6 +157,51 @@ cancelTrade = () => {
   this.setState({ confirm: false });
 }
 
+saveTradeModel = () => {
+  if (!this.state.savedModels) {
+    this.setState({ savedModels: [this.state.confirmationModel] }, () => localStorage.setItem('tradeideas', JSON.stringify(this.state.savedModels)));
+  } else {
+    let copyOfSavedModels = JSON.parse(JSON.stringify(this.state.savedModels));
+    const savedSymbolList = copyOfSavedModels.map(l => l.symbol);
+    if (savedSymbolList.includes(this.state.confirmationModel.symbol)) {
+      const indexOfSymbol = copyOfSavedModels.findIndex(m =>
+        m.symbol === this.state.confirmationModel.symbol);
+      copyOfSavedModels = [...copyOfSavedModels.slice(0, indexOfSymbol),
+        ...copyOfSavedModels.slice(indexOfSymbol + 1)];
+    }
+    this.setState({
+      savedModels: [...copyOfSavedModels, this.state.confirmationModel],
+    }, () => localStorage.setItem('tradeideas', JSON.stringify(this.state.savedModels)));
+  }
+  this.cancelTrade();
+}
+
+handleSavedModel = (clicked, tempId) => {
+  let copyOfSavedModels = JSON.parse(JSON.stringify(this.state.savedModels));
+  const indexOfModel = copyOfSavedModels.findIndex(m => m.tempId === tempId);
+  if (typeof (clicked.target.className) === 'string') {
+    this.setState({
+      symbol: [this.state.savedModels[indexOfModel].symbol, true], // pattern [value, validity]
+      direction: [this.state.savedModels[indexOfModel].long ? 'Long' : 'Short', true],
+      date: [moment(this.state.savedModels[indexOfModel].date), true],
+      stop: [this.state.savedModels[indexOfModel].stop, true],
+      size: [this.state.savedModels[indexOfModel].size, true],
+      price: [this.state.savedModels[indexOfModel].price, true],
+      comments: [this.state.savedModels[indexOfModel].comments, true],
+      lastPrice: this.props.fxLastPrices[this.state.savedModels[indexOfModel].symbol.toUpperCase()],
+    }, () => this.submitReady());
+    return;
+  }
+  copyOfSavedModels = [...copyOfSavedModels.slice(0, indexOfModel),
+    ...copyOfSavedModels.slice(indexOfModel + 1)];
+  this.setState({
+    savedModels: copyOfSavedModels,
+  }, () => {
+    localStorage.setItem('tradeideas', JSON.stringify(this.state.savedModels));
+    this.initializeForm();
+  });
+}
+
 enterTrade = async () => {
   await postNewTrade(this.state.tradeModel);
   window.location.assign('/');
@@ -163,7 +213,7 @@ render() {
     <Modal
       isOpen={this.props.show}
     >
-      <ModalHeader >
+      <ModalHeader toggle={this.cancelTrade}>
         {this.state.confirm ? 'Confirm Trade' : 'Trade Entry'}
       </ModalHeader>
       <ModalBody id="mbody">
@@ -173,43 +223,58 @@ render() {
             lastPrices={this.props.fxLastPrices}
           />
           :
-          <EntryForm
-            sendFormValue={fv => this.handleChange(fv)}
-            date={this.state.date[0]}
-            focused={this.state.dateFocus}
-            onDateFocus={() => this.setState({ dateFocus: !this.state.dateFocus })}
-            validity={name => this.inputValidity(name)}
-            currentState={this.state}
-          />
+          <React.Fragment>
+            {
+              this.state.savedModels ?
+                <SavedModels
+                  models={this.state.savedModels}
+                  handleSavedModel={(clicked, tempId) => this.handleSavedModel(clicked, tempId)}
+                />
+                :
+                null
+            }
+            <EntryForm
+              sendFormValue={fv => this.handleChange(fv)}
+              date={this.state.date[0]}
+              focused={this.state.dateFocus}
+              onDateFocus={() => this.setState({ dateFocus: !this.state.dateFocus })}
+              validity={name => this.inputValidity(name)}
+              currentState={this.state}
+            />
+          </React.Fragment>
         }
       </ModalBody>
       <ModalFooter>
-        <Col sm={6}>
-          <Button
-            color="danger"
-            className="float-left"
-            onClick={this.cancelTrade}
-          >Cancel
-          </Button>
-        </Col>
-        <Col sm={6}>
-          {this.state.confirm ?
+        {this.state.confirm ?
+          <React.Fragment>
+            <Button
+              color="danger"
+              onClick={this.saveTradeModel}
+            >Save
+            </Button>
             <Button
               color="success"
-              className="float-right"
               onClick={this.enterTrade}
             >Enter Trade
             </Button>
-            :
+          </React.Fragment>
+          :
+          <div className="entryfooter">
+            <FontAwesomeIcon
+              icon={faTrash}
+              className="clearform"
+              onClick={this.initializeForm}
+            />
             <Button
               color="success"
               className="float-right"
               onClick={this.confirmTrade}
               {...this.confirmButtonState()}
+              block
             >Confirm Trade
             </Button>
-          }
-        </Col>
+          </div>
+        }
       </ModalFooter>
     </Modal>
   );
