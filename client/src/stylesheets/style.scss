@@ -9,17 +9,25 @@ body{
 
   .Loading{
     margin:0 auto;
-    width:150px;
-    height: 150px;
-    margin-top: 300px;
-    border: 20px solid black;
-    border-top-color: #1a6aed;
-    border-bottom-color: #f49b42;
     border-radius: 50%;
     animation-name: picloading;
     animation-duration: 5s;
     animation-timing-function: linear;
     animation-iteration-count: infinite;
+    margin-top: 30px;
+    width:150px;
+    height: 150px;
+    border: 20px solid black;
+    border-top-color: #1a6aed;
+    border-bottom-color: #f49b42;
+    &.fx{
+      margin-top: 10px;
+      width:15px;
+      height: 15px;
+      border: 20px solid black;
+      border-top-color: #ed331a;
+      border-bottom-color: #ed331a;
+    }
   }
   
   @keyframes picloading {

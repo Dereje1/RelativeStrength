@@ -72,7 +72,10 @@ class Landing extends Component {
           currency={this.state.currecnyInfo}
           zoomInfo={this.props.forexData.highImpact}
         />
-        <div id="gitsource"><a href="https://github.com/Dereje1/RelativeStrength" target="_blank" rel="noopener noreferrer"> <i className="fa fa-github" aria-hidden="true" /> Github</a></div>
+        <div id="author">
+          <span className="copyright">Dereje Getahun {'\u00A9'} 2018</span>
+          <div className="gitsource"><a href="https://github.com/Dereje1/RelativeStrength" target="_blank" rel="noopener noreferrer"> <i className="fa fa-github" aria-hidden="true" /> Github</a></div>
+        </div>
       </div>
     );
   }

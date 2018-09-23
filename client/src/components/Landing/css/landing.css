@@ -25,18 +25,37 @@
           justify-content: flex-start;
 }
 
-#gitsource {
-  padding-top: 50px;
+#author {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
   text-align: center;
-  text-decoration: none;
-  text-transform: full-width;
-  font-weight: 900;
-  font-size: 18px;
-  color: a;
+  margin-top: 2em;
 }
 
-#gitsource :hover {
+#author .gitsource {
   text-decoration: none;
+  font-weight: 900;
+  font-size: 18px;
+}
+
+#author .gitsource a:hover {
+  text-decoration: none;
+}
+
+#author .copyright {
+  font-size: 14px;
+  margin-right: 3em;
 }
 
 @media screen and (max-width: 640px) {

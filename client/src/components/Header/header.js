@@ -1,16 +1,24 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { NavLink, withRouter } from 'react-router-dom';
+import getForexHours from '../../utilitiy/tradehours';
 import './css/header.css';
 
 const Header = ({ secondsSinceUpdate, loggedIn }) => (
   <div className="header">
     <div className="description">
-      <h3 className="title"> Relative Strength of Major Currencies Against the USD</h3>
-      {secondsSinceUpdate < -900 ?
-        <h4 className="title expired">Requesting Fresh Data...{-1 * (secondsSinceUpdate + 900)}s</h4>
+      {secondsSinceUpdate < -300 ?
+        <div className="Loading fx" />
         :
-        <h4 className="title valid">Updated {(-1 * secondsSinceUpdate)} Seconds Ago</h4>
+        null
+      }
+      {
+        <div className="forexHours">
+          <div className={`center ${getForexHours('NEWYORK')}`}>New York</div>
+          <div className={`center ${getForexHours('LONDON')}`}>London</div>
+          <div className={`center ${getForexHours('TOKYO')}`}>Tokyo</div>
+          <div className={`center ${getForexHours('SYDNEY')}`}>Sydney</div>
+        </div>
       }
     </div>
     {loggedIn ?

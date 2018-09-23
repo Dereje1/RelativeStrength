@@ -11,16 +11,16 @@ const SavedModels = ({ models, handleSavedModel }) => (
       {
         models.map(t =>
           (
-            <h4 key={t.tempId}>
+            <h4 key={t.symbol}>
               <Badge
                 className="badge"
-                onClick={b => handleSavedModel(b, t.tempId)}
+                onClick={b => handleSavedModel(b, t.symbol)}
               >
                 {`${t.symbol} `}
                 <FontAwesomeIcon
                   icon={faTimesCircle}
                   className="icon"
-                  onClick={b => handleSavedModel(b, t.tempId)}
+                  onClick={b => handleSavedModel(b, t.symbol)}
                 />
               </Badge>
             </h4>))

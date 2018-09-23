@@ -135,7 +135,6 @@ confirmTrade = () => {
     ],
   };
   const confirmationModel = {
-    tempId: Date.now(),
     symbol: this.state.symbol[0].toUpperCase(),
     long: this.state.direction[0] === 'Long', // true = long
     stop: Number(this.state.stop[0]),
@@ -176,9 +175,9 @@ saveTradeModel = () => {
   this.cancelTrade();
 }
 
-handleSavedModel = (clicked, tempId) => {
+handleSavedModel = (clicked, symbol) => {
   let copyOfSavedModels = JSON.parse(JSON.stringify(this.state.savedModels));
-  const indexOfModel = copyOfSavedModels.findIndex(m => m.tempId === tempId);
+  const indexOfModel = copyOfSavedModels.findIndex(m => m.symbol === symbol);
   if (typeof (clicked.target.className) === 'string') {
     this.setState({
       symbol: [this.state.savedModels[indexOfModel].symbol, true], // pattern [value, validity]
@@ -228,7 +227,7 @@ render() {
               this.state.savedModels ?
                 <SavedModels
                   models={this.state.savedModels}
-                  handleSavedModel={(clicked, tempId) => this.handleSavedModel(clicked, tempId)}
+                  handleSavedModel={(clicked, symbol) => this.handleSavedModel(clicked, symbol)}
                 />
                 :
                 null

@@ -12,6 +12,37 @@
   color: red;
 }
 
+.header .description .forexHours {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+  margin: 50px;
+}
+
+.header .description .forexHours .center {
+  border: 0px solid #5f9fff;
+  padding: 5px;
+  margin: 3px;
+  border-radius: 7px;
+  font-size: .7em;
+  font-weight: bold;
+}
+
+.header .description .forexHours .center.open {
+  background: #1edb1e;
+}
+
+.header .description .forexHours .center.closed {
+  background: #ff4444;
+  color: white;
+}
+
 .header .login {
   display: -webkit-box;
   display: -ms-flexbox;

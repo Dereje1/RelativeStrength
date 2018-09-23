@@ -4,12 +4,6 @@ body {
 
 .Loading {
   margin: 0 auto;
-  width: 150px;
-  height: 150px;
-  margin-top: 300px;
-  border: 20px solid black;
-  border-top-color: #1a6aed;
-  border-bottom-color: #f49b42;
   border-radius: 50%;
   -webkit-animation-name: picloading;
           animation-name: picloading;
@@ -19,6 +13,21 @@ body {
           animation-timing-function: linear;
   -webkit-animation-iteration-count: infinite;
           animation-iteration-count: infinite;
+  margin-top: 30px;
+  width: 150px;
+  height: 150px;
+  border: 20px solid black;
+  border-top-color: #1a6aed;
+  border-bottom-color: #f49b42;
+}
+
+.Loading.fx {
+  margin-top: 10px;
+  width: 15px;
+  height: 15px;
+  border: 20px solid black;
+  border-top-color: #ed331a;
+  border-bottom-color: #ed331a;
 }
 
 @-webkit-keyframes picloading {
