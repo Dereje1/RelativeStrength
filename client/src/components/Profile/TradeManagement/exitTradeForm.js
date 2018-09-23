@@ -10,7 +10,7 @@ import { Col, Form, FormGroup, Label, Input } from 'reactstrap';
 const inputSize = 10;
 const labelSize = 2;
 
-const ExitForm = props => (
+const ExitTradeForm = props => (
   <Form>
     <FormGroup row>
       <Label for="entrydate" sm={labelSize}>Date</Label>
@@ -59,7 +59,7 @@ const ExitForm = props => (
   </Form>
 );
 
-ExitForm.propTypes = {
+ExitTradeForm.propTypes = {
   sendFormValue: PropTypes.func.isRequired,
   onDateFocus: PropTypes.func.isRequired,
   validity: PropTypes.func.isRequired,
@@ -69,4 +69,4 @@ ExitForm.propTypes = {
   comments: PropTypes.string.isRequired,
 };
 
-export default ExitForm;
+export default ExitTradeForm;

@@ -3,8 +3,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-import Strength from './rstrength'; // displays strenngth data for different tfs
-import Zoom from './modalzoom'; // modal zoom for
+import Strength from './strength'; // displays strenngth data for different tfs
+import Zoom from './zoom'; // modal zoom for
 
 import './css/landing.css';
 

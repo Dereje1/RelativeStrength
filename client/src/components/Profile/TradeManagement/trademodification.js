@@ -7,9 +7,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowUp, faArrowDown } from '@fortawesome/free-solid-svg-icons';
 
 import TradeDetail from './tradedetail';
-import ModifyStop from './modifyStopForm';
-import ExitForm from './exitTradeForm';
-import { setStop, closeTrade } from '../../../utilitiy/orders';
+import ModifyStopForm from './modifyStopForm';
+import ExitTradeForm from './exitTradeForm';
+import { setStop, closeTrade, getDollarsPerPip } from '../../../utilitiy/orders';
 
 import './css/management.css';
 
@@ -160,6 +160,7 @@ class TradeModification extends Component {
           date: Date.parse(this.state.exitTrade.date[0]._d),
           size: parseInt(this.props.trade.entry[0].size, 10),
           price: Number(this.state.exitTrade.price[0]),
+          pipValue: getDollarsPerPip(this.props.trade.symbol, this.props.fxLastPrices),
           comments: this.state.exitTrade.comments[0],
         },
       ],
@@ -185,7 +186,7 @@ class TradeModification extends Component {
     // lastPrice={this.props.fxLastPrices[this.props.trade.symbol]}
     if (this.state.moveStop.displayForm) {
       return (
-        <ModifyStop
+        <ModifyStopForm
           sendStopValue={fv => this.handleStopChange(fv)}
           formVal={this.state.moveStop.stop}
           validity={() => this.inputStopValidity()}
@@ -193,7 +194,7 @@ class TradeModification extends Component {
       );
     } else if (this.state.exitTrade.displayForm) {
       return (
-        <ExitForm
+        <ExitTradeForm
           sendFormValue={fv => this.handleExitChange(fv)}
           date={this.state.exitTrade.date[0]}
           focused={this.state.dateFocus}
@@ -276,7 +277,7 @@ class TradeModification extends Component {
       <Modal
         isOpen={this.props.show}
       >
-        <ModalHeader className="CustomModalHeader">
+        <ModalHeader className="CustomModalHeader" toggle={this.cancelModify}>
           <div>
             {`${this.props.trade.symbol} `}
             <FontAwesomeIcon
@@ -284,12 +285,6 @@ class TradeModification extends Component {
               icon={this.props.trade.long ? faArrowUp : faArrowDown}
             />
           </div>
-          <Button
-            color="danger"
-            className="float-left"
-            onClick={this.cancelModify}
-          >Cancel
-          </Button>
         </ModalHeader>
         <ModalBody id="mbody">
           {this.modalBodyRender()}

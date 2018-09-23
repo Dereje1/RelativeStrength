@@ -4,8 +4,8 @@ import { connect } from 'react-redux';
 // bootstrap
 import { Button } from 'reactstrap';
 // custom functions
-import TradeEntry from './TradeEntry/entry';
-import TradeManagement from './TradeManagement/management';
+import TradeEntry from './TradeEntry/tradeentry';
+import TradeManagement from './TradeManagement/trademanagement';
 import TradeRecords from './TradeRecords/records';
 
 import { getOpenTrades, getClosedTrades } from '../../utilitiy/orders';

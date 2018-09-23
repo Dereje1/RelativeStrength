@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import { Col, Form, FormGroup, Label, Input } from 'reactstrap';
 
-const ModifyStop = props => (
+const ModifyStopForm = props => (
   <Form>
     <FormGroup row>
       <Label for="stop" sm={2}>New Stop</Label>
@@ -22,9 +22,9 @@ const ModifyStop = props => (
   </Form>
 );
 
-ModifyStop.propTypes = {
+ModifyStopForm.propTypes = {
   formVal: PropTypes.arrayOf(PropTypes.any).isRequired,
   sendStopValue: PropTypes.func.isRequired,
   validity: PropTypes.func.isRequired,
 };
-export default ModifyStop;
+export default ModifyStopForm;

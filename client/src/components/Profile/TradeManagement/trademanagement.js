@@ -7,7 +7,7 @@ import moment from 'moment';
 import './css/management.css';
 import { findGain, getProfits } from '../../../utilitiy/orders';
 
-import TradeModification from './modify';
+import TradeModification from './trademodification';
 
 class TradeManagement extends Component {
 
