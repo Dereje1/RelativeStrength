@@ -1,6 +1,6 @@
 // only getuser action dispatches to store
 import axios from 'axios';
-import { filterEvents } from '../utilitiy/index';
+import { filterEvents } from '../utilitiy/fxAndMt4';
 
 export const getForexData = () =>
   async (dispatch) => { // note async dispatch for better management on client

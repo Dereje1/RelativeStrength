@@ -1,3 +1,4 @@
+// dumb component to dispaly header bar
 import React from 'react';
 import PropTypes from 'prop-types';
 import { NavLink, withRouter } from 'react-router-dom';
@@ -41,14 +42,10 @@ const Header = ({ secondsSinceUpdate, loggedIn, openCenters }) => (
   </div>
 );
 
-Header.defaultProps = {
-  secondsSinceUpdate: 0,
-  loggedIn: false,
-};
 
 Header.propTypes = {
-  secondsSinceUpdate: PropTypes.number,
-  loggedIn: PropTypes.bool,
+  secondsSinceUpdate: PropTypes.number.isRequired,
+  loggedIn: PropTypes.bool.isRequired,
   openCenters: PropTypes.objectOf(PropTypes.string).isRequired,
 };
 export default withRouter(Header);

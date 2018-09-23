@@ -8,19 +8,16 @@ import thunk from 'redux-thunk';
 import React from 'react';
 import { render } from 'react-dom';
 import { Provider } from 'react-redux';
-
-import './stylesheets/style.css';
-// Import all Created react components that are associated with the router
-// standard menu (non-authenticated) components
+// router
 import AppRouter from './routers/AppRouter';
 
-import 'bootstrap/dist/css/bootstrap.min.css';
-
-// import combined reducer to pass to store here
+// import combined reducer to pass to store
 import reducers from './reducers/index';
 
-// use logger for debugging only
-// const middleware = applyMiddleware(thunk,logger)
+// css
+import './stylesheets/style.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 const middleware = applyMiddleware(thunk, logger);
 const store = createStore(reducers, middleware);
 
