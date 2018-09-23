@@ -1,23 +1,25 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { NavLink, withRouter } from 'react-router-dom';
-import getForexHours from '../../utilitiy/tradehours';
 import './css/header.css';
+import Constants from '../../constants/index';
 
-const Header = ({ secondsSinceUpdate, loggedIn }) => (
+const { MT4_UPDATE_CYCLE } = Constants;
+
+const Header = ({ secondsSinceUpdate, loggedIn, openCenters }) => (
   <div className="header">
     <div className="description">
-      {secondsSinceUpdate < -300 ?
+      {secondsSinceUpdate < MT4_UPDATE_CYCLE ?
         <div className="Loading fx" />
         :
         null
       }
       {
         <div className="forexHours">
-          <div className={`center ${getForexHours('NEWYORK')}`}>New York</div>
-          <div className={`center ${getForexHours('LONDON')}`}>London</div>
-          <div className={`center ${getForexHours('TOKYO')}`}>Tokyo</div>
-          <div className={`center ${getForexHours('SYDNEY')}`}>Sydney</div>
+          <div className={`center ${openCenters.NEWYORK}`}>New York</div>
+          <div className={`center ${openCenters.LONDON}`}>London</div>
+          <div className={`center ${openCenters.TOKYO}`}>Tokyo</div>
+          <div className={`center ${openCenters.SYDNEY}`}>Sydney</div>
         </div>
       }
     </div>
@@ -47,5 +49,6 @@ Header.defaultProps = {
 Header.propTypes = {
   secondsSinceUpdate: PropTypes.number,
   loggedIn: PropTypes.bool,
+  openCenters: PropTypes.objectOf(PropTypes.string).isRequired,
 };
 export default withRouter(Header);

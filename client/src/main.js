@@ -12,6 +12,10 @@ import { getForexData, setForexData } from './actions/mt4fetch';
 
 // import data utilities
 import { mt4LastPush } from './utilitiy/index';
+import getForexHours from './utilitiy/tradehours';
+import Constants from './constants/index';
+
+const { MT4_UPDATE_CYCLE, CLIENT_CHECK_INTERVAL } = Constants;
 
 class Main extends React.Component {
 
@@ -19,6 +23,7 @@ class Main extends React.Component {
     super(props);
     this.state = {
       secondsSinceUpdate: 0, // seconds since last mt4 Update
+      fxOpenCeters: {},
     };
   }
 
@@ -38,19 +43,23 @@ class Main extends React.Component {
       this.updateForexData();
     } else {
       await this.props.setForexData(); // set store with locally stored data
-      if (mt4LastPush(this.props.forexData.aws.updated) < -300) this.updateForexData();
-      else this.setState({ secondsSinceUpdate: mt4LastPush(this.props.forexData.aws.updated) });
+      if (mt4LastPush(this.props.forexData.aws.updated) < MT4_UPDATE_CYCLE) this.updateForexData();
+      else {
+        this.setState({
+          secondsSinceUpdate: mt4LastPush(this.props.forexData.aws.updated),
+          fxOpenCeters: getForexHours(),
+        });
+      }
     }
 
-    const checkInterval = 30; // in secs
-    this.Interval = setInterval(() => { // start timer interval update every sec
+    this.Interval = setInterval(() => {
       this.setState({
-        secondsSinceUpdate: this.state.secondsSinceUpdate - checkInterval,
+        secondsSinceUpdate: this.state.secondsSinceUpdate - CLIENT_CHECK_INTERVAL,
       });
-      if (this.state.secondsSinceUpdate < -300) { // 20 minutes = 15 min MT4 + 5 min AWS cycles
+      if (this.state.secondsSinceUpdate < MT4_UPDATE_CYCLE) {
         this.updateForexData();
       }
-    }, checkInterval * 1000);
+    }, CLIENT_CHECK_INTERVAL * 1000);
   }
 
   updateForexData = async () => {
@@ -58,6 +67,7 @@ class Main extends React.Component {
     localStorage.setItem('forexData', JSON.stringify(this.props.forexData));
     this.setState({
       secondsSinceUpdate: mt4LastPush(this.props.forexData.aws.updated),
+      fxOpenCeters: getForexHours(),
     });
   }
 
@@ -69,6 +79,7 @@ class Main extends React.Component {
         <Header
           secondsSinceUpdate={this.state.secondsSinceUpdate}
           loggedIn={this.props.user.authenticated}
+          openCenters={this.state.fxOpenCeters}
         />
         <Landing />
       </div>

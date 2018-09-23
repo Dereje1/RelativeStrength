@@ -7,22 +7,34 @@ const tradeHours = {
   TOKYO: [23, 7],
 };
 
-const getForexHours = (center) => {
+const getForexHours = () => {
   const currentGMThour = moment().utc().hour();
   const currentGMTday = moment().utc().day();
+  const centerStatus = {
+    NEWYORK: 'closed',
+    LONDON: 'closed',
+    SYDNEY: 'closed',
+    TOKYO: 'closed',
+  };
 
-  if (currentGMTday === 6) return 'closed';
-  if ((currentGMTday === 5) && (currentGMThour >= tradeHours.NEWYORK[1])) return 'closed';
-  if ((currentGMTday === 0) && (currentGMThour < tradeHours.SYDNEY[0])) return 'closed';
-  const openCenters = Object.keys(tradeHours).filter((c) => {
+  if (currentGMTday === 6) return centerStatus;
+  if ((currentGMTday === 5) && (currentGMThour >= tradeHours.NEWYORK[1])) return centerStatus;
+  if ((currentGMTday === 0) && (currentGMThour < tradeHours.SYDNEY[0])) return centerStatus;
+
+  Object.keys(tradeHours).forEach((c) => {
     const zoneType = tradeHours[c][0] < tradeHours[c][1];
     if (zoneType) {
-      return (currentGMThour >= tradeHours[c][0]) && (currentGMThour < tradeHours[c][1]);
+      const status = (currentGMThour >= tradeHours[c][0]) && (currentGMThour < tradeHours[c][1]);
+      if (status) centerStatus[c] = 'open';
+    } else if (currentGMThour >= 0 && currentGMThour <= 12) {
+      const status = currentGMThour < tradeHours[c][1];
+      if (status) centerStatus[c] = 'open';
+    } else {
+      const status = currentGMThour >= tradeHours[c][0];
+      if (status) centerStatus[c] = 'open';
     }
-    if (currentGMThour >= 0 && currentGMThour <= 12) return currentGMThour < tradeHours[c][1];
-    return currentGMThour >= tradeHours[c][0];
   });
-  return openCenters.includes(center) ? 'open' : 'closed';
+  return centerStatus;
 };
 
 export default getForexHours;
