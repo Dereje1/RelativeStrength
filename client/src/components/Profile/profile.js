@@ -5,8 +5,8 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 // custom components
 import TradeEntry from './TradeEntry/tradeentry';
-import TradeManagement from './TradeManagement/trademanagement';
-import TradeRecords from './TradeRecords/traderecords';
+// import TradeRecords from './TradeRecords/traderecords';
+import TradeTable from './tradetable';
 // api calls
 import { getOpenTrades, getClosedTrades } from '../../utilitiy/api';
 // bootstrap and css
@@ -69,9 +69,10 @@ class Profile extends Component {
           <hr />
           {
             this.state.openTrades.length ?
-              <TradeManagement
+              <TradeTable
                 trades={this.state.openTrades}
                 fxLastPrices={this.props.forexData.aws.lastPrices}
+                open
               />
               :
               null
@@ -79,9 +80,10 @@ class Profile extends Component {
           <hr />
           {
             this.state.closedTrades.length ?
-              <TradeRecords
+              <TradeTable
                 trades={this.state.closedTrades}
                 fxLastPrices={this.props.forexData.aws.lastPrices}
+                open={false}
               />
               :
               <div className="Loading" />
