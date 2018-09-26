@@ -9,10 +9,10 @@ require('./Authentication/authserver')(app); // add authentication
 
 app.use(mainroute);
 // server primary route
-app.use(express.static(path.join(__dirname, 'client/build')));
+app.use(express.static(path.join(__dirname, '../client/build')));
 
 app.get('*', (req, res) => {
-  res.sendFile(path.resolve(__dirname, 'client/build', 'index.html'));
+  res.sendFile(path.resolve(__dirname, '../client/build', 'index.html'));
 });
 
 // catch 404 and forward to error handler
