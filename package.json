@@ -21,8 +21,7 @@
     "mongoose": "^4.9.0",
     "morgan": "~1.9.0",
     "passport": "latest",
-    "passport-google-oauth": "^1.0.0",
-    "xml2js": "^0.4.19"
+    "passport-google-oauth": "^1.0.0"
   },
   "devDependencies": {
     "babel-eslint": "^8.2.5",

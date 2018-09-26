@@ -1,14 +1,11 @@
 // get forex faxtory calendar events for the week
 const axios = require('axios');
-const parser = require('xml2js'); // parses ff xml to json
 
 module.exports = () =>
   new Promise((resolve, reject) => {
-    axios.get('https://cdn-nfs.forexfactory.net/ff_calendar_thisweek.xml')
+    axios.get('https://cdn-nfs.forexfactory.net/ff_calendar_thisweek.json')
       .then((response) => {
-        parser.parseString(response.data, (err, result) => {
-          resolve(result);
-        });
+        resolve({ weeklyevents: response.data });
       })
       .catch((err) => {
         reject(err);

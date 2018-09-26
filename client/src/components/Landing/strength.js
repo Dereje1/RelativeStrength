@@ -15,14 +15,11 @@ class Strength extends Component {
   }
 
   symbolEvents(symbol) { // returns all highimpact events for a particular symbol
-    const symbEvent = this.props.alldata.highImpact.filter(h => h.country[0] === symbol);
-    let soonEvent = false; // check for events within the next 24 hours
+    const symbEvent = this.props.alldata.highImpact.filter(h => h.country === symbol);
+    let soonEvent = false; // checks for events within the next 12 hours
     symbEvent.forEach((ev) => {
       if (!soonEvent) {
-        const eDay = ev.date[0];
-        const eTime = ev.time[0];
-        const when = `${eDay},${eTime}`;
-        const gmtDateTime = moment.utc(when, 'MM-DD-YYYY,h:mmA');
+        const gmtDateTime = moment(ev.date);
         const elapsed = gmtDateTime.diff(moment.utc());
         soonEvent = (elapsed < 43200000);
       }

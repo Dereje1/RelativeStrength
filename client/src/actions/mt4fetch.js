@@ -11,7 +11,7 @@ export const getForexData = () =>
           payload:
            {
              aws: response.data,
-             highImpact: filterEvents(response.data.weeklyevents.event),
+             highImpact: filterEvents(response.data.weeklyevents),
            },
         });
       })

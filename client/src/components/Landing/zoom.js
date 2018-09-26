@@ -38,16 +38,15 @@ class Zoom extends Component {
   processCalendar() { // gets calendar detail events and formats for modal
     // filter all event currency for those that match with clicked
     const filtered = this.props.zoomInfo.filter(n =>
-      n.country[0] === this.props.currency);
+      n.country === this.props.currency);
     const formatted = filtered.map((n, idx) => {
-      const eDay = n.date[0];
-      const eTime = n.time[0];
-      const when = `${eDay},${eTime}`;
-      const gmtDateTime = moment.utc(when, 'MM-DD-YYYY,h:mmA');
-      // momemnet from now computes when the event is to take place
+      const gmtDateTime = moment.utc(n.date);
+      // moment.fromNow() computes when the event is to take place
       const happens = gmtDateTime.utc().fromNow();
       return (
-        <p key={`${n.country[0]}${idx + 1}`} className="event">{n.title[0]}<span className="time"> {`${happens}`}</span></p>
+        <p key={`${n.country}${idx + 1}`} className="event">
+          {n.title}<span className="time"> {`${happens}`}</span>
+        </p>
       );
     });
     return <div>{formatted}</div>;
