@@ -1,17 +1,20 @@
+// modal modifies an open trade
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-// bootstrap
+// bootstrap fontawesome css
 import { Col, Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowUp, faArrowDown } from '@fortawesome/free-solid-svg-icons';
-
+import './css/management.css';
+// api calls, fx computations and validation
+import { setStop, closeTrade } from '../../../utilitiy/api';
+import { getDollarsPerPip } from '../../../utilitiy/fxcomputations';
+import checkValidity from '../../../utilitiy/validation';
+// custom components
 import TradeDetail from './tradedetail';
 import ModifyStopForm from './modifyStopForm';
 import ExitTradeForm from './exitTradeForm';
-import { setStop, closeTrade, getDollarsPerPip } from '../../../utilitiy/orders';
-
-import './css/management.css';
 
 class TradeModification extends Component {
 
@@ -26,14 +29,13 @@ class TradeModification extends Component {
 
   initializeForm = () => {
     const emptyForm = {
-      moveStop: {
+      moveStop: { // for stop modal
         displayForm: false,
         stop: [this.props.trade.stop, false],
         submit: true,
       },
-      exitTrade: {
+      exitTrade: { // for close modal
         displayForm: false,
-        // no clue why date picker needs to call moment as a function here but not in entry!!
         date: [moment(), true],
         price: [this.props.fxLastPrices[this.props.trade.symbol], false],
         comments: ['', false],
@@ -49,7 +51,7 @@ class TradeModification extends Component {
     this.setState(emptyForm);
   }
 
-  // Stop Adjustment
+  /* Stop Adjustment */
   stopAdjustment = () => {
     const copyOfState = JSON.parse(JSON.stringify(this.state));
     copyOfState.moveStop.displayForm = true;
@@ -59,21 +61,12 @@ class TradeModification extends Component {
     this.setState(copyOfState);
   }
   handleStopChange = (event) => {
-    const { value } = event.target;
-    const validity = this.checkStopValidity(value);
+    const { name, value } = event.target;
+    const validity = checkValidity(name, value, this.props.trade.long, this.props.trade.stop);
     const copyOfState = JSON.parse(JSON.stringify(this.state));
     copyOfState.moveStop.stop = [value, validity];
     copyOfState.moveStop.submit = validity;
     this.setState(copyOfState);
-  }
-
-  checkStopValidity = (value) => {
-    let isValid = false;
-    if (Number(value)) {
-      if (this.props.trade.long && Number(value) > this.props.trade.stop) isValid = true;
-      if (!this.props.trade.long && Number(value) < this.props.trade.stop) isValid = true;
-    }
-    return isValid;
   }
 
   inputStopValidity = () => (this.state.moveStop.stop[1] ? { valid: true } : { invalid: true });
@@ -90,7 +83,7 @@ class TradeModification extends Component {
   }
   /* end stop Adjustment */
 
-  // Exiting Trades
+  /* Exiting Trade */
   exitTrade = () => {
     const copyOfState = JSON.parse(JSON.stringify(this.state));
     copyOfState.exitTrade.displayForm = true;
@@ -110,25 +103,12 @@ class TradeModification extends Component {
       return;
     }
     const { name, value } = event.target;
-    const inputIsValid = this.checkExitValidity(name, value);
+    const inputIsValid = checkValidity(name, value, true, 1);
     copyOfState.exitTrade[name] = [value, inputIsValid];
+    // note reset of date eventhough it is handled by react dates
+    // deep copy does not work on functions within objects
     copyOfState.exitTrade.date = [this.state.exitTrade.date[0], true];
     this.setState(copyOfState, () => this.exitButton());
-  }
-
-  checkExitValidity = (field, value) => {
-    let isValid = false;
-    switch (field) {
-      case 'price':
-        if (Number(value)) isValid = true;
-        break;
-      case 'comments':
-        if (value) isValid = true;
-        break;
-      default:
-        break;
-    }
-    return isValid;
   }
 
   exitButton = () => {
@@ -183,7 +163,7 @@ class TradeModification extends Component {
   };
 
   modalBodyRender = () => {
-    // lastPrice={this.props.fxLastPrices[this.props.trade.symbol]}
+    // conditionally render modal depending on stop move / exit or info
     if (this.state.moveStop.displayForm) {
       return (
         <ModifyStopForm
@@ -215,6 +195,7 @@ class TradeModification extends Component {
   };
 
   controlButtonsRender = () => {
+    // conditionally render modal footer depending on stop move / exit or info
     if (this.state.controlButtons.full) {
       return (
         <React.Fragment>

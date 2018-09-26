@@ -1,3 +1,4 @@
+// dumb component displays trade exit form
 import React from 'react';
 import PropTypes from 'prop-types';
 // react dates below

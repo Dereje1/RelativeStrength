@@ -1,39 +1,8 @@
-import axios from 'axios';
-
 export const symbolList = [
   'GBPNZD', 'GBPAUD', 'GBPCHF', 'GBPUSD', 'GBPCAD', 'EURUSD', 'GBPJPY',
   'EURNZD', 'USDCHF', 'EURJPY', 'EURAUD', 'EURCAD', 'CHFJPY', 'USDCAD',
   'NZDUSD', 'EURGBP', 'AUDUSD', 'NZDCHF', 'AUDCHF', 'CADCHF', 'EURCHF',
   'NZDJPY', 'AUDJPY', 'NZDCAD', 'CADJPY', 'AUDCAD', 'USDJPY', 'AUDNZD'];
-
-/*
-Api coomands
-*/
-export const postNewTrade = entry =>
-  axios.post('/api/newtrade', entry)
-    .then(response => response.data)
-    .catch(error => error);
-
-export const getOpenTrades = () =>
-  axios.get('/api/getopentrades')
-    .then(response => response.data)
-    .catch(error => error);
-
-export const getClosedTrades = () =>
-  axios.get('/api/getclosedtrades')
-    .then(response => response.data)
-    .catch(error => error);
-
-export const setStop = newStop =>
-  axios.put('/api/movestop', newStop)
-    .then(response => response.data)
-    .catch(error => error);
-
-export const closeTrade = exitInfo =>
-  axios.put('/api/closetrade', exitInfo)
-    .then(response => response.data)
-    .catch(error => error);
-// end api commands
 
 export const getPips = (symb, change) => {
   if (symb.indexOf('JPY') === 3) return (Math.round(change / 0.01));

@@ -1,11 +1,11 @@
-.card {
+.cardx {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
-    justify-content: center;
+    justify-content: space-around;
     margin:10px;
     width:150px;
-    background:#d9dde3;
+    background:#ffffff;
     border-radius: 3px;
     font-size: 1em;
     cursor: default;
@@ -31,7 +31,8 @@
       }
     }
     .events{
-      color: #9e3008;
+      color: #ffffff;
+      font-size: .75em;
       font-weight: bold;
       font-family: 'Fredoka One', cursive;
       cursor: pointer;
@@ -51,5 +52,5 @@
 
   @keyframes flash {
     from {color: #d9dde3;}
-    to {color: #9e3008;}
+    to {color: #6c757d;}
 }

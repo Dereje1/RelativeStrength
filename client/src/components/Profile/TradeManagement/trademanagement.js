@@ -1,12 +1,15 @@
+// Component processes open trades
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import moment from 'moment';
+// bootstarp css and fonteawsome
 import { Table } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCog, faArrowUp, faArrowDown } from '@fortawesome/free-solid-svg-icons';
-import moment from 'moment';
 import './css/management.css';
-import { findGain, getProfits } from '../../../utilitiy/orders';
-
+// fx computation utility
+import { findGain, getProfits } from '../../../utilitiy/fxcomputations';
+// custom component
 import TradeModification from './trademodification';
 
 class TradeManagement extends Component {
@@ -14,13 +17,14 @@ class TradeManagement extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      showModification: false,
-      gainUnits: 'pips',
+      showModification: false, // modification modal
+      gainUnits: 'pips', // pips or dollars
       tradeDetail: {},
     };
   }
 
   getGain = (symbol, long, costBasis, size) => {
+    // process inidividual trade gains/loss
     const gain = findGain(symbol, long, costBasis, size, this.props.fxLastPrices);
     const gainresult = {
       pips: `${gain.pips} pips`,
@@ -30,6 +34,7 @@ class TradeManagement extends Component {
   }
 
   getCummulative = () => {
+    // process cummulative gain/los
     const cummulative = getProfits(this.props.trades, this.props.fxLastPrices);
     return (
       this.state.gainUnits === 'pips' ?
@@ -42,6 +47,7 @@ class TradeManagement extends Component {
   }
 
   toggleGain = () => {
+    // switch between pips and dollars
     if (this.state.gainUnits === 'pips') this.setState({ gainUnits: 'dollars' });
     else this.setState({ gainUnits: 'pips' });
   }
@@ -81,6 +87,7 @@ class TradeManagement extends Component {
       tradeDetail: t,
     });
   }
+
   render() {
     return (
       <Table responsive>

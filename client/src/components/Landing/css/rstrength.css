@@ -1,26 +1,25 @@
-.card {
+.cardx {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  -webkit-box-orient: vertical;
+  -webkit-box-orient: horizontal;
   -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
+      -ms-flex-direction: row;
+          flex-direction: row;
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
   margin: 10px;
   width: 150px;
-  background: #d9dde3;
+  background: #ffffff;
   border-radius: 3px;
   font-size: 1em;
   cursor: default;
 }
 
-.card.lit {
+.cardx.lit {
   background: white;
   -webkit-transform: translateY(-10px);
           transform: translateY(-10px);
@@ -32,30 +31,31 @@
           box-shadow: 10px 5px 5px black;
 }
 
-.card.usd {
+.cardx.usd {
   background: #f0d8b9;
 }
 
-.card .symbol {
+.cardx .symbol {
   color: #913232;
   font-weight: bold;
   font-family: "Spectral SC";
 }
 
-.card .symbol .strength {
+.cardx .symbol .strength {
   color: #315391;
   font-weight: bold;
   font-family: "Spectral SC";
 }
 
-.card .events {
-  color: #9e3008;
+.cardx .events {
+  color: #ffffff;
+  font-size: .75em;
   font-weight: bold;
   font-family: 'Fredoka One', cursive;
   cursor: pointer;
 }
 
-.card .events.soon {
+.cardx .events.soon {
   -webkit-animation-name: flash;
           animation-name: flash;
   -webkit-animation-duration: 1s;
@@ -75,7 +75,7 @@
     color: #d9dde3;
   }
   to {
-    color: #9e3008;
+    color: #6c757d;
   }
 }
 
@@ -84,7 +84,7 @@
     color: #d9dde3;
   }
   to {
-    color: #9e3008;
+    color: #6c757d;
   }
 }
 /*# sourceMappingURL=rstrength.css.map */

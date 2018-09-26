@@ -1,9 +1,11 @@
+// dumb component to confirm trade entry
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Col } from 'reactstrap';
 import moment from 'moment';
-
-import { getPips, getDollarsPerPip } from '../../../utilitiy/orders';
+// bootstrap
+import { Col } from 'reactstrap';
+// profit/ loss computation functions
+import { getPips, getDollarsPerPip } from '../../../utilitiy/fxcomputations';
 
 const Confirmation = ({
   model: { long },

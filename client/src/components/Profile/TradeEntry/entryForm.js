@@ -1,6 +1,7 @@
+// dumb component to display entry form
 import React from 'react';
 import PropTypes from 'prop-types';
-// react dates below
+// react dates
 import { SingleDatePicker } from 'react-dates';
 import 'react-dates/initialize';
 import 'react-dates/lib/css/_datepicker.css';

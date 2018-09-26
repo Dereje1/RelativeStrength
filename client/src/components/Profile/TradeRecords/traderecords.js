@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faInfoCircle, faArrowUp, faArrowDown } from '@fortawesome/free-solid-svg-icons';
 import moment from 'moment';
 
-import { findGain, getProfits } from '../../../utilitiy/orders';
+import { findGain, getProfits } from '../../../utilitiy/fxcomputations';
 
 import TradeInfo from './tradeInfo';
 import './css/records.css';

@@ -1,15 +1,16 @@
+// master profile component
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+// redux read only
 import { connect } from 'react-redux';
-// bootstrap
-import { Button } from 'reactstrap';
-// custom functions
+// custom components
 import TradeEntry from './TradeEntry/tradeentry';
 import TradeManagement from './TradeManagement/trademanagement';
-import TradeRecords from './TradeRecords/records';
-
-import { getOpenTrades, getClosedTrades } from '../../utilitiy/orders';
-
+import TradeRecords from './TradeRecords/traderecords';
+// api calls
+import { getOpenTrades, getClosedTrades } from '../../utilitiy/api';
+// bootstrap and css
+import { Button } from 'reactstrap';
 import './css/profile.css';
 
 const mapStateToProps = state => state;

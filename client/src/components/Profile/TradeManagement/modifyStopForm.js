@@ -1,3 +1,4 @@
+// dumb component displays stop move form
 import React from 'react';
 import PropTypes from 'prop-types';
 
@@ -10,7 +11,7 @@ const ModifyStopForm = props => (
       <Col sm={10}>
         <Input
           type="text"
-          name="stop"
+          name="movestop"
           id="stop"
           value={props.formVal[0]}
           onChange={event => props.sendStopValue(event)}

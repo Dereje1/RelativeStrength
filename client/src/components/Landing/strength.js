@@ -2,15 +2,16 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
+import { Badge } from 'reactstrap';
 import './css/rstrength.css';
 
 class Strength extends Component {
 
   findClass(d) { // sets className for hovered symbol
-    if (d[0] === this.props.hoveredSymbol) return 'card lit';
+    if (d[0] === this.props.hoveredSymbol) return 'cardx lit';
     // USD is base so add different class
-    if (d[0] === 'USD') return 'card usd';
-    return 'card';
+    if (d[0] === 'USD') return 'cardx usd';
+    return 'cardx';
   }
 
   symbolEvents(symbol) { // returns all highimpact events for a particular symbol
@@ -38,11 +39,6 @@ class Strength extends Component {
         const strength = `${(Number(d['1'])).toFixed(2)}%`;
         const events = this.symbolEvents(symbol);
         const totalEvents = events[0].length; // total # of events for symbol
-        let displayEvent;
-        if (totalEvents === 1) displayEvent = '1 Event';
-        else if (totalEvents > 1) displayEvent = `${totalEvents} Events`;
-        else displayEvent = '';
-
         const eventClass = events[1] ? 'events soon' : 'events';
         return (
           <div
@@ -57,7 +53,7 @@ class Strength extends Component {
             <div className="symbol">{symbol}
               <span className="strength"> {strength}</span>
             </div>
-            <div className={eventClass}>{displayEvent}</div>
+            <Badge className={eventClass}>{totalEvents || null}</Badge>
           </div>
         );
       }));
