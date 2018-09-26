@@ -12,7 +12,7 @@ import { setStop, closeTrade } from '../../../utilitiy/api';
 import { getDollarsPerPip } from '../../../utilitiy/fxcomputations';
 import checkValidity from '../../../utilitiy/validation';
 // custom components
-import TradeDetail from './tradedetail';
+import OpenTradeDetail from './opentradedetail';
 import ModifyStopForm from './modifyStopForm';
 import ExitTradeForm from './exitTradeForm';
 
@@ -187,7 +187,7 @@ class TradeModification extends Component {
     }
 
     return (
-      <TradeDetail
+      <OpenTradeDetail
         trade={this.props.trade}
         fxLastPrices={this.props.fxLastPrices}
       />

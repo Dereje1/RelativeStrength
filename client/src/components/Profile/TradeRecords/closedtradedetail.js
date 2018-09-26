@@ -1,9 +1,10 @@
+// dumb component displays closed trade information
 import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import { getProfits } from '../../../utilitiy/fxcomputations';
 
-const TradeDetail = (props) => {
+const ClosedTradeDetail = (props) => {
   const {
     entry,
     exit,
@@ -48,9 +49,9 @@ const TradeDetail = (props) => {
   );
 };
 
-TradeDetail.propTypes = {
+ClosedTradeDetail.propTypes = {
   trade: PropTypes.objectOf(PropTypes.any).isRequired,
   fxLastPrices: PropTypes.objectOf(PropTypes.any).isRequired,
 };
 
-export default TradeDetail;
+export default ClosedTradeDetail;

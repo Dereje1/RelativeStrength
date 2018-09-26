@@ -5,7 +5,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 // custom components
 import TradeEntry from './TradeEntry/tradeentry';
-// import TradeRecords from './TradeRecords/traderecords';
 import TradeTable from './tradetable';
 // api calls
 import { getOpenTrades, getClosedTrades } from '../../utilitiy/api';

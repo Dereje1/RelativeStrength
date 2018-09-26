@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import { getProfits } from '../../../utilitiy/fxcomputations';
 
-const TradeDetail = (props) => {
+const OpenTradeDetail = (props) => {
   const {
     stop,
     entry,
@@ -42,9 +42,9 @@ const TradeDetail = (props) => {
   );
 };
 
-TradeDetail.propTypes = {
+OpenTradeDetail.propTypes = {
   trade: PropTypes.objectOf(PropTypes.any).isRequired,
   fxLastPrices: PropTypes.objectOf(PropTypes.any).isRequired,
 };
 
-export default TradeDetail;
+export default OpenTradeDetail;

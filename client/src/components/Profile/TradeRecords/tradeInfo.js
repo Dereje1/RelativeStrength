@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-// bootstrap
+// custom components
+import ClosedTradeDetail from './closedtradedetail';
+// bootstrap fontawesom and css
 import { Modal, ModalHeader, ModalBody } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowUp, faArrowDown } from '@fortawesome/free-solid-svg-icons';
-
-import TradeDetail from './tradedetail';
-
 import './css/records.css';
 
 class TradeInfo extends Component {
@@ -29,7 +28,7 @@ class TradeInfo extends Component {
 
   modalBodyRender = () =>
     (
-      <TradeDetail
+      <ClosedTradeDetail
         trade={this.props.trade}
         fxLastPrices={this.props.fxLastPrices}
       />

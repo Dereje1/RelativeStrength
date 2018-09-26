@@ -20,7 +20,7 @@ export const filterEvents = (events) => {
 export const getForexHours = () => {
   // returns the open forex trading centers
   const tradeHours = {
-    NEWYORK: [12, 20], LONDON: [7, 15], SYDNEY: [22, 6], TOKYO: [23, 7],
+    NEWYORK: [12, 21], LONDON: [7, 16], SYDNEY: [21, 6], TOKYO: [0, 8],
   };
   const currentGMThour = moment().utc().hour();
   const currentGMTday = moment().utc().day();
