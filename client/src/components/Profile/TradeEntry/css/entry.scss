@@ -109,12 +109,19 @@ $inputBottomMargin: 10px;
 
 .entryfooter{
     display: flex;
-    justify-content: center;
+    justify-content: space-around;
     align-items: center;
     .clearform{
         color: red;
-        font-size: 10vw;
-        width:5%;
+        width:20%;
+        height: 5vmax;
+        margin-right: 5%;
+        cursor: pointer;
+    }
+    .saveform{
+        color: rgb(45, 80, 233);
+        width:20%;
+        height: 5vmax;
         margin-right: 5%;
         cursor: pointer;
     }

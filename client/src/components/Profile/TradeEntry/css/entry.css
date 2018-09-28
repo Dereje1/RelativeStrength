@@ -161,9 +161,8 @@
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
@@ -171,8 +170,16 @@
 
 .entryfooter .clearform {
   color: red;
-  font-size: 10vw;
-  width: 5%;
+  width: 20%;
+  height: 5vmax;
+  margin-right: 5%;
+  cursor: pointer;
+}
+
+.entryfooter .saveform {
+  color: #2d50e9;
+  width: 20%;
+  height: 5vmax;
   margin-right: 5%;
   cursor: pointer;
 }

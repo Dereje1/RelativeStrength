@@ -11,7 +11,7 @@ import checkValidity from '../../../utilitiy/validation';
 // bootstrap, fontawesome and css
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faTrash, faSave } from '@fortawesome/free-solid-svg-icons';
 import './css/entry.css';
 
 class TradeEntry extends Component {
@@ -89,7 +89,7 @@ class TradeEntry extends Component {
     this.setState({ readyToSubmit: buttonState });
   }
 
-  confirmTrade = () => {
+  confirmTrade = (displayConfirmation = true) => {
     // tradeModel is used for posting new trade to db
     const tradeModel = {
       userId: this.props.userId,
@@ -116,9 +116,8 @@ class TradeEntry extends Component {
       price: Number(this.state.price[0]),
       comments: this.state.comments[0],
     };
-    this.setState({ confirm: true, tradeModel, confirmationModel });
+    this.setState({ confirm: displayConfirmation, tradeModel, confirmationModel });
   }
-
   // for reactstrap button state
   confirmButtonState = () => (this.state.readyToSubmit ? { disabled: false } : { disabled: true })
 
@@ -131,8 +130,9 @@ class TradeEntry extends Component {
     this.setState({ confirm: false });
   }
 
-  saveTradeModel = () => {
-    // for local storage
+  saveTradeModel = async () => {
+    // for local storage, async since we first need to set state of the confirmation model
+    await this.confirmTrade(false);
     if (!this.state.savedModels) {
       // nothing saved in local storage ... save first symbol
       this.setState({ savedModels: [this.state.confirmationModel] }, () => localStorage.setItem('tradeideas', JSON.stringify(this.state.savedModels)));
@@ -150,7 +150,7 @@ class TradeEntry extends Component {
         savedModels: [...copyOfSavedModels, this.state.confirmationModel],
       }, () => localStorage.setItem('tradeideas', JSON.stringify(this.state.savedModels)));
     }
-    this.cancelTrade(); // close modal after saving symbol
+    // this.cancelTrade(); // close modal after saving symbol
   }
 
   handleSavedModel = (clicked, symbol) => {
@@ -230,13 +230,9 @@ class TradeEntry extends Component {
           {this.state.confirm ?
             <React.Fragment>
               <Button
-                color="danger"
-                onClick={this.saveTradeModel}
-              >Save
-              </Button>
-              <Button
                 color="success"
                 onClick={this.enterTrade}
+                block
               >Enter Trade
               </Button>
             </React.Fragment>
@@ -247,12 +243,22 @@ class TradeEntry extends Component {
                 className="clearform"
                 onClick={this.initializeForm}
               />
+              {
+                this.state.readyToSubmit ?
+                  <FontAwesomeIcon
+                    icon={faSave}
+                    className="saveform"
+                    onClick={this.saveTradeModel}
+                  />
+                  :
+                  null
+              }
+
               <Button
                 color="success"
                 className="float-right"
                 onClick={this.confirmTrade}
                 {...this.confirmButtonState()}
-                block
               >Confirm Trade
               </Button>
             </div>
