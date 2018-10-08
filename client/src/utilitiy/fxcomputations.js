@@ -31,9 +31,16 @@ export const getDollarsPerPip = (symb, allPairPrices) => {
   return symb.indexOf('JPY') === -1 ? (multiplier * 10) : (multiplier * 1000);
 };
 
-export const findGain = (symb, long, costBasis, avSize, allPairPrices, closed = false) => {
+
+export const costBasis = (tradeArr) => {
+  const totalSize = tradeArr.reduce((accum, current) => accum + current.size, 0);
+  const basis = tradeArr.reduce((accum, current) => accum + (current.size * current.price), 0);
+  return [totalSize, basis / totalSize];
+};
+
+export const findGain = (symb, long, entryPrice, avSize, allPairPrices, closed = false) => {
   const lastPrice = !closed ? allPairPrices[symb] : closed.closePrice;
-  const pipGain = getPips(symb, long ? (lastPrice - costBasis) : (costBasis - lastPrice));
+  const pipGain = getPips(symb, long ? (lastPrice - entryPrice) : (entryPrice - lastPrice));
   const dollarGain = Math.round(pipGain
      * (!closed ? getDollarsPerPip(symb, allPairPrices) : closed.closedPipVal)
      * (avSize / 100000));
@@ -44,14 +51,8 @@ export const findGain = (symb, long, costBasis, avSize, allPairPrices, closed = 
   };
 };
 
-export const costBasis = (tradeArr) => {
-  const totalSize = tradeArr.reduce((accum, current) => accum + current.size, 0);
-  const basis = tradeArr.reduce((accum, current) => accum + (current.size * current.price), 0);
-  return [totalSize, basis / totalSize];
-};
-
-export const getProfits = (opentrades, allPairPrices, closed = false) => {
-  const cummulative = opentrades.reduce((accum, current) => {
+export const getProfits = (batchOfTrades, allPairPrices, closed = false) => {
+  const cummulative = batchOfTrades.reduce((accum, current) => {
     const accumCopy = { ...accum }; // because of no assign-param eslint rule
     const priceInfo = costBasis(current.entry);
     accumCopy.totalPips += findGain(

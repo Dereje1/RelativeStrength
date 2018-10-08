@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 // fx computation utility
-import { findGain, getProfits } from '../../utilitiy/fxcomputations';
+import { findGain, costBasis, getProfits } from '../../utilitiy/fxcomputations';
 // custom components
 import TradeInfo from './TradeRecords/tradeInfo';
 import TradeModification from './TradeManagement/trademodification';
@@ -31,12 +31,12 @@ class TradeTable extends Component {
       const {
         symbol, long, entry, exit,
       } = singleTrade;
-
+      const basis = costBasis(entry);
       const gain = this.props.open ?
-        findGain(symbol, long, entry[0].price, entry[0].size, this.props.fxLastPrices)
+        findGain(symbol, long, basis[1], basis[0], this.props.fxLastPrices)
         :
         findGain(
-          symbol, long, entry[0].price, entry[0].size, this.props.fxLastPrices,
+          symbol, long, basis[1], basis[0], this.props.fxLastPrices,
           { closePrice: exit[0].price, closedPipVal: exit[0].pipValue },
         );
       const gainresult = {
