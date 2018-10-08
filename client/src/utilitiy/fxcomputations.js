@@ -44,14 +44,21 @@ export const findGain = (symb, long, costBasis, avSize, allPairPrices, closed = 
   };
 };
 
+export const costBasis = (tradeArr) => {
+  const totalSize = tradeArr.reduce((accum, current) => accum + current.size, 0);
+  const basis = tradeArr.reduce((accum, current) => accum + (current.size * current.price), 0);
+  return [totalSize, basis / totalSize];
+};
+
 export const getProfits = (opentrades, allPairPrices, closed = false) => {
   const cummulative = opentrades.reduce((accum, current) => {
     const accumCopy = { ...accum }; // because of no assign-param eslint rule
+    const priceInfo = costBasis(current.entry);
     accumCopy.totalPips += findGain(
       current.symbol,
       current.long,
-      current.entry[0].price,
-      current.entry[0].size,
+      priceInfo[1],
+      priceInfo[0],
       allPairPrices,
       !closed ? false :
         { closePrice: current.exit[0].price, closedPipVal: current.exit[0].pipValue },
@@ -59,22 +66,22 @@ export const getProfits = (opentrades, allPairPrices, closed = false) => {
     accumCopy.totalDollars += findGain(
       current.symbol,
       current.long,
-      current.entry[0].price,
-      current.entry[0].size,
+      priceInfo[1],
+      priceInfo[0],
       allPairPrices,
       !closed ? false :
         { closePrice: current.exit[0].price, closedPipVal: current.exit[0].pipValue },
     ).dollars;
 
     const openRisk = current.long ?
-      current.entry[0].price - current.stop
+      priceInfo[1] - current.stop
       :
-      current.stop - current.entry[0].price;
+      current.stop - priceInfo[1];
 
     const openRiskPips = openRisk > 0 ? getPips(current.symbol, openRisk) : 0;
     const openRiskDollars = openRisk > 0 ?
       getDollarsPerPip(current.symbol, allPairPrices) *
-      openRiskPips * (current.entry[0].size / 100000) : 0;
+      openRiskPips * (priceInfo[0] / 100000) : 0;
 
     accumCopy.openRiskPips += openRiskPips;
     accumCopy.openRiskDollars += Math.ceil(openRiskDollars);
@@ -86,4 +93,25 @@ export const getProfits = (opentrades, allPairPrices, closed = false) => {
     openRiskDollars: 0,
   });
   return cummulative;
+};
+
+export const getNewRisk = (oldTrade, addPoisition, allPairPrices) => {
+  // preserve previous trade
+  const previousTrade = JSON.parse(JSON.stringify(oldTrade));
+  // save example of an entry to modify
+  const mockEntry = JSON.parse(JSON.stringify(previousTrade.entry[0]));
+  // modify example with current/proposed user input
+  mockEntry.date = Date.parse(addPoisition.date[0]._d);
+  mockEntry.size = parseInt(addPoisition.size[0], 10);
+  mockEntry.price = Number(addPoisition.price[0]);
+  mockEntry.comments = String(addPoisition.comments[0]);
+  // add example as a new trade entry in the netry array
+  const updatedEntry = [...previousTrade.entry, ...[mockEntry]];
+  // modify previous trade to simulate computations
+  previousTrade.entry = updatedEntry;
+  previousTrade.stop = Number(addPoisition.movestop[0]);
+  return {
+    newRisk: getProfits([previousTrade], allPairPrices).openRiskDollars,
+    newCostBasis: costBasis(previousTrade.entry),
+  };
 };

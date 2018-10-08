@@ -28,3 +28,8 @@ export const closeTrade = exitInfo =>
     .then(response => response.data)
     .catch(error => error);
 
+export const addTrade = updatedInfo =>
+  axios.put('/api/addtrade', updatedInfo)
+    .then(response => response.data)
+    .catch(error => error);
+

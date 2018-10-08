@@ -29,6 +29,21 @@
         justify-content: space-between;
     }
 }
+.modal-footer{
+    .managementbuttons{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+        width: 100%;
+        .managetradebutton{
+            width: 30%;
+            font-size: .75em;
+            white-space: normal;
+        }
+    }
+}
+
+
 .tradedetail{
     white-space: pre-line;
     font-weight: bold;  
@@ -43,6 +58,10 @@
         margin-bottom: 5px;
         border-radius: 3px;
         padding: 5px;
+        .positionadded{
+            color: blue;
+            font-style: italic;
+        }
     }
     .gainrisk{
         margin-bottom: 5px;
@@ -60,6 +79,10 @@
 #comments{
     height: 5em;
     width:100%;
+}
+
+.riskDisplay{
+    white-space: pre-line;
 }
 @media screen and (min-width: 700px) {
     .opentradesbody {

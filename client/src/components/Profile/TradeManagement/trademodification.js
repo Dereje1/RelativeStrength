@@ -3,18 +3,20 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 // bootstrap fontawesome css
-import { Col, Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowUp, faArrowDown } from '@fortawesome/free-solid-svg-icons';
 import './css/management.css';
 // api calls, fx computations and validation
-import { setStop, closeTrade } from '../../../utilitiy/api';
-import { getDollarsPerPip } from '../../../utilitiy/fxcomputations';
+import { setStop, closeTrade, addTrade } from '../../../utilitiy/api';
+import { getDollarsPerPip, costBasis, getNewRisk } from '../../../utilitiy/fxcomputations';
 import checkValidity from '../../../utilitiy/validation';
 // custom components
 import OpenTradeDetail from './opentradedetail';
 import ModifyStopForm from './modifyStopForm';
 import ExitTradeForm from './exitTradeForm';
+import AddPositionForm from './addPositionForm';
+import RenderControlsButton from './renderContolsButton';
 
 class TradeModification extends Component {
 
@@ -41,10 +43,21 @@ class TradeModification extends Component {
         comments: ['', false],
         submit: true,
       },
+      addPoisition: { // for add shares modal
+        displayForm: false,
+        newRisk: null,
+        date: [moment(), true],
+        price: [this.props.fxLastPrices[this.props.trade.symbol], false],
+        size: ['', false],
+        movestop: [this.props.trade.stop, false],
+        comments: ['', false],
+        submit: true,
+      },
       controlButtons: {
         full: true,
         moveStop: false,
-        closeTrade: false,
+        exitTrade: false,
+        addPoisition: false,
       },
       dateFocus: false,
     };
@@ -52,14 +65,6 @@ class TradeModification extends Component {
   }
 
   /* Stop Adjustment */
-  stopAdjustment = () => {
-    const copyOfState = JSON.parse(JSON.stringify(this.state));
-    copyOfState.moveStop.displayForm = true;
-    copyOfState.moveStop.submit = false;
-    copyOfState.controlButtons.moveStop = true;
-    copyOfState.controlButtons.full = false;
-    this.setState(copyOfState);
-  }
   handleStopChange = (event) => {
     const { name, value } = event.target;
     const validity = checkValidity(name, value, this.props.trade.long, this.props.trade.stop);
@@ -84,16 +89,6 @@ class TradeModification extends Component {
   /* end stop Adjustment */
 
   /* Exiting Trade */
-  exitTrade = () => {
-    const copyOfState = JSON.parse(JSON.stringify(this.state));
-    copyOfState.exitTrade.displayForm = true;
-    copyOfState.exitTrade.submit = false;
-    copyOfState.exitTrade.date = [moment(), true];
-    copyOfState.controlButtons.closeTrade = true;
-    copyOfState.controlButtons.full = false;
-    copyOfState.exitTrade.submit = false;
-    this.setState(copyOfState);
-  }
 
   handleExitChange = (event) => {
     const copyOfState = JSON.parse(JSON.stringify(this.state));
@@ -108,22 +103,7 @@ class TradeModification extends Component {
     // note reset of date eventhough it is handled by react dates
     // deep copy does not work on functions within objects
     copyOfState.exitTrade.date = [this.state.exitTrade.date[0], true];
-    this.setState(copyOfState, () => this.exitButton());
-  }
-
-  exitButton = () => {
-    const copyOfState = JSON.parse(JSON.stringify(this.state));
-    const stateKeys = Object.keys(this.state.exitTrade);
-    const validatedInputs = ['price', 'comments'];
-    let buttonState = true;
-    stateKeys.forEach((k) => {
-      if (validatedInputs.includes(k) && !this.state.exitTrade[k][1]) {
-        buttonState = false;
-      }
-    });
-    copyOfState.exitTrade.submit = buttonState;
-    copyOfState.exitTrade.date = [this.state.exitTrade.date[0], true];
-    this.setState(copyOfState);
+    this.setState(copyOfState, () => this.updateButtonStatus('exitTrade', ['price', 'comments']));
   }
 
   inputExitValidity = field => (this.state.exitTrade[field][1] ?
@@ -138,7 +118,7 @@ class TradeModification extends Component {
       exitInfo: [
         {
           date: Date.parse(this.state.exitTrade.date[0]._d),
-          size: parseInt(this.props.trade.entry[0].size, 10),
+          size: parseInt(costBasis(this.props.trade.entry)[0], 10),
           price: Number(this.state.exitTrade.price[0]),
           pipValue: getDollarsPerPip(this.props.trade.symbol, this.props.fxLastPrices),
           comments: this.state.exitTrade.comments[0],
@@ -151,12 +131,97 @@ class TradeModification extends Component {
 
   /* End Exit trade */
 
+  /* Add Position */
+  handleAddPosition = (event) => {
+    const copyOfState = JSON.parse(JSON.stringify(this.state));
+    if (Object.prototype.hasOwnProperty.call(event, '_isAMomentObject')) {
+      copyOfState.addPoisition.date = [event, true];
+      this.setState(copyOfState);
+      return;
+    }
+    const { name, value } = event.target;
+    const inputIsValid = checkValidity(name, value, this.props.trade.long, this.props.trade.stop);
+    copyOfState.addPoisition[name] = [value, inputIsValid];
+    // note reset of date eventhough it is handled by react dates
+    // deep copy does not work on functions within objects
+    copyOfState.addPoisition.date = [this.state.addPoisition.date[0], true];
+    this.setState(copyOfState, () => this.updateButtonStatus('addPoisition', ['price', 'comments', 'size', 'movestop']));
+  }
+
+  addPositionValidity = field => (this.state.addPoisition[field][1] ?
+    { valid: true } : { invalid: true });
+
+  addPositionButtonState = () => (this.state.addPoisition.submit ?
+    { disabled: false } : { disabled: true })
+
+  submitAddPosition = async () => {
+    const newEntry = [
+      {
+        date: Date.parse(this.state.addPoisition.date[0]._d),
+        size: parseInt(this.state.addPoisition.size[0], 10),
+        price: Number(this.state.addPoisition.price[0]),
+        comments: this.state.addPoisition.comments[0],
+      },
+    ];
+
+    const updatedTradeModel = {
+      tradeId: this.props.trade._id,
+      updated: {
+        stop: Number(this.state.addPoisition.movestop[0]),
+        entry: [...this.props.trade.entry, ...newEntry],
+      },
+    };
+
+    await addTrade(updatedTradeModel);
+    window.location.assign('/');
+  }
+
+  /* End Position Add */
+
+  handleButtonAction = (action) => {
+    const copyOfState = JSON.parse(JSON.stringify(this.state));
+    copyOfState[action].displayForm = true;
+    copyOfState[action].submit = false;
+    copyOfState[action].date = [moment(), true];
+    copyOfState.controlButtons[action] = true;
+    copyOfState.controlButtons.full = false;
+    copyOfState[action].submit = false;
+    this.setState(copyOfState);
+  }
+  updateButtonStatus = (action, validatedInputs) => {
+    const copyOfState = JSON.parse(JSON.stringify(this.state));
+    const stateKeys = Object.keys(this.state[action]);
+    // const validatedInputs = ['price', 'comments', 'size'];
+    let buttonState = true;
+    stateKeys.forEach((k) => {
+      if (validatedInputs.includes(k) && !this.state[action][k][1]) {
+        buttonState = false;
+      }
+    });
+    copyOfState[action].submit = buttonState;
+    copyOfState[action].date = [this.state[action].date[0], true];
+    if ((action === 'addPoisition') && buttonState) {
+      copyOfState[action].newRisk = getNewRisk(
+        this.props.trade,
+        this.state.addPoisition,
+        this.props.fxLastPrices,
+      );
+    } else copyOfState[action].newRisk = null;
+    this.setState(copyOfState);
+  }
+  /* enable / diable buttons based on validitiy */
+
+
   cancelModify = () => {
-    if (this.state.moveStop.displayForm) {
+    let formType;
+    Object.keys(this.state).forEach((o) => {
+      if (this.state[o].displayForm) formType = o;
+    });
+    if (formType) {
       const copyOfState = JSON.parse(JSON.stringify(this.state));
-      copyOfState.moveStop.displayForm = false;
-      copyOfState.moveStop.submit = true;
-      copyOfState.controlButtons.moveStop = false;
+      copyOfState[formType].displayForm = false;
+      copyOfState[formType].submit = true;
+      copyOfState.controlButtons[formType] = false;
       copyOfState.controlButtons.full = true;
       this.setState(copyOfState);
     } else this.props.onToggle();
@@ -184,8 +249,22 @@ class TradeModification extends Component {
           comments={this.state.exitTrade.comments[0]}
         />
       );
+    } else if (this.state.addPoisition.displayForm) {
+      return (
+        <AddPositionForm
+          sendFormValue={fv => this.handleAddPosition(fv)}
+          date={this.state.addPoisition.date[0]}
+          focused={this.state.dateFocus}
+          onDateFocus={() => this.setState({ dateFocus: !this.state.dateFocus })}
+          validity={name => this.addPositionValidity(name)}
+          price={this.state.addPoisition.price[0]}
+          stop={this.state.addPoisition.movestop[0]}
+          size={this.state.addPoisition.size[0]}
+          comments={this.state.addPoisition.comments[0]}
+          risk={this.state.addPoisition.newRisk}
+        />
+      );
     }
-
     return (
       <OpenTradeDetail
         trade={this.props.trade}
@@ -193,63 +272,6 @@ class TradeModification extends Component {
       />
     );
   };
-
-  controlButtonsRender = () => {
-    // conditionally render modal footer depending on stop move / exit or info
-    if (this.state.controlButtons.full) {
-      return (
-        <React.Fragment>
-          <Col sm={6}>
-            <Button
-              color="primary"
-              className="float-left"
-              onClick={this.stopAdjustment}
-              {...this.moveStopButtonState()}
-            >Move Stop
-            </Button>
-          </Col>
-          <Col sm={6}>
-            <Button
-              color="warning"
-              className="float-right"
-              onClick={this.exitTrade}
-            >Close Trade
-            </Button>
-          </Col>
-        </React.Fragment>
-      );
-    } else if (this.state.controlButtons.moveStop) {
-      return (
-        <React.Fragment>
-          <Col sm={12}>
-            <Button
-              color="primary"
-              className="float-left"
-              onClick={this.submitNewStop}
-              {...this.moveStopButtonState()}
-              block
-            >Move Stop
-            </Button>
-          </Col>
-        </React.Fragment>
-      );
-    }
-
-    return (
-      <React.Fragment>
-        <Col sm={12}>
-          <Button
-            color="success"
-            className="float-right"
-            onClick={this.submitExit}
-            {...this.exitButtonState()}
-            block
-          >Close Trade
-          </Button>
-        </Col>
-      </React.Fragment>
-    );
-  }
 
   render() {
     if (!Object.keys(this.props.trade).length) return null;
@@ -271,7 +293,13 @@ class TradeModification extends Component {
           {this.modalBodyRender()}
         </ModalBody>
         <ModalFooter>
-          {this.controlButtonsRender()}
+          <RenderControlsButton
+            controlButtons={this.state.controlButtons}
+            handleButtonAction={action => this.handleButtonAction(action)}
+            moveStopButton={[this.moveStopButtonState, this.submitNewStop]}
+            addPositionButton={[this.addPositionButtonState, this.submitAddPosition]}
+            exitButton={[this.exitButtonState, this.submitExit]}
+          />
         </ModalFooter>
       </Modal>
     );

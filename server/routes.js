@@ -65,5 +65,18 @@ router.put('/api/closetrade', (req, res) => {
     },
   );
 });
+
+router.put('/api/addtrade', (req, res) => {
+  const { tradeId, updated } = req.body;
+  Trades.findByIdAndUpdate(
+    tradeId,
+    { stop: updated.stop, entry: updated.entry },
+    { new: true },
+    (err, updatedResult) => {
+      if (err) throw err;
+      res.json(updatedResult);
+    },
+  );
+});
 module.exports = router;
 
