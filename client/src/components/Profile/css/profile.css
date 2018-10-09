@@ -10,4 +10,17 @@
   -ms-flex-pack: distribute;
       justify-content: space-around;
 }
+
+.dateSelection {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+  margin-bottom: 20px;
+}
+
+.addedposition {
+  color: blue;
+}
 /*# sourceMappingURL=profile.css.map */

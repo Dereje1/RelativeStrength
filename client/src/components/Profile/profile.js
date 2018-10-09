@@ -9,7 +9,7 @@ import TradeTable from './tradetable';
 // api calls
 import { getOpenTrades, getClosedTrades } from '../../utilitiy/api';
 // bootstrap and css
-import { Button } from 'reactstrap';
+import { Button, ButtonGroup } from 'reactstrap';
 import './css/profile.css';
 
 const mapStateToProps = state => state;
@@ -21,12 +21,14 @@ class Profile extends Component {
       showEntry: false,
       openTrades: [],
       closedTrades: [],
+      loading: false,
+      dateSelection: 'all',
     };
   }
 
   componentDidMount() {
     this.findOpenTrades();
-    this.findClosedTrades();
+    this.findClosedTrades(0);
   }
 
   findOpenTrades = async () => {
@@ -34,9 +36,33 @@ class Profile extends Component {
     this.setState({ openTrades });
   }
 
-  findClosedTrades = async () => {
-    const closedTrades = await getClosedTrades();
-    this.setState({ closedTrades });
+  findClosedTrades = async (dateRange, limit = false) => {
+    this.setState({ loading: true });
+    const closedTrades = await getClosedTrades(dateRange, limit);
+    this.setState({ closedTrades, loading: false });
+  }
+
+  selectDates = (dateRange) => {
+    const date = new Date();
+    const currentYear = date.getFullYear();
+    const currentMonth = date.getMonth();
+    const beginMonth = new Date(currentYear, currentMonth, 1);
+    switch (dateRange) {
+      case 'all':
+        this.setState({ dateSelection: dateRange }, () => this.findClosedTrades(0));
+        break;
+      case 'thismonth':
+        this.setState(
+          { dateSelection: dateRange },
+          () => this.findClosedTrades(Date.parse(beginMonth)),
+        );
+        break;
+      case 'lastten':
+        this.setState({ dateSelection: dateRange }, () => this.findClosedTrades(0, 10));
+        break;
+      default:
+        break;
+    }
   }
 
   entryModal = () => {
@@ -78,12 +104,34 @@ class Profile extends Component {
           }
           <hr />
           {
-            this.state.closedTrades.length ?
-              <TradeTable
-                trades={this.state.closedTrades}
-                fxLastPrices={this.props.forexData.aws.lastPrices}
-                open={false}
-              />
+            this.state.closedTrades.length && !this.state.loading ?
+              <React.Fragment>
+                <TradeTable
+                  trades={this.state.closedTrades}
+                  fxLastPrices={this.props.forexData.aws.lastPrices}
+                  open={false}
+                />
+                <div className="dateSelection">
+                  <ButtonGroup>
+                    <Button
+                      color={this.state.dateSelection === 'all' ? 'primary' : 'secondary'}
+                      onClick={() => this.selectDates('all')}
+                    >All
+                    </Button>
+                    <Button
+                      color={this.state.dateSelection === 'thismonth' ? 'primary' : 'secondary'}
+                      onClick={() => this.selectDates('thismonth')}
+                    >This Month
+                    </Button>
+                    <Button
+                      color={this.state.dateSelection === 'lastten' ? 'primary' : 'secondary'}
+                      onClick={() => this.selectDates('lastten')}
+                    >Last Ten
+                    </Button>
+                  </ButtonGroup>
+                </div>
+              </React.Fragment>
+
               :
               <div className="Loading" />
           }

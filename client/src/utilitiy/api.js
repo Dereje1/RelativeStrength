@@ -13,10 +13,16 @@ export const getOpenTrades = () =>
     .then(response => response.data)
     .catch(error => error);
 
-export const getClosedTrades = () =>
-  axios.get('/api/getclosedtrades')
+export const getClosedTrades = (minDate, limited = false) => {
+  const queryURL = limited ?
+    `/api/getclosedtrades/${limited}?start=${minDate}`
+    :
+    `/api/getclosedtrades/500?start=${minDate}`;
+  return axios.get(queryURL)
     .then(response => response.data)
     .catch(error => error);
+};
+
 
 export const setStop = newStop =>
   axios.put('/api/movestop', newStop)

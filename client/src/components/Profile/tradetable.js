@@ -117,7 +117,7 @@ class TradeTable extends Component {
                   />
                   :
                   <FontAwesomeIcon
-                    className="fas fa-info-circle"
+                    className={t.entry.length > 1 ? 'addedposition' : ''}
                     icon={faInfoCircle}
                     onClick={() => this.infoModal(t)}
                   />

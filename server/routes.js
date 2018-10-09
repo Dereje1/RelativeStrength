@@ -35,10 +35,11 @@ router.get('/api/getopentrades', isLoggedIn, (req, res) => {
     });
 });
 
-router.get('/api/getclosedtrades', isLoggedIn, (req, res) => {
+router.get('/api/getclosedtrades/:limit', isLoggedIn, (req, res) => {
   const traderGoogleId = req.user.google.id;
-  Trades.find({ userId: traderGoogleId, tradeStatusOpen: false })
+  Trades.find({ userId: traderGoogleId, tradeStatusOpen: false, 'entry.date': { $gte: req.query.start } })
     .sort('-entry.date')
+    .limit(Number(req.params.limit))
     .exec((err, closedTrades) => {
       if (err) throw err;
       res.json(closedTrades);
