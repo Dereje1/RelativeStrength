@@ -23,4 +23,15 @@
 .addedposition {
   color: blue;
 }
+
+.tradetablecaption {
+  text-align: center;
+}
+
+.tradetablecaption .displaytext {
+  display: inline-block;
+  font-size: 1em;
+  text-align: left;
+  white-space: pre-line;
+}
 /*# sourceMappingURL=profile.css.map */

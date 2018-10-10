@@ -61,9 +61,21 @@ class TradeTable extends Component {
          Open Risk = $${cummulative.openRiskDollars}`;
       }
       return this.state.gainUnits === 'pips' ?
-        ` Total Gain = ${cummulative.totalPips} Pips`
+        ` Trades = ${cummulative.totalTrades}
+          Total Gain = ${cummulative.totalPips} Pips`
         :
-        `Total Gain = $${cummulative.totalDollars}`;
+        ` Trades = ${cummulative.totalTrades}
+        Total Gain = $${cummulative.totalDollars}
+        Win Rate = ${Math.floor((cummulative.numberOfGainers / cummulative.totalTrades) * 100)}%, RR = ${this.computeRR(cummulative)}`;
+    }
+
+    computeRR = (cummulative) => {
+      const {
+        numberOfGainers, numberOfLoosers, gainTotal, lossTotal,
+      } = cummulative;
+      const aveWinner = gainTotal / numberOfGainers;
+      const aveLooser = (lossTotal / numberOfLoosers) * -1;
+      return Math.round((aveWinner / aveLooser) * 100) / 100;
     }
 
     formatExitDate = (t) => {
@@ -150,7 +162,8 @@ class TradeTable extends Component {
     render() {
       return (
         <Table {...this.tableType()}>
-          <caption className="opentradescaption">{this.getCummulative(this.props.open)}
+          <caption className="tradetablecaption">
+            <span className="displaytext">{this.getCummulative(this.props.open)}</span>
           </caption>
           {this.tableBody()}
           <TradeInfo

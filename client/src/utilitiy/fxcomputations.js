@@ -55,7 +55,7 @@ export const getProfits = (batchOfTrades, allPairPrices, closed = false) => {
   const cummulative = batchOfTrades.reduce((accum, current) => {
     const accumCopy = { ...accum }; // because of no assign-param eslint rule
     const priceInfo = costBasis(current.entry);
-    accumCopy.totalPips += findGain(
+    const gainInPips = findGain(
       current.symbol,
       current.long,
       priceInfo[1],
@@ -64,7 +64,7 @@ export const getProfits = (batchOfTrades, allPairPrices, closed = false) => {
       !closed ? false :
         { closePrice: current.exit[0].price, closedPipVal: current.exit[0].pipValue },
     ).pips;
-    accumCopy.totalDollars += findGain(
+    const gainInDollars = findGain(
       current.symbol,
       current.long,
       priceInfo[1],
@@ -74,24 +74,46 @@ export const getProfits = (batchOfTrades, allPairPrices, closed = false) => {
         { closePrice: current.exit[0].price, closedPipVal: current.exit[0].pipValue },
     ).dollars;
 
-    const openRisk = current.long ?
-      priceInfo[1] - current.stop
-      :
-      current.stop - priceInfo[1];
+    accumCopy.totalTrades += 1;
+    accumCopy.totalPips += gainInPips;
+    accumCopy.totalDollars += gainInDollars;
 
-    const openRiskPips = openRisk > 0 ? getPips(current.symbol, openRisk) : 0;
-    const openRiskDollars = openRisk > 0 ?
-      getDollarsPerPip(current.symbol, allPairPrices) *
+    if (!closed) {
+      const openRisk = current.long ?
+        priceInfo[1] - current.stop
+        :
+        current.stop - priceInfo[1];
+
+      const openRiskPips = openRisk > 0 ? getPips(current.symbol, openRisk) : 0;
+      const openRiskDollars = openRisk > 0 ?
+        getDollarsPerPip(current.symbol, allPairPrices) *
       openRiskPips * (priceInfo[0] / 100000) : 0;
 
-    accumCopy.openRiskPips += openRiskPips;
-    accumCopy.openRiskDollars += Math.ceil(openRiskDollars);
+      accumCopy.openRiskPips += openRiskPips;
+      accumCopy.openRiskDollars += Math.ceil(openRiskDollars);
+    } else {
+      accumCopy.openRiskPips = null;
+      accumCopy.openRiskDollars = null;
+    }
+
+    if (gainInDollars > 0) {
+      accumCopy.numberOfGainers += 1;
+      accumCopy.gainTotal += gainInDollars;
+    } else {
+      accumCopy.numberOfLoosers += 1;
+      accumCopy.lossTotal += gainInDollars;
+    }
     return accumCopy;
   }, {
+    totalTrades: 0,
     totalPips: 0,
     totalDollars: 0,
     openRiskPips: 0,
     openRiskDollars: 0,
+    numberOfGainers: 0,
+    numberOfLoosers: 0,
+    gainTotal: 0,
+    lossTotal: 0,
   });
   return cummulative;
 };

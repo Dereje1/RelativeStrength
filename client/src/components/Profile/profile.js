@@ -22,13 +22,13 @@ class Profile extends Component {
       openTrades: [],
       closedTrades: [],
       loading: false,
-      dateSelection: 'all',
+      dateSelection: 'lastten',
     };
   }
 
   componentDidMount() {
     this.findOpenTrades();
-    this.findClosedTrades(0);
+    this.findClosedTrades(0, 10);
   }
 
   findOpenTrades = async () => {
