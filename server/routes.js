@@ -47,11 +47,14 @@ router.get('/api/getclosedtrades/:limit', isLoggedIn, (req, res) => {
 });
 
 router.put('/api/movestop', (req, res) => {
-  const { tradeId, newStop } = req.body;
-  Trades.findByIdAndUpdate(tradeId, { stop: newStop }, { new: true }, (err, updated) => {
-    if (err) throw err;
-    res.json(updated);
-  });
+  const { tradeId, newStop, updatedEntry } = req.body;
+  Trades.findByIdAndUpdate(
+    tradeId, { stop: newStop, entry: updatedEntry }, { new: true },
+    (err, updated) => {
+      if (err) throw err;
+      res.json(updated);
+    },
+  );
 });
 
 router.put('/api/closetrade', (req, res) => {

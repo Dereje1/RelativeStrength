@@ -79,9 +79,13 @@ class TradeModification extends Component {
     { disabled: false } : { disabled: true })
 
   submitNewStop = async () => {
+    const entryCopy = JSON.parse(JSON.stringify(this.props.trade.entry));
+    const stopComments = `\nMoved stop from ${this.props.trade.stop} to ${this.state.moveStop.stop[0]}`;
+    entryCopy[entryCopy.length - 1].comments += stopComments;
     const newStopObject = {
       tradeId: this.props.trade._id,
       newStop: Number(this.state.moveStop.stop[0]),
+      updatedEntry: entryCopy,
     };
     await setStop(newStopObject);
     window.location.assign('/');
