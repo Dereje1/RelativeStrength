@@ -42,6 +42,8 @@ class TradeEntry extends Component {
       savedModels: JSON.parse(localStorage.getItem('tradeideas')),
       tradeModel: {},
       confirmationModel: {},
+      loading: false,
+      disableEntry: false,
     };
     this.setState(emptyForm);
   }
@@ -185,6 +187,7 @@ class TradeEntry extends Component {
   }
 
   enterTrade = async () => {
+    this.setState({ loading: true, disableEntry: true });
     await postNewTrade(this.state.tradeModel);
     window.location.assign('/');
   }
@@ -203,6 +206,7 @@ class TradeEntry extends Component {
             <Confirmation
               model={this.state.confirmationModel}
               lastPrices={this.props.fxLastPrices}
+              loading={this.state.loading}
             />
             :
             <React.Fragment>
@@ -229,12 +233,16 @@ class TradeEntry extends Component {
         <ModalFooter>
           {this.state.confirm ?
             <React.Fragment>
-              <Button
-                color="success"
-                onClick={this.enterTrade}
-                block
-              >Enter Trade
-              </Button>
+              {!this.state.disableEntry ?
+                <Button
+                  color="success"
+                  onClick={this.enterTrade}
+                  block
+                >Enter Trade
+                </Button>
+                :
+                null
+              }
             </React.Fragment>
             :
             <div className="entryfooter">

@@ -60,22 +60,23 @@ const RenderCondtrolsButton = (props) => {
         </Col>
       </React.Fragment>
     );
+  } else if (props.controlButtons.exitTrade) {
+    return (
+      <React.Fragment>
+        <Col sm={12}>
+          <Button
+            color="warning"
+            className="float-right"
+            onClick={props.exitButton[1]}
+            {...props.exitButton[0]()}
+            block
+          >Close Trade
+          </Button>
+        </Col>
+      </React.Fragment>
+    );
   }
-
-  return (
-    <React.Fragment>
-      <Col sm={12}>
-        <Button
-          color="warning"
-          className="float-right"
-          onClick={props.exitButton[1]}
-          {...props.exitButton[0]()}
-          block
-        >Close Trade
-        </Button>
-      </Col>
-    </React.Fragment>
-  );
+  return null;
 };
 
 RenderCondtrolsButton.propTypes = {

@@ -132,7 +132,7 @@ export const getNewRisk = (oldTrade, addPoisition, allPairPrices) => {
   const updatedEntry = [...previousTrade.entry, ...[mockEntry]];
   // modify previous trade to simulate computations
   previousTrade.entry = updatedEntry;
-  previousTrade.stop = Number(addPoisition.movestop[0]);
+  previousTrade.stop = Number(addPoisition.moveStop[0]);
   return {
     newRisk: getProfits([previousTrade], allPairPrices).openRiskDollars,
     newCostBasis: costBasis(previousTrade.entry),

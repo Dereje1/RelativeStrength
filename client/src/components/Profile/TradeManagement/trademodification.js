@@ -49,7 +49,7 @@ class TradeModification extends Component {
         date: [moment(), true],
         price: [this.props.fxLastPrices[this.props.trade.symbol], false],
         size: ['', false],
-        movestop: [this.props.trade.stop, false],
+        moveStop: [this.props.trade.stop, false],
         comments: ['', false],
         submit: true,
       },
@@ -60,6 +60,7 @@ class TradeModification extends Component {
         addPoisition: false,
       },
       dateFocus: false,
+      loading: false,
     };
     this.setState(emptyForm);
   }
@@ -79,6 +80,7 @@ class TradeModification extends Component {
     { disabled: false } : { disabled: true })
 
   submitNewStop = async () => {
+    this.disableAllControlButtons();
     const entryCopy = JSON.parse(JSON.stringify(this.props.trade.entry));
     const stopComments = `\nMoved stop from ${this.props.trade.stop} to ${this.state.moveStop.stop[0]}`;
     entryCopy[entryCopy.length - 1].comments += stopComments;
@@ -87,6 +89,7 @@ class TradeModification extends Component {
       newStop: Number(this.state.moveStop.stop[0]),
       updatedEntry: entryCopy,
     };
+    this.setState({ loading: true });
     await setStop(newStopObject);
     window.location.assign('/');
   }
@@ -117,6 +120,7 @@ class TradeModification extends Component {
     { disabled: false } : { disabled: true })
 
   submitExit = async () => {
+    this.disableAllControlButtons();
     const exitObject = {
       tradeId: this.props.trade._id,
       exitInfo: [
@@ -129,6 +133,7 @@ class TradeModification extends Component {
         },
       ],
     };
+    this.setState({ loading: true });
     await closeTrade(exitObject);
     window.location.assign('/');
   }
@@ -149,7 +154,7 @@ class TradeModification extends Component {
     // note reset of date eventhough it is handled by react dates
     // deep copy does not work on functions within objects
     copyOfState.addPoisition.date = [this.state.addPoisition.date[0], true];
-    this.setState(copyOfState, () => this.updateButtonStatus('addPoisition', ['price', 'comments', 'size', 'movestop']));
+    this.setState(copyOfState, () => this.updateButtonStatus('addPoisition', ['price', 'comments', 'size', 'moveStop']));
   }
 
   addPositionValidity = field => (this.state.addPoisition[field][1] ?
@@ -159,6 +164,7 @@ class TradeModification extends Component {
     { disabled: false } : { disabled: true })
 
   submitAddPosition = async () => {
+    this.disableAllControlButtons();
     const newEntry = [
       {
         date: Date.parse(this.state.addPoisition.date[0]._d),
@@ -171,11 +177,11 @@ class TradeModification extends Component {
     const updatedTradeModel = {
       tradeId: this.props.trade._id,
       updated: {
-        stop: Number(this.state.addPoisition.movestop[0]),
+        stop: Number(this.state.addPoisition.moveStop[0]),
         entry: [...this.props.trade.entry, ...newEntry],
       },
     };
-
+    this.setState({ loading: true });
     await addTrade(updatedTradeModel);
     window.location.assign('/');
   }
@@ -213,7 +219,16 @@ class TradeModification extends Component {
     } else copyOfState[action].newRisk = null;
     this.setState(copyOfState);
   }
-  /* enable / diable buttons based on validitiy */
+
+  disableAllControlButtons = () => {
+    const stateCopy = JSON.parse(JSON.stringify(this.state));
+    stateCopy.addPoisition.date = [this.state.addPoisition.date[0], true];
+    stateCopy.exitTrade.date = [this.state.exitTrade.date[0], true];
+    Object.keys(this.state.controlButtons).forEach((cb) => {
+      if (stateCopy.controlButtons[cb]) stateCopy.controlButtons[cb] = false;
+    });
+    this.setState(stateCopy);
+  }
 
 
   cancelModify = () => {
@@ -239,6 +254,7 @@ class TradeModification extends Component {
           sendStopValue={fv => this.handleStopChange(fv)}
           formVal={this.state.moveStop.stop}
           validity={() => this.inputStopValidity()}
+          loading={this.state.loading}
         />
       );
     } else if (this.state.exitTrade.displayForm) {
@@ -251,6 +267,7 @@ class TradeModification extends Component {
           validity={name => this.inputExitValidity(name)}
           price={this.state.exitTrade.price[0]}
           comments={this.state.exitTrade.comments[0]}
+          loading={this.state.loading}
         />
       );
     } else if (this.state.addPoisition.displayForm) {
@@ -262,10 +279,11 @@ class TradeModification extends Component {
           onDateFocus={() => this.setState({ dateFocus: !this.state.dateFocus })}
           validity={name => this.addPositionValidity(name)}
           price={this.state.addPoisition.price[0]}
-          stop={this.state.addPoisition.movestop[0]}
+          stop={this.state.addPoisition.moveStop[0]}
           size={this.state.addPoisition.size[0]}
           comments={this.state.addPoisition.comments[0]}
           risk={this.state.addPoisition.newRisk}
+          loading={this.state.loading}
         />
       );
     }

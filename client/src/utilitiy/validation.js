@@ -25,7 +25,7 @@ const checkValidity = (fieldName, value, long, price) => {
     case 'comments':
       if (value) isValid = true;
       break;
-    case 'movestop':
+    case 'moveStop':
       if (Number(value)) {
         if (long && Number(value) > price) isValid = true;
         if (!long && Number(value) < price) isValid = true;

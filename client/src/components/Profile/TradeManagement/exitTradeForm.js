@@ -12,52 +12,55 @@ const inputSize = 10;
 const labelSize = 2;
 
 const ExitTradeForm = props => (
-  <Form>
-    <FormGroup row>
-      <Label for="entrydate" sm={labelSize}>Date</Label>
-      <Col sm={inputSize}>
-        <SingleDatePicker
-          date={props.date} // momentPropTypes.momentObj or null
-          onDateChange={date => props.sendFormValue(date)} // PropTypes.func.isRequired
-          focused={props.focused} // PropTypes.bool
-          onFocusChange={() => props.onDateFocus()} // PropTypes.func.isRequired
-          numberOfMonths={1}
-          isOutsideRange={() => false}
-          id="Trade_Exit_Date"
-        />
-      </Col>
-    </FormGroup>
+  !props.loading ?
+    <Form>
+      <FormGroup row>
+        <Label for="entrydate" sm={labelSize}>Date</Label>
+        <Col sm={inputSize}>
+          <SingleDatePicker
+            date={props.date} // momentPropTypes.momentObj or null
+            onDateChange={date => props.sendFormValue(date)} // PropTypes.func.isRequired
+            focused={props.focused} // PropTypes.bool
+            onFocusChange={() => props.onDateFocus()} // PropTypes.func.isRequired
+            numberOfMonths={1}
+            isOutsideRange={() => false}
+            id="Trade_Exit_Date"
+          />
+        </Col>
+      </FormGroup>
 
-    <FormGroup row>
-      <Label for="price" sm={labelSize}>Exit Price</Label>
-      <Col sm={inputSize}>
-        <Input
-          type="text"
-          name="price"
-          id="price"
-          value={props.price}
-          onChange={event => props.sendFormValue(event)}
-          {...props.validity('price')}
-          autoComplete="off"
-        />
-      </Col>
-    </FormGroup>
+      <FormGroup row>
+        <Label for="price" sm={labelSize}>Exit Price</Label>
+        <Col sm={inputSize}>
+          <Input
+            type="text"
+            name="price"
+            id="price"
+            value={props.price}
+            onChange={event => props.sendFormValue(event)}
+            {...props.validity('price')}
+            autoComplete="off"
+          />
+        </Col>
+      </FormGroup>
 
-    <FormGroup row>
-      <Label for="comments" sm={labelSize}>Notes</Label>
-      <Col sm={inputSize}>
-        <Input
-          type="textarea"
-          name="comments"
-          id="comments"
-          value={props.comments}
-          onChange={event => props.sendFormValue(event)}
-          {...props.validity('comments')}
-          autoComplete="off"
-        />
-      </Col>
-    </FormGroup>
-  </Form>
+      <FormGroup row>
+        <Label for="comments" sm={labelSize}>Notes</Label>
+        <Col sm={inputSize}>
+          <Input
+            type="textarea"
+            name="comments"
+            id="comments"
+            value={props.comments}
+            onChange={event => props.sendFormValue(event)}
+            {...props.validity('comments')}
+            autoComplete="off"
+          />
+        </Col>
+      </FormGroup>
+    </Form>
+    :
+    <div className="Loading" />
 );
 
 ExitTradeForm.propTypes = {
@@ -68,6 +71,7 @@ ExitTradeForm.propTypes = {
   date: PropTypes.objectOf(PropTypes.any).isRequired,
   price: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
   comments: PropTypes.string.isRequired,
+  loading: PropTypes.bool.isRequired,
 };
 
 export default ExitTradeForm;
