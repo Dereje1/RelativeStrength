@@ -91,7 +91,8 @@ class TradeModification extends Component {
     };
     this.setState({ loading: true });
     await setStop(newStopObject);
-    window.location.assign('/');
+    this.props.onToggle();
+    this.props.refreshData();
   }
   /* end stop Adjustment */
 
@@ -135,7 +136,8 @@ class TradeModification extends Component {
     };
     this.setState({ loading: true });
     await closeTrade(exitObject);
-    window.location.assign('/');
+    this.props.onToggle();
+    this.props.refreshData();
   }
 
   /* End Exit trade */
@@ -183,7 +185,8 @@ class TradeModification extends Component {
     };
     this.setState({ loading: true });
     await addTrade(updatedTradeModel);
-    window.location.assign('/');
+    this.props.onToggle();
+    this.props.refreshData();
   }
 
   /* End Position Add */
@@ -331,6 +334,7 @@ class TradeModification extends Component {
 
 TradeModification.propTypes = {
   onToggle: PropTypes.func.isRequired,
+  refreshData: PropTypes.func.isRequired,
   show: PropTypes.bool.isRequired,
   trade: PropTypes.objectOf(PropTypes.any).isRequired,
   fxLastPrices: PropTypes.objectOf(PropTypes.any).isRequired,

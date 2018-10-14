@@ -3,14 +3,14 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-import Strength from './strength'; // displays strenngth data for different tfs
+import StrengthTables from './strengthtables'; // displays strenngth data for different tfs
 import Zoom from './zoom'; // modal zoom for
 
-import './css/landing.css';
+import './css/strength.css';
 
 const mapStateToProps = state => state;
 
-class Landing extends Component {
+class Strength extends Component {
 
   constructor(props) {
     super(props);
@@ -34,7 +34,7 @@ class Landing extends Component {
     return ['Past 24 Hours', 'Past 10 Days', 'Past Year'].map((tf, idx) => {
       const eventDisplay = idx === 0;
       return (
-        <Strength
+        <StrengthTables
           alldata={this.props.forexData}
           key={tf}
           timeframe={tf}
@@ -61,33 +61,32 @@ class Landing extends Component {
   }
 
   render() {
-    return (
-      <div>
-        <div id="all">
-          {this.setTables()}
+    if (Object.keys(this.props.forexData).length) {
+      return (
+        <div>
+          <div id="all">
+            {this.setTables()}
+          </div>
+          <Zoom
+            message={this.state.displayModal}
+            reset={() => this.setState({ displayModal: false })}
+            currency={this.state.currecnyInfo}
+            zoomInfo={this.props.forexData.highImpact}
+          />
         </div>
-        <Zoom
-          message={this.state.displayModal}
-          reset={() => this.setState({ displayModal: false })}
-          currency={this.state.currecnyInfo}
-          zoomInfo={this.props.forexData.highImpact}
-        />
-        <div id="author">
-          <span className="copyright">Dereje Getahun {'\u00A9'} 2018</span>
-          <div className="gitsource"><a href="https://github.com/Dereje1/RelativeStrength" target="_blank" rel="noopener noreferrer"> <i className="fa fa-github" aria-hidden="true" /> Github</a></div>
-        </div>
-      </div>
-    );
+      );
+    }
+    return null;
   }
 
 }
 
-Landing.defaultProps = {
+Strength.defaultProps = {
   forexData: {},
 };
 
-Landing.propTypes = {
+Strength.propTypes = {
   forexData: PropTypes.objectOf(PropTypes.any),
 };
 
-export default connect(mapStateToProps)(Landing);
+export default connect(mapStateToProps)(Strength);

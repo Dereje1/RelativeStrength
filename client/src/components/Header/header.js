@@ -1,13 +1,16 @@
 // dumb component to dispaly header bar
 import React from 'react';
 import PropTypes from 'prop-types';
-import { NavLink, withRouter } from 'react-router-dom';
+import { NavLink, withRouter, Redirect } from 'react-router-dom';
 import './css/header.css';
 import Constants from '../../constants/index';
+import Strength from '../Strength/strength';
 
 const { MT4_UPDATE_CYCLE } = Constants;
 
-const Header = ({ secondsSinceUpdate, loggedIn, openCenters }) => (
+const Header = ({
+  secondsSinceUpdate, loggedIn, openCenters, newLogin, resetNewLogin,
+}) => (
   <div className="header">
     <div className="description">
       {secondsSinceUpdate < MT4_UPDATE_CYCLE ?
@@ -25,20 +28,31 @@ const Header = ({ secondsSinceUpdate, loggedIn, openCenters }) => (
       }
     </div>
     {loggedIn ?
-      <div className="login">
-        <NavLink activeClassName="is-active" to="/profile">
-              Profile
-        </NavLink>
-        <a href="auth/logout">
-              Logout
-        </a>
-      </div>
+      <React.Fragment>
+        <div className="login">
+          <NavLink activeClassName="is-active" to="/profile">
+            Profile
+          </NavLink>
+          <NavLink activeClassName="is-active" to="/strength">
+            Strength
+          </NavLink>
+          <a href="auth/logout">
+            Logout
+          </a>
+        </div>
+        <hr />
+      </React.Fragment>
       :
-      <div className="login">
-        <a href="auth/google">Login</a>
-      </div>
+      <React.Fragment>
+        <div className="login">
+          <a href="auth/google">Login</a>
+        </div>
+        <hr />
+        <Strength />
+      </React.Fragment>
     }
-    <hr />
+    {newLogin ? <Redirect to="/strength" /> : null }
+    {newLogin ? resetNewLogin() : null }
   </div>
 );
 
@@ -47,5 +61,7 @@ Header.propTypes = {
   secondsSinceUpdate: PropTypes.number.isRequired,
   loggedIn: PropTypes.bool.isRequired,
   openCenters: PropTypes.objectOf(PropTypes.string).isRequired,
+  newLogin: PropTypes.bool.isRequired,
+  resetNewLogin: PropTypes.func.isRequired,
 };
 export default withRouter(Header);

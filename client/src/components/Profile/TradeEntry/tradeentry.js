@@ -189,7 +189,8 @@ class TradeEntry extends Component {
   enterTrade = async () => {
     this.setState({ loading: true, disableEntry: true });
     await postNewTrade(this.state.tradeModel);
-    window.location.assign('/');
+    this.props.onToggle();
+    this.props.refreshData();
   }
 
   render() {
@@ -280,6 +281,7 @@ class TradeEntry extends Component {
 
 TradeEntry.propTypes = {
   onToggle: PropTypes.func.isRequired,
+  refreshData: PropTypes.func.isRequired,
   show: PropTypes.bool.isRequired,
   userId: PropTypes.string.isRequired,
   fxLastPrices: PropTypes.objectOf(PropTypes.any).isRequired,

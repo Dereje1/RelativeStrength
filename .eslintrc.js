@@ -40,6 +40,7 @@ module.exports = {
       { 'extensions': ['.js', '.jsx'] }
     ],
     'react/jsx-uses-vars': [2],
-    'linebreak-style': ["error",process.env.OS==='Windows_NT' ? "windows" : "unix"]
+    'linebreak-style': ["error",process.env.OS==='Windows_NT' ? "windows" : "unix"],
+    'react/no-did-update-set-state': 0,
   }
 };

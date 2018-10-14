@@ -5,7 +5,7 @@ import moment from 'moment';
 import { Badge } from 'reactstrap';
 import './css/rstrength.css';
 
-class Strength extends Component {
+class StrengthTables extends Component {
 
   findClass(d) { // sets className for hovered symbol
     if (d[0] === this.props.hoveredSymbol) return 'cardx lit';
@@ -87,7 +87,7 @@ class Strength extends Component {
 
 }
 
-Strength.defaultProps = {
+StrengthTables.defaultProps = {
   hoveredSymbol: '',
   alldata: {},
   timeframe: '',
@@ -97,7 +97,7 @@ Strength.defaultProps = {
   zoomed: {},
 };
 
-Strength.propTypes = {
+StrengthTables.propTypes = {
   hoveredSymbol: PropTypes.string,
   alldata: PropTypes.objectOf(PropTypes.any),
   timeframe: PropTypes.string,
@@ -106,4 +106,4 @@ Strength.propTypes = {
   hovEnd: PropTypes.func,
   zoomed: PropTypes.func,
 };
-export default Strength;
+export default StrengthTables;

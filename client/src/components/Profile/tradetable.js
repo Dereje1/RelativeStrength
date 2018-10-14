@@ -177,6 +177,7 @@ class TradeTable extends Component {
             trade={this.state.tradeDetail}
             fxLastPrices={this.props.fxLastPrices}
             onToggle={() => this.setState({ showModification: false })}
+            refreshData={() => this.props.refreshData()}
           />
         </Table>
       );
@@ -184,10 +185,15 @@ class TradeTable extends Component {
 
 }
 
+TradeTable.defaultProps = {
+  refreshData: null,
+};
+
 TradeTable.propTypes = {
   trades: PropTypes.arrayOf(PropTypes.any).isRequired,
   fxLastPrices: PropTypes.objectOf(PropTypes.any).isRequired,
   open: PropTypes.bool.isRequired,
+  refreshData: PropTypes.func,
 };
 
 export default TradeTable;

@@ -7,7 +7,6 @@ import { bindActionCreators } from 'redux';
 import getUser from './actions/authentication';
 import { getForexData, setForexData } from './actions/mt4fetch';
 // Components
-import Landing from './components/Landing/landing';
 import Header from './components/Header/header';
 // utilities and constants
 import { mt4LastPush, getForexHours } from './utilitiy/fxAndMt4';
@@ -22,12 +21,20 @@ class Main extends React.Component {
     this.state = {
       secondsSinceUpdate: 0,
       fxOpenCenters: {},
+      newLogin: false,
     };
   }
 
   componentDidMount() {
     console.log('CDM Mounted for Main');
     this.initialize();
+  }
+
+  componentDidUpdate(prevProps) {
+    const aNewLogin = !prevProps.user.authenticated && this.props.user.authenticated;
+    if (aNewLogin) {
+      this.setState({ newLogin: true });
+    }
   }
 
   componentWillUnmount() {
@@ -79,8 +86,9 @@ class Main extends React.Component {
           secondsSinceUpdate={this.state.secondsSinceUpdate}
           loggedIn={this.props.user.authenticated}
           openCenters={this.state.fxOpenCenters}
+          newLogin={this.state.newLogin}
+          resetNewLogin={() => this.setState({ newLogin: false })}
         />
-        <Landing />
       </div>
     );
   }

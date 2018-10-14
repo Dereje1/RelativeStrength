@@ -27,6 +27,12 @@ class Profile extends Component {
   }
 
   componentDidMount() {
+    if (this.props.user.authenticated && Object.keys(this.props.forexData).length) {
+      this.pullTradeData();
+    }
+  }
+
+  pullTradeData = () => {
     this.findOpenTrades();
     this.findClosedTrades(0, 10);
   }
@@ -72,15 +78,11 @@ class Profile extends Component {
   }
 
   render() {
-    if (this.props.user.authenticated) {
+    if (this.props.user.authenticated && Object.keys(this.props.forexData).length) {
       return (
-        <div>
-          <h4 className="profile_header">{`${this.props.user.displayname}`}</h4>
-          <hr />
+        <React.Fragment>
           <div className="profile_items">
-            <div>
-              <Button onClick={() => window.location.assign('/')}>Back</Button>
-            </div>
+            <h4 className="profile_header">{`${this.props.user.displayname}`}</h4>
             <div>
               <Button onClick={this.entryModal}>Trade Entry</Button>
             </div>
@@ -90,13 +92,14 @@ class Profile extends Component {
             onToggle={() => this.setState({ showEntry: false })}
             userId={this.props.user.username}
             fxLastPrices={this.props.forexData.aws.lastPrices}
+            refreshData={() => this.pullTradeData()}
           />
-          <hr />
           {
             this.state.openTrades.length ?
               <TradeTable
                 trades={this.state.openTrades}
                 fxLastPrices={this.props.forexData.aws.lastPrices}
+                refreshData={() => this.pullTradeData()}
                 open
               />
               :
@@ -135,10 +138,10 @@ class Profile extends Component {
               :
               <div className="Loading" />
           }
-        </div>
+        </React.Fragment>
       );
     }
-    return window.location.assign('/');
+    return null;
   }
 
 }
