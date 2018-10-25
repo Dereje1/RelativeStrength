@@ -5,9 +5,46 @@ body{
     background: white;
   }
 
+.header{
+  .description{
+    .title{
+      text-align: center;
+      font-weight: bold;
+      font-family: "Spectral SC";
+      &.valid{
+        color:#c45d1d;
+      }
+      &.expired{
+        color:red;
+      }
+    }
+    .forexHours{
+      display: flex;
+      flex-direction: row;
+      justify-content: space-around;
+      margin: 20px;
+      .center{
+        border: 0px solid rgb(95, 159, 255);
+        padding:5px;
+        margin: 3px;
+        border-radius: 7px;
+        font-size: .7em;
+        font-weight: bold;
+        
+        &.open{
+          background: rgb(30, 219, 30);
+        }
+        &.closed{
+          background: rgb(255, 68, 68);
+          color: white;
+        }
+      }
+    }
+  }
+}
 
 
-  .Loading{
+.Loading{
     margin:0 auto;
     border-radius: 50%;
     animation-name: picloading;
@@ -28,16 +65,16 @@ body{
       border-top-color: #ed331a;
       border-bottom-color: #ed331a;
     }
-  }
+}
   
-  @keyframes picloading {
-    0%{
-      transform: rotate(0deg) scale(1);
-    }
-    50%{
-      transform: rotate(360deg) scale(1.05);
-    }
-    100%{
-      transform: rotate(720deg) scale(1);
-    }
+@keyframes picloading {
+  0%{
+    transform: rotate(0deg) scale(1);
   }
+  50%{
+    transform: rotate(360deg) scale(1.05);
+  }
+  100%{
+    transform: rotate(720deg) scale(1);
+  }
+}

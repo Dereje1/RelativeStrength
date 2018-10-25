@@ -32,6 +32,12 @@ class Profile extends Component {
     }
   }
 
+  componentDidUpdate(prevProps) {
+    const prevFxData = Object.keys(prevProps.forexData).length;
+    const currFxData = Object.keys(this.props.forexData).length;
+    if (currFxData > prevFxData && this.props.user.authenticated) this.pullTradeData();
+  }
+
   pullTradeData = () => {
     this.findOpenTrades();
     this.findClosedTrades(0, 10);

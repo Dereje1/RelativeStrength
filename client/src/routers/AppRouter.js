@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
 
 // Our components
 import Main from '../main';
@@ -14,6 +14,7 @@ const AppRouter = () => (
       <Switch>
         <Route path="/strength" exact component={Strength} />
         <Route path="/profile" exact component={Profile} />
+        <Redirect from="/" to="/strength" />
       </Switch>
       <Footer />
     </React.Fragment>
