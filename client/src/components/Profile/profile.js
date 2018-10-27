@@ -87,10 +87,11 @@ class Profile extends Component {
     if (this.props.user.authenticated && Object.keys(this.props.forexData).length) {
       return (
         <React.Fragment>
+          <hr />
           <div className="profile_items">
             <h4 className="profile_header">{`${this.props.user.displayname}`}</h4>
             <div>
-              <Button onClick={this.entryModal}>Trade Entry</Button>
+              <Button onClick={this.entryModal}>Trade</Button>
             </div>
           </div>
           <TradeEntry

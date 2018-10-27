@@ -9,25 +9,19 @@ const Navigation = ({ authenticated }) => (
   <div className="navigation">
     {authenticated ?
       <React.Fragment>
-        <div className="login">
-          <NavLink to="/profile">
-            Profile
-          </NavLink>
-          <NavLink to="/strength">
-            Strength
-          </NavLink>
-          <a href="auth/logout">
-            Logout
-          </a>
-        </div>
-        <hr />
+        <NavLink className="navitem" to="/profile">
+             Profile
+        </NavLink>
+        <NavLink className="navitem" to="/strength">
+             Strength
+        </NavLink>
+        <a className="navitem" href="auth/logout">
+             Logout
+        </a>
       </React.Fragment>
       :
       <React.Fragment>
-        <div className="login">
-          <a href="auth/google">Login</a>
-        </div>
-        <hr />
+        <a className="navitem" href="auth/google">Login</a>
       </React.Fragment>
     }
   </div>

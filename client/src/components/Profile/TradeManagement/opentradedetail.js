@@ -48,6 +48,7 @@ const OpenTradeDetail = (props) => {
       <div className={`gainrisk ${totalDollars > 0 ? 'profitable' : 'loser'}`}>
         {
           `Stop: ${stop}
+          Last Price: ${props.fxLastPrices[props.trade.symbol]}
           Gain: ${totalPips} Pips, $${totalDollars}
           Open Risk: ${openRiskPips} Pips, $${openRiskDollars}`
         }
