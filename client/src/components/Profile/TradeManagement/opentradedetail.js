@@ -4,9 +4,12 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import { getProfits, costBasis } from '../../../utilitiy/fxcomputations';
 
+// concatenates multiple position entry comments
 const generateEntryComments = (entryArr) => {
+  // if no position added just use first element in entry array
   if (entryArr.length === 1) return `${entryArr[0].comments}`;
-  const myParser = entryArr.map((entry) => {
+
+  const multipleEntryComments = entryArr.map((entry) => {
     const positionInfo = `${moment(entry.date).format('L')} +${entry.size} @${entry.price}`;
     return (
       <React.Fragment key={entry._id}>
@@ -15,7 +18,7 @@ const generateEntryComments = (entryArr) => {
       </React.Fragment>
     );
   });
-  return myParser;
+  return multipleEntryComments;
 };
 
 const OpenTradeDetail = (props) => {

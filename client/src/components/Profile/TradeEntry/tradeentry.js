@@ -8,6 +8,7 @@ import SavedModels from './savedmodels';
 // api calls and validation
 import { postNewTrade } from '../../../utilitiy/api';
 import checkValidity from '../../../utilitiy/validation';
+import { getProfits } from '../../../utilitiy/fxcomputations';
 // bootstrap, fontawesome and css
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -44,6 +45,7 @@ class TradeEntry extends Component {
       confirmationModel: {},
       loading: false,
       disableEntry: false,
+      risk: null,
     };
     this.setState(emptyForm);
   }
@@ -78,7 +80,7 @@ class TradeEntry extends Component {
     }, () => this.submitReady());
   }
 
-  submitReady = () => {
+  submitReady = async () => {
     // scans thru all inputs for passing vaildity and enables confirmation
     const stateKeys = Object.keys(this.state);
     const validatedInputs = ['symbol', 'stop', 'size', 'price', 'comments'];
@@ -88,7 +90,12 @@ class TradeEntry extends Component {
         buttonState = false;
       }
     });
-    this.setState({ readyToSubmit: buttonState });
+    if (buttonState) {
+      await this.confirmTrade(false);
+      const riskCalc = getProfits([this.state.tradeModel], this.props.fxLastPrices);
+      const riskDisplay = `Risk: ${riskCalc.openRiskPips} Pips, $${riskCalc.openRiskDollars}`;
+      this.setState({ readyToSubmit: true, risk: riskDisplay });
+    } else this.setState({ readyToSubmit: true, risk: null });
   }
 
   confirmTrade = (displayConfirmation = true) => {
@@ -227,6 +234,7 @@ class TradeEntry extends Component {
                 onDateFocus={() => this.setState({ dateFocus: !this.state.dateFocus })}
                 validity={name => this.inputValidity(name)}
                 currentState={this.state}
+                risk={this.state.risk}
               />
             </React.Fragment>
           }

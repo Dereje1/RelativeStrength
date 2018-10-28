@@ -95,6 +95,11 @@ $inputBottomMargin: 10px;
     margin-bottom: $inputBottomMargin;
 }
 
+.riskDisplay{
+    color: rgb(219, 48, 48);
+    margin: auto;
+}
+
 .savedmodels{
     display: flex;
     flex-direction: row;

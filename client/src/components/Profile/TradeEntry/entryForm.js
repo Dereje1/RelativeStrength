@@ -99,9 +99,23 @@ const EntryForm = props => (
         autoComplete="off"
       />
     </div>
+    <div className="riskDisplay">
+      <strong>
+        {
+          props.risk ?
+            `${props.risk}`
+            :
+            null
+        }
+      </strong>
+    </div>
   </React.Fragment>
 
 );
+
+EntryForm.defaultProps = {
+  risk: null,
+};
 
 EntryForm.propTypes = {
   sendFormValue: PropTypes.func.isRequired,
@@ -110,6 +124,7 @@ EntryForm.propTypes = {
   focused: PropTypes.bool.isRequired,
   date: PropTypes.objectOf(PropTypes.any).isRequired,
   currentState: PropTypes.objectOf(PropTypes.any).isRequired,
+  risk: PropTypes.string,
 };
 
 export default EntryForm;

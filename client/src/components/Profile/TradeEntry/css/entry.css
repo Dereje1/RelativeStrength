@@ -137,6 +137,11 @@
   margin-bottom: 10px;
 }
 
+.riskDisplay {
+  color: #db3030;
+  margin: auto;
+}
+
 .savedmodels {
   display: -webkit-box;
   display: -ms-flexbox;

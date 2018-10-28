@@ -1,4 +1,5 @@
-// dumb component displays trade exit form
+// dumb component renders management buttons
+// called by TradeModification
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Col, Button } from 'reactstrap';

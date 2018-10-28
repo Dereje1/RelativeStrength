@@ -1,4 +1,5 @@
-// dumb component displays trade exit form
+// dumb component displays form to add to position
+// called by TradeModification
 import React from 'react';
 import PropTypes from 'prop-types';
 // react dates below
