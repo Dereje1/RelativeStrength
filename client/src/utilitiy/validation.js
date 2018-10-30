@@ -10,6 +10,9 @@ const checkValidity = (fieldName, value, long, price) => {
         isValid = true;
       }
       break;
+    case 'direction':
+      if (value === 'Long' || value === 'Short') isValid = true;
+      break;
     case 'size':
       if (Number.isInteger(Number(value)) && (value)) isValid = true;
       break;

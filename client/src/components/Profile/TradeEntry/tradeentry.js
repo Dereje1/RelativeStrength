@@ -62,22 +62,26 @@ class TradeEntry extends Component {
       return;
     }
     const { name, value } = event.target;
-    // direction and date do not need to be validated
-    const inputIsValid = (name === 'direction') ? true : checkValidity(name, value, this.state.direction[0] === 'Long', this.state.price[0]);
-
-    if (inputIsValid && name === 'symbol') {
-      this.setState({
-        lastPrice: this.props.fxLastPrices[value.toUpperCase()],
-      });
+    const stateCopy = JSON.parse(JSON.stringify(this.state));
+    const validatedInputs = ['symbol', 'direction', 'stop', 'size', 'price', 'comments'];
+    validatedInputs.forEach((fieldName) => {
+      const valueChecked = fieldName === name ? value : stateCopy[fieldName][0];
+      const isLong = name === 'direction' ? value === 'Long' : stateCopy.direction[0] === 'Long';
+      const priceChecked = name === 'price' ? value : this.state.price[0];
+      const isValid = checkValidity(fieldName, valueChecked, isLong, priceChecked);
+      stateCopy[fieldName] = [valueChecked, isValid];
+    });
+    stateCopy.date = [this.state.date[0], true];
+    if (stateCopy.symbol[1]) {
+      stateCopy.lastPrice = this.props.fxLastPrices[stateCopy.symbol[0].toUpperCase()];
+    } else {
+      stateCopy.stop = ['', false];
+      stateCopy.size = ['', false];
+      stateCopy.price = ['', false];
+      stateCopy.comments = ['', false];
+      stateCopy.lastPrice = '';
     }
-
-    if (!inputIsValid && name === 'symbol') {
-      this.initializeForm();
-    }
-
-    this.setState({
-      [name]: [value, inputIsValid],
-    }, () => this.submitReady());
+    this.setState(stateCopy, () => this.submitReady());
   }
 
   submitReady = async () => {
@@ -86,16 +90,14 @@ class TradeEntry extends Component {
     const validatedInputs = ['symbol', 'stop', 'size', 'price', 'comments'];
     let buttonState = true;
     stateKeys.forEach((k) => {
-      if (validatedInputs.includes(k) && !this.state[k][1]) {
-        buttonState = false;
-      }
+      if (validatedInputs.includes(k) && !this.state[k][1]) buttonState = false;
     });
     if (buttonState) {
       await this.confirmTrade(false);
       const riskCalc = getProfits([this.state.tradeModel], this.props.fxLastPrices);
       const riskDisplay = `Risk: ${riskCalc.openRiskPips} Pips, $${riskCalc.openRiskDollars}`;
       this.setState({ readyToSubmit: true, risk: riskDisplay });
-    } else this.setState({ readyToSubmit: true, risk: null });
+    } else this.setState({ readyToSubmit: false, risk: null });
   }
 
   confirmTrade = (displayConfirmation = true) => {
