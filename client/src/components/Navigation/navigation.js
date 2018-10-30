@@ -1,8 +1,11 @@
 // dumb component to dispaly header bar
 import React from 'react';
 import PropTypes from 'prop-types';
+// Router
 import { NavLink, withRouter } from 'react-router-dom';
-// redux read only
+// font awesome and css
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faGooglePlusG } from '@fortawesome/free-brands-svg-icons';
 import './css/navigation.css';
 
 const Navigation = ({ authenticated }) => (
@@ -21,7 +24,14 @@ const Navigation = ({ authenticated }) => (
       </React.Fragment>
       :
       <React.Fragment>
-        <a className="navitem" href="auth/google">Login</a>
+        <button className="signin" onClick={() => window.location.assign('auth/google')}>
+          <FontAwesomeIcon
+            icon={faGooglePlusG}
+            className="login"
+          />
+          <span className="signinfont">Sign In With Google</span>
+        </button>
+
       </React.Fragment>
     }
   </div>

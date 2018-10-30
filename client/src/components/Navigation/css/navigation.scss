@@ -4,6 +4,26 @@
   justify-content: center;
   align-items: center;
   margin-bottom: 20px;
+  button:focus {outline:0;}
+  .signin{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #DB4437;
+    width: 300px;
+    padding: 10px;
+    border-radius: 5px;
+    color:white;
+    font-family: Roboto;
+    font-weight: bold;
+    cursor: pointer;
+    .signinfont{
+      font-size: 1em;
+    }
+    .login{
+      font-size: 1.5em;
+    }
+  }
   .navitem{
     display: flex;
     align-items: center;
