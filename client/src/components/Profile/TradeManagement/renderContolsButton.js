@@ -6,7 +6,8 @@ import { Col, Button } from 'reactstrap';
 
 const RenderCondtrolsButton = (props) => {
   // conditionally render modal footer depending on stop move / exit or info
-  if (props.controlButtons.full) {
+  if (!props.controlButtons) return null;
+  else if (props.controlButtons.full) {
     return (
       <React.Fragment>
         <div className="managementbuttons">

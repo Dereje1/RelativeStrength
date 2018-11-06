@@ -14,6 +14,7 @@ export const getOpenTrades = () =>
     .catch(error => error);
 
 export const getClosedTrades = (minDate, limited = false) => {
+  // limited displays specified amount or max of 500 trades.
   const queryURL = limited ?
     `/api/getclosedtrades/${limited}?start=${minDate}`
     :

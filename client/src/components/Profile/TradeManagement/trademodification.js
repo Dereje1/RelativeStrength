@@ -80,7 +80,6 @@ class TradeModification extends Component {
     { disabled: false } : { disabled: true })
 
   submitNewStop = async () => {
-    this.disableAllControlButtons();
     const entryCopy = JSON.parse(JSON.stringify(this.props.trade.entry));
     const stopComments = `\nMoved stop from ${this.props.trade.stop} to ${this.state.moveStop.stop[0]}`;
     entryCopy[entryCopy.length - 1].comments += stopComments;
@@ -121,7 +120,6 @@ class TradeModification extends Component {
     { disabled: false } : { disabled: true })
 
   submitExit = async () => {
-    this.disableAllControlButtons();
     const exitObject = {
       tradeId: this.props.trade._id,
       exitInfo: [
@@ -166,7 +164,6 @@ class TradeModification extends Component {
     { disabled: false } : { disabled: true })
 
   submitAddPosition = async () => {
-    this.disableAllControlButtons();
     const newEntry = [
       {
         date: Date.parse(this.state.addPoisition.date[0]._d),
@@ -192,6 +189,7 @@ class TradeModification extends Component {
   /* End Position Add */
 
   handleButtonAction = (action) => {
+    // couple selected button from callback to state
     const copyOfState = JSON.parse(JSON.stringify(this.state));
     copyOfState[action].displayForm = true;
     copyOfState[action].submit = false;
@@ -201,10 +199,11 @@ class TradeModification extends Component {
     copyOfState[action].submit = false;
     this.setState(copyOfState);
   }
+
   updateButtonStatus = (action, validatedInputs) => {
+    // enable/disable actionable buttons depending on button passed and respective vaildation req.
     const copyOfState = JSON.parse(JSON.stringify(this.state));
     const stateKeys = Object.keys(this.state[action]);
-    // const validatedInputs = ['price', 'comments', 'size'];
     let buttonState = true;
     stateKeys.forEach((k) => {
       if (validatedInputs.includes(k) && !this.state[action][k][1]) {
@@ -213,6 +212,7 @@ class TradeModification extends Component {
     });
     copyOfState[action].submit = buttonState;
     copyOfState[action].date = [this.state[action].date[0], true];
+    // calculate new risk associated with added position
     if ((action === 'addPoisition') && buttonState) {
       copyOfState[action].newRisk = getNewRisk(
         this.props.trade,
@@ -223,22 +223,12 @@ class TradeModification extends Component {
     this.setState(copyOfState);
   }
 
-  disableAllControlButtons = () => {
-    const stateCopy = JSON.parse(JSON.stringify(this.state));
-    stateCopy.addPoisition.date = [this.state.addPoisition.date[0], true];
-    stateCopy.exitTrade.date = [this.state.exitTrade.date[0], true];
-    Object.keys(this.state.controlButtons).forEach((cb) => {
-      if (stateCopy.controlButtons[cb]) stateCopy.controlButtons[cb] = false;
-    });
-    this.setState(stateCopy);
-  }
-
-
   cancelModify = () => {
     let formType;
     Object.keys(this.state).forEach((o) => {
       if (this.state[o].displayForm) formType = o;
     });
+    // if secondary modal open just close that
     if (formType) {
       const copyOfState = JSON.parse(JSON.stringify(this.state));
       copyOfState[formType].displayForm = false;
@@ -319,7 +309,7 @@ class TradeModification extends Component {
         </ModalBody>
         <ModalFooter>
           <RenderControlsButton
-            controlButtons={this.state.controlButtons}
+            controlButtons={!this.state.loading ? this.state.controlButtons : null}
             handleButtonAction={action => this.handleButtonAction(action)}
             moveStopButton={[this.moveStopButtonState, this.submitNewStop]}
             addPositionButton={[this.addPositionButtonState, this.submitAddPosition]}

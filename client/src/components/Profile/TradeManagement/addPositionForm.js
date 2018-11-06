@@ -111,16 +111,22 @@ AddPositionForm.defaultProps = {
 };
 
 AddPositionForm.propTypes = {
+  // uinified callback for all form values
   sendFormValue: PropTypes.func.isRequired,
+  // react dates callbacks and controlled state value
   onDateFocus: PropTypes.func.isRequired,
-  validity: PropTypes.func.isRequired,
   focused: PropTypes.bool.isRequired,
   date: PropTypes.objectOf(PropTypes.any).isRequired,
+  // validation callback
+  validity: PropTypes.func.isRequired,
+  // price, size, stop, comments controlled state values
   price: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
   size: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
   stop: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
   comments: PropTypes.string.isRequired,
+  // dynamic calculated risk value
   risk: PropTypes.objectOf(PropTypes.any),
+  // database updating signal
   loading: PropTypes.bool.isRequired,
 };
 

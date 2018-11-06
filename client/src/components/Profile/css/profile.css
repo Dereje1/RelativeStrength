@@ -9,6 +9,11 @@
   display: flex;
   -ms-flex-pack: distribute;
       justify-content: space-around;
+  font-family: Roboto;
+  font-weight: bold;
+  font-size: 4vmax;
+  color: #6b461b;
+  text-shadow: 1px 1px 1px #000000;
 }
 
 .dateSelection {
@@ -33,5 +38,15 @@
   font-size: 1em;
   text-align: left;
   white-space: pre-line;
+}
+
+.notrades {
+  text-align: center;
+  margin-top: 50px;
+  margin-bottom: 50px;
+  font-family: Roboto;
+  font-weight: bold;
+  font-size: 2em;
+  color: #e21b1b;
 }
 /*# sourceMappingURL=profile.css.map */

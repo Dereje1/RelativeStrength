@@ -65,14 +65,15 @@ class TradeEntry extends Component {
     const stateCopy = JSON.parse(JSON.stringify(this.state));
     const validatedInputs = ['symbol', 'direction', 'stop', 'size', 'price', 'comments'];
     validatedInputs.forEach((fieldName) => {
+      // if field is being updated use latest value otherwise use stored value
       const valueChecked = fieldName === name ? value : stateCopy[fieldName][0];
       const isLong = name === 'direction' ? value === 'Long' : stateCopy.direction[0] === 'Long';
-      const priceChecked = name === 'price' ? value : this.state.price[0];
+      const priceChecked = name === 'price' ? value : stateCopy.price[0];
       const isValid = checkValidity(fieldName, valueChecked, isLong, priceChecked);
       stateCopy[fieldName] = [valueChecked, isValid];
     });
     stateCopy.date = [this.state.date[0], true];
-    if (stateCopy.symbol[1]) {
+    if (stateCopy.symbol[1]) { // if symbol is valid display latest price
       stateCopy.lastPrice = this.props.fxLastPrices[stateCopy.symbol[0].toUpperCase()];
     } else {
       stateCopy.stop = ['', false];

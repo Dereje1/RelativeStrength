@@ -33,6 +33,7 @@ class Profile extends Component {
   }
 
   componentDidUpdate(prevProps) {
+    // on manual refresh of /profile route need to pull trade data again
     const prevFxData = Object.keys(prevProps.forexData).length;
     const currFxData = Object.keys(this.props.forexData).length;
     if (currFxData > prevFxData && this.props.user.authenticated) this.pullTradeData();
@@ -48,29 +49,29 @@ class Profile extends Component {
     this.setState({ openTrades });
   }
 
-  findClosedTrades = async (dateRange, limit = false) => {
+  findClosedTrades = async (minDate, limit = false) => {
     this.setState({ loading: true });
-    const closedTrades = await getClosedTrades(dateRange, limit);
+    const closedTrades = await getClosedTrades(minDate, limit);
     this.setState({ closedTrades, loading: false });
   }
 
-  selectDates = (dateRange) => {
+  selectDates = (dateSelection) => {
     const date = new Date();
     const currentYear = date.getFullYear();
     const currentMonth = date.getMonth();
     const beginMonth = new Date(currentYear, currentMonth, 1);
-    switch (dateRange) {
+    switch (dateSelection) {
       case 'all':
-        this.setState({ dateSelection: dateRange }, () => this.findClosedTrades(0));
+        this.setState({ dateSelection }, () => this.findClosedTrades(0));
         break;
       case 'thismonth':
         this.setState(
-          { dateSelection: dateRange },
+          { dateSelection },
           () => this.findClosedTrades(Date.parse(beginMonth)),
         );
         break;
       case 'lastten':
-        this.setState({ dateSelection: dateRange }, () => this.findClosedTrades(0, 10));
+        this.setState({ dateSelection }, () => this.findClosedTrades(0, 10));
         break;
       default:
         break;
@@ -83,13 +84,46 @@ class Profile extends Component {
     });
   }
 
+  dateSelector = () =>
+    (
+      <div className="dateSelection">
+        <ButtonGroup>
+          <Button
+            color={this.state.dateSelection === 'all' ? 'primary' : 'secondary'}
+            onClick={() => this.selectDates('all')}
+          >All
+          </Button>
+          <Button
+            color={this.state.dateSelection === 'thismonth' ? 'primary' : 'secondary'}
+            onClick={() => this.selectDates('thismonth')}
+          >This Month
+          </Button>
+          <Button
+            color={this.state.dateSelection === 'lastten' ? 'primary' : 'secondary'}
+            onClick={() => this.selectDates('lastten')}
+          >Last Ten
+          </Button>
+        </ButtonGroup>
+      </div>
+    )
+
+  noTrades = () => (
+    !this.state.loading ?
+      <React.Fragment>
+        <div className="notrades">No Trades Found in Database!</div>
+        {this.dateSelector()}
+      </React.Fragment>
+      :
+      <div className="Loading" />
+  )
+
   render() {
     if (this.props.user.authenticated && Object.keys(this.props.forexData).length) {
       return (
         <React.Fragment>
           <hr />
           <div className="profile_items">
-            <h4 className="profile_header">{`${this.props.user.displayname}`}</h4>
+            <div className="profile_header">{`${this.props.user.displayname}`}</div>
             <div>
               <Button onClick={this.entryModal}>Trade</Button>
             </div>
@@ -121,29 +155,10 @@ class Profile extends Component {
                   fxLastPrices={this.props.forexData.aws.lastPrices}
                   open={false}
                 />
-                <div className="dateSelection">
-                  <ButtonGroup>
-                    <Button
-                      color={this.state.dateSelection === 'all' ? 'primary' : 'secondary'}
-                      onClick={() => this.selectDates('all')}
-                    >All
-                    </Button>
-                    <Button
-                      color={this.state.dateSelection === 'thismonth' ? 'primary' : 'secondary'}
-                      onClick={() => this.selectDates('thismonth')}
-                    >This Month
-                    </Button>
-                    <Button
-                      color={this.state.dateSelection === 'lastten' ? 'primary' : 'secondary'}
-                      onClick={() => this.selectDates('lastten')}
-                    >Last Ten
-                    </Button>
-                  </ButtonGroup>
-                </div>
+                {this.dateSelector()}
               </React.Fragment>
-
               :
-              <div className="Loading" />
+              this.noTrades()
           }
         </React.Fragment>
       );
