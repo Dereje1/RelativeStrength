@@ -35,6 +35,11 @@ class Main extends React.Component {
     clearInterval(this.Interval);
   }
 
+  getLoadingClass = () => {
+    if ((this.state.secondsSinceUpdate - MT4_UPDATE_CYCLE) < -600) return 'Loading dataupdate mt4Down';
+    return 'Loading dataupdate fx';
+  }
+
   initialize = async () => {
     await this.props.getUser();
 
@@ -76,7 +81,7 @@ class Main extends React.Component {
       <div className="header">
         <div className="description">
           {this.state.secondsSinceUpdate < MT4_UPDATE_CYCLE ?
-            <div className="Loading fx" />
+            <div className={this.getLoadingClass()} />
             :
             null
           }

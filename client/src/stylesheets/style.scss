@@ -57,13 +57,19 @@ body{
     border: 20px solid black;
     border-top-color: #1a6aed;
     border-bottom-color: #f49b42;
-    &.fx{
+    &.dataupdate{
       margin-top: 10px;
       width:15px;
       height: 15px;
       border: 20px solid black;
-      border-top-color: #ed331a;
-      border-bottom-color: #ed331a;
+      &.fx{
+        border-top-color: #049c2a;
+        border-bottom-color: #049c2a;
+      }
+      &.mt4Down{
+        border-top-color: #ed331a;
+        border-bottom-color: #ed331a;
+      }
     }
 }
   

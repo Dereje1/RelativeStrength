@@ -66,11 +66,19 @@ body {
   border-bottom-color: #f49b42;
 }
 
-.Loading.fx {
+.Loading.dataupdate {
   margin-top: 10px;
   width: 15px;
   height: 15px;
   border: 20px solid black;
+}
+
+.Loading.dataupdate.fx {
+  border-top-color: #049c2a;
+  border-bottom-color: #049c2a;
+}
+
+.Loading.dataupdate.mt4Down {
   border-top-color: #ed331a;
   border-bottom-color: #ed331a;
 }
