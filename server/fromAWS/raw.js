@@ -49,10 +49,15 @@ module.exports = () =>
   new Promise((resolve, reject) => {
     axios.get(process.env.AWS_RAW_DATA)// data comes in as a pure text file
       .then((response) => {
-        calendar().then((c) => { // once aws data comes in get ff calendar
-        // combine both sets into json after converting mt4 text file and send
-          resolve(Object.assign({}, toJSON(response.data), c));
-        });
+        calendar()
+          .then((c) => { // once aws data comes in get ff calendar
+          // combine both sets into json after converting mt4 text file and send
+            resolve(Object.assign({}, toJSON(response.data), c));
+          })
+          .catch(() => {
+            console.log('Error Fetching Calendar!!!!');
+            resolve(Object.assign({}, toJSON(response.data), { weeklyevents: [] }));
+          });
       })
       .catch((err) => {
         reject(err);
