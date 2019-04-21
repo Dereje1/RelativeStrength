@@ -6,7 +6,7 @@ import moment from 'moment';
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowUp, faArrowDown } from '@fortawesome/free-solid-svg-icons';
-import './css/management.css';
+import './styles/management.scss';
 // api calls, fx computations and validation
 import { setStop, closeTrade, addTrade } from '../../../utilitiy/api';
 import { getDollarsPerPip, costBasis, getNewRisk } from '../../../utilitiy/fxcomputations';

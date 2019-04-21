@@ -13,7 +13,7 @@ import { getProfits } from '../../../utilitiy/fxcomputations';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash, faSave } from '@fortawesome/free-solid-svg-icons';
-import './css/entry.css';
+import './styles/entry.scss';
 
 class TradeEntry extends Component {
 

@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import StrengthTables from './strengthtables'; // displays strenngth data for different tfs
 import Zoom from './zoom'; // modal zoom for
 
-import './css/strength.css';
+import './styles/strength.scss';
 
 const mapStateToProps = state => state;
 

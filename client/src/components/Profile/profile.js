@@ -10,7 +10,7 @@ import TradeTable from './tradetable';
 import { getOpenTrades, getClosedTrades } from '../../utilitiy/api';
 // bootstrap and css
 import { Button, ButtonGroup } from 'reactstrap';
-import './css/profile.css';
+import './styles/profile.scss';
 
 const mapStateToProps = state => state;
 class Profile extends Component {

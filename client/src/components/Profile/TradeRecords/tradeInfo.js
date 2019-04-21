@@ -6,7 +6,7 @@ import ClosedTradeDetail from './closedtradedetail';
 import { Modal, ModalHeader, ModalBody } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowUp, faArrowDown } from '@fortawesome/free-solid-svg-icons';
-import './css/records.css';
+import './styles/records.scss';
 
 class TradeInfo extends Component {
 

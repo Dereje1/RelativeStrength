@@ -1,6 +1,6 @@
 // dumb component to dispaly footer
 import React from 'react';
-import './css/footer.css';
+import './styles/footer.scss';
 
 const Footer = () => (
   <React.Fragment>

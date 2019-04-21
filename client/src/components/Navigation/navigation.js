@@ -6,7 +6,7 @@ import { NavLink, withRouter } from 'react-router-dom';
 // font awesome and css
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGooglePlusG } from '@fortawesome/free-brands-svg-icons';
-import './css/navigation.css';
+import './styles/navigation.scss';
 
 const Navigation = ({ authenticated }) => (
   <div className="navigation">

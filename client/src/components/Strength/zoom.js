@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import moment from 'moment';
-import './css/modalzoom.css';
+import './styles/modalzoom.scss';
 
 class Zoom extends Component {
 
