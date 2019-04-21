@@ -4,9 +4,8 @@ import PropTypes from 'prop-types';
 // Router
 import { NavLink, withRouter } from 'react-router-dom';
 // font awesome and css
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faGooglePlusG } from '@fortawesome/free-brands-svg-icons';
 import './styles/navigation.scss';
+import googleSignIn from './styles/btn_google_signin_dark_normal_web@2x.png';
 
 const Navigation = ({ authenticated }) => (
   <div className="navigation">
@@ -24,13 +23,15 @@ const Navigation = ({ authenticated }) => (
       </React.Fragment>
       :
       <React.Fragment>
-        <button className="signin" onClick={() => window.location.assign('auth/google')}>
-          <FontAwesomeIcon
-            icon={faGooglePlusG}
-            className="login"
-          />
-          <span className="signinfont">Sign In With Google</span>
-        </button>
+        <div
+          className="signin"
+          role="button"
+          tabIndex={0}
+          onKeyDown={() => {}}
+          onClick={() => window.location.assign('auth/google')}
+        >
+          <img alt="google" src={googleSignIn} className="google" />
+        </div>
 
       </React.Fragment>
     }

@@ -4,24 +4,20 @@
   justify-content: center;
   align-items: center;
   margin-bottom: 20px;
-  button:focus {outline:0;}
   .signin{
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background: #DB4437;
-    width: 300px;
-    padding: 10px;
-    border-radius: 5px;
-    color:white;
-    font-family: Roboto;
-    font-weight: bold;
+    width: 250px;
     cursor: pointer;
-    .signinfont{
-      font-size: 1em;
+    box-shadow: 5px 3px 3px 0px #978f8f;
+    outline: none;
+    border-radius: 3px;
+    &:active{
+      box-shadow: none;
+      transform: translateY(10px);
     }
-    .login{
-      font-size: 1.5em;
+    .google{
+      width:100%;
+      margin: 0;
+      
     }
   }
   .navitem{
