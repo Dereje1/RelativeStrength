@@ -22,21 +22,27 @@ body{
       display: flex;
       flex-direction: row;
       justify-content: space-around;
-      margin: 20px;
+      width: 100%;
+      background: yellow;
+      margin-bottom: 10px;
       .center{
-        border: 0px solid rgb(95, 159, 255);
-        padding:5px;
-        margin: 3px;
-        border-radius: 7px;
-        font-size: .7em;
+        border: 1px solid #d8dcd8;
+        width: 25%;
+        height: 60px;
+        padding-top: 15px;
+        font-size: 1em;
         font-weight: bold;
-        
+        text-align: center;
+        color: #f1f0f0;
         &.open{
-          background: rgb(30, 219, 30);
+          background: #0faa0f;
         }
         &.closed{
-          background: rgb(255, 68, 68);
-          color: white;
+          background: #d54545;
+        }
+        @media screen and (max-width: 500px) {
+            font-size: .75em;
+            padding-top: 20px;
         }
       }
     }
@@ -59,6 +65,7 @@ body{
     border-bottom-color: #f49b42;
     &.dataupdate{
       margin-top: 10px;
+      margin-bottom: 10px;
       width:15px;
       height: 15px;
       border: 20px solid black;

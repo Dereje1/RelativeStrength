@@ -16,7 +16,7 @@ import Constants from './constants/index';
 
 const { MT4_UPDATE_CYCLE, CLIENT_CHECK_INTERVAL } = Constants;
 
-class Main extends React.Component {
+class App extends React.Component {
 
   constructor(props) {
     super(props);
@@ -27,7 +27,7 @@ class Main extends React.Component {
   }
 
   componentDidMount() {
-    console.log('CDM Mounted for Main');
+    console.log('CDM Mounted for App');
     this.initialize();
   }
 
@@ -35,10 +35,11 @@ class Main extends React.Component {
     clearInterval(this.Interval);
   }
 
-  getLoadingClass = () => {
-    if ((this.state.secondsSinceUpdate - MT4_UPDATE_CYCLE) < -600) return 'Loading dataupdate mt4Down';
-    return 'Loading dataupdate fx';
-  }
+  getLoadingClass = () => (
+    this.state.secondsSinceUpdate - MT4_UPDATE_CYCLE < -600
+      ? 'Loading dataupdate mt4Down'
+      : 'Loading dataupdate fx'
+  )
 
   initialize = async () => {
     await this.props.getUser();
@@ -117,11 +118,11 @@ const mapDispatchToProps = dispatch =>
     setForexData,
   }, dispatch);
 
-Main.propTypes = {
+App.propTypes = {
   getUser: PropTypes.func.isRequired,
   getForexData: PropTypes.func.isRequired,
   setForexData: PropTypes.func.isRequired,
   forexData: PropTypes.objectOf(PropTypes.any).isRequired,
   user: PropTypes.objectOf(PropTypes.any).isRequired,
 };
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Main));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(App));
