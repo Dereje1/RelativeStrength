@@ -83,4 +83,3 @@ router.put('/api/addtrade', (req, res) => {
   );
 });
 module.exports = router;
-

@@ -13,4 +13,3 @@ module.exports = (app) => {
   routeConfig(app, passport); // load our routes and pass in our app and fully configured passport
   // end authentication
 };
-

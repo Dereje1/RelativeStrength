@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-// custom components
-import ClosedTradeDetail from './closedtradedetail';
 // bootstrap fontawesom and css
 import { Modal, ModalHeader, ModalBody } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowUp, faArrowDown } from '@fortawesome/free-solid-svg-icons';
+// custom components
+import ClosedTradeDetail from './closedtradedetail';
 import './styles/records.scss';
 
 class TradeInfo extends Component {
@@ -16,7 +16,8 @@ class TradeInfo extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.show !== this.props.show) this.initializeForm();
+    const { show } = this.props;
+    if (prevProps.show !== show) this.initializeForm();
   }
 
   initializeForm = () => {
@@ -24,30 +25,33 @@ class TradeInfo extends Component {
     this.setState(emptyForm);
   }
 
+  // eslint-disable-next-line react/destructuring-assignment
   cancelDetail = () => this.props.onToggle();
 
-  modalBodyRender = () =>
-    (
-      <ClosedTradeDetail
-        trade={this.props.trade}
-        fxLastPrices={this.props.fxLastPrices}
-      />
-    );
+  modalBodyRender = () => (
+    <ClosedTradeDetail
+      // eslint-disable-next-line react/destructuring-assignment
+      trade={this.props.trade}
+      // eslint-disable-next-line react/destructuring-assignment
+      fxLastPrices={this.props.fxLastPrices}
+    />
+  );
 
 
   render() {
-    if (!Object.keys(this.props.trade).length) return null;
+    const { trade, show } = this.props;
+    if (!Object.keys(trade).length) return null;
     return (
       <Modal
-        isOpen={this.props.show}
+        isOpen={show}
         toggle={this.cancelDetail}
       >
         <ModalHeader toggle={this.cancelDetail} className="CustomModalHeader">
           <div>
-            {`${this.props.trade.symbol} `}
+            {`${trade.symbol} `}
             <FontAwesomeIcon
-              className={this.props.trade.long ? 'directionalArrowUp' : 'directionalArrowDown'}
-              icon={this.props.trade.long ? faArrowUp : faArrowDown}
+              className={trade.long ? 'directionalArrowUp' : 'directionalArrowDown'}
+              icon={trade.long ? faArrowUp : faArrowDown}
             />
           </div>
         </ModalHeader>

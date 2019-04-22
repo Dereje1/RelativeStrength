@@ -7,103 +7,109 @@ import { SingleDatePicker } from 'react-dates';
 import 'react-dates/initialize';
 import 'react-dates/lib/css/_datepicker.css';
 // bootstrap
-import { Col, Form, FormGroup, Label, Input } from 'reactstrap';
+import {
+  Col, Form, FormGroup, Label, Input,
+} from 'reactstrap';
 
 const inputSize = 10;
 const labelSize = 2;
 
-const AddPositionForm = props => (
-  !props.loading ?
-    <Form>
-      <FormGroup row>
-        <Label for="entrydate" sm={labelSize}>Date</Label>
-        <Col sm={inputSize}>
-          <SingleDatePicker
-            date={props.date} // momentPropTypes.momentObj or null
-            onDateChange={date => props.sendFormValue(date)} // PropTypes.func.isRequired
-            focused={props.focused} // PropTypes.bool
-            onFocusChange={() => props.onDateFocus()} // PropTypes.func.isRequired
-            numberOfMonths={1}
-            isOutsideRange={() => false}
-            id="Trade_Exit_Date"
-          />
-        </Col>
-      </FormGroup>
+const AddPositionForm = ({
+  loading, date, sendFormValue, focused,
+  onDateFocus, price, validity, size,
+  stop, comments, risk,
+}) => (
+  !loading
+    ? (
+      <Form>
+        <FormGroup row>
+          <Label for="entrydate" sm={labelSize}>Date</Label>
+          <Col sm={inputSize}>
+            <SingleDatePicker
+              date={date} // momentPropTypes.momentObj or null
+              onDateChange={d => sendFormValue(d)} // PropTypes.func.isRequired
+              focused={focused} // PropTypes.bool
+              onFocusChange={() => onDateFocus()} // PropTypes.func.isRequired
+              numberOfMonths={1}
+              isOutsideRange={() => false}
+              id="Trade_Exit_Date"
+            />
+          </Col>
+        </FormGroup>
 
-      <FormGroup row>
-        <Label for="price" sm={labelSize}>Price</Label>
-        <Col sm={inputSize}>
-          <Input
-            type="text"
-            name="price"
-            id="price"
-            value={props.price}
-            onChange={event => props.sendFormValue(event)}
-            {...props.validity('price')}
-            autoComplete="off"
-          />
-        </Col>
-      </FormGroup>
+        <FormGroup row>
+          <Label for="price" sm={labelSize}>Price</Label>
+          <Col sm={inputSize}>
+            <Input
+              type="text"
+              name="price"
+              id="price"
+              value={price}
+              onChange={event => sendFormValue(event)}
+              {...validity('price')}
+              autoComplete="off"
+            />
+          </Col>
+        </FormGroup>
 
-      <FormGroup row>
-        <Label for="size" sm={labelSize}>Size</Label>
-        <Col sm={inputSize}>
-          <Input
-            type="text"
-            name="size"
-            id="positionsize"
-            value={props.size}
-            onChange={event => props.sendFormValue(event)}
-            {...props.validity('size')}
-            autoComplete="off"
-          />
-        </Col>
-      </FormGroup>
+        <FormGroup row>
+          <Label for="size" sm={labelSize}>Size</Label>
+          <Col sm={inputSize}>
+            <Input
+              type="text"
+              name="size"
+              id="positionsize"
+              value={size}
+              onChange={event => sendFormValue(event)}
+              {...validity('size')}
+              autoComplete="off"
+            />
+          </Col>
+        </FormGroup>
 
-      <FormGroup row>
-        <Label for="stop" sm={2}>New Stop</Label>
-        <Col sm={10}>
-          <Input
-            type="text"
-            name="moveStop"
-            id="stop"
-            value={props.stop}
-            onChange={event => props.sendFormValue(event)}
-            {...props.validity('moveStop')}
-            autoComplete="off"
-          />
-        </Col>
-      </FormGroup>
+        <FormGroup row>
+          <Label for="stop" sm={2}>New Stop</Label>
+          <Col sm={10}>
+            <Input
+              type="text"
+              name="moveStop"
+              id="stop"
+              value={stop}
+              onChange={event => sendFormValue(event)}
+              {...validity('moveStop')}
+              autoComplete="off"
+            />
+          </Col>
+        </FormGroup>
 
-      <FormGroup row>
-        <Label for="comments" sm={labelSize}>Notes</Label>
-        <Col sm={inputSize}>
-          <Input
-            type="textarea"
-            name="comments"
-            id="comments"
-            value={props.comments}
-            onChange={event => props.sendFormValue(event)}
-            {...props.validity('comments')}
-            autoComplete="off"
-          />
-        </Col>
-      </FormGroup>
-      <Label for="risk" className="riskDisplay" sm={12}>
-        <strong>
-          {
-            props.risk ?
-              `Open Risk: $${props.risk.newRisk}
-             Cost Basis: ${props.risk.newCostBasis[1]}
-             Position Size: ${props.risk.newCostBasis[0]}`
-              :
-              null
-          }
-        </strong>
-      </Label>
-    </Form>
-    :
-    <div className="Loading" />
+        <FormGroup row>
+          <Label for="comments" sm={labelSize}>Notes</Label>
+          <Col sm={inputSize}>
+            <Input
+              type="textarea"
+              name="comments"
+              id="comments"
+              value={comments}
+              onChange={event => sendFormValue(event)}
+              {...validity('comments')}
+              autoComplete="off"
+            />
+          </Col>
+        </FormGroup>
+        <Label for="risk" className="riskDisplay" sm={12}>
+          <strong>
+            {
+              risk
+                ? `Open Risk: $${risk.newRisk}
+             Cost Basis: ${risk.newCostBasis[1]}
+             Position Size: ${risk.newCostBasis[0]}`
+                : null
+            }
+          </strong>
+        </Label>
+      </Form>
+    )
+    : <div className="Loading" />
 );
 
 AddPositionForm.defaultProps = {

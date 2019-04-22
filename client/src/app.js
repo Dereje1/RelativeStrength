@@ -35,75 +35,86 @@ class App extends React.Component {
     clearInterval(this.Interval);
   }
 
-  getLoadingClass = () => (
-    this.state.secondsSinceUpdate - MT4_UPDATE_CYCLE < -600
+  getLoadingClass = () => {
+    const { secondsSinceUpdate } = this.state;
+    return secondsSinceUpdate - MT4_UPDATE_CYCLE < -600
       ? 'Loading dataupdate mt4Down'
-      : 'Loading dataupdate fx'
-  )
+      : 'Loading dataupdate fx';
+  }
 
   initialize = async () => {
-    await this.props.getUser();
+    const { getUser: getUserStatus, setForexData: updateLocalData } = this.props;
+    await getUserStatus();
 
     if (!localStorage.getItem('forexData')) { // no local storage data
       this.updateForexData();
     } else {
-      await this.props.setForexData(); // set store with locally stored data
+      await updateLocalData(); // set store with locally stored data
       // check if current data has expired
-      if (mt4LastPush(this.props.forexData.aws.updated) < MT4_UPDATE_CYCLE) this.updateForexData();
+      const { forexData } = this.props;
+      if (mt4LastPush(forexData.aws.updated) < MT4_UPDATE_CYCLE) this.updateForexData();
       else {
         this.setState({
-          secondsSinceUpdate: mt4LastPush(this.props.forexData.aws.updated),
+          secondsSinceUpdate: mt4LastPush(forexData.aws.updated),
           fxOpenCenters: getForexHours(),
         });
       }
     }
     // start client interval
     this.Interval = setInterval(() => {
+      const { secondsSinceUpdate } = this.state;
       this.setState({
-        secondsSinceUpdate: this.state.secondsSinceUpdate - CLIENT_CHECK_INTERVAL,
+        secondsSinceUpdate: secondsSinceUpdate - CLIENT_CHECK_INTERVAL,
       });
-      if (this.state.secondsSinceUpdate < MT4_UPDATE_CYCLE) {
+      if (secondsSinceUpdate < MT4_UPDATE_CYCLE) {
         this.updateForexData();
       }
     }, CLIENT_CHECK_INTERVAL * 1000);
   }
 
   updateForexData = async () => {
-    await this.props.getForexData();
-    localStorage.setItem('forexData', JSON.stringify(this.props.forexData));
+    const { getForexData: newDataRequest } = this.props;
+    await newDataRequest();
+    const { forexData } = this.props;
+    localStorage.setItem('forexData', JSON.stringify(forexData));
     this.setState({
-      secondsSinceUpdate: mt4LastPush(this.props.forexData.aws.updated),
+      secondsSinceUpdate: mt4LastPush(forexData.aws.updated),
       fxOpenCenters: getForexHours(),
     });
   }
 
-  header = () =>
-    (
+  header = () => {
+    const { secondsSinceUpdate, fxOpenCenters } = this.state;
+    const { user } = this.props;
+    return (
       <div className="header">
         <div className="description">
-          {this.state.secondsSinceUpdate < MT4_UPDATE_CYCLE ?
-            <div className={this.getLoadingClass()} />
-            :
-            null
+          {secondsSinceUpdate < MT4_UPDATE_CYCLE
+            ? <div className={this.getLoadingClass()} />
+            : null
           }
           {
             <div className="forexHours">
-              <div className={`center ${this.state.fxOpenCenters.NEWYORK}`}>New York</div>
-              <div className={`center ${this.state.fxOpenCenters.LONDON}`}>London</div>
-              <div className={`center ${this.state.fxOpenCenters.TOKYO}`}>Tokyo</div>
-              <div className={`center ${this.state.fxOpenCenters.SYDNEY}`}>Sydney</div>
+              <div className={`center ${fxOpenCenters.NEWYORK}`}>New York</div>
+              <div className={`center ${fxOpenCenters.LONDON}`}>London</div>
+              <div className={`center ${fxOpenCenters.TOKYO}`}>Tokyo</div>
+              <div className={`center ${fxOpenCenters.SYDNEY}`}>Sydney</div>
             </div>
           }
         </div>
         <Navigation
-          authenticated={this.props.user.authenticated}
+          authenticated={user.authenticated}
         />
       </div>
-    )
+    );
+  }
+
 
   render() {
-    if (!Object.keys(this.props.forexData).length) return <div className="Loading" />;
-    if (!this.state.secondsSinceUpdate) return <div className="Loading" />;
+    const { secondsSinceUpdate } = this.state;
+    const { forexData } = this.props;
+    if (!Object.keys(forexData).length) return <div className="Loading" />;
+    if (!secondsSinceUpdate) return <div className="Loading" />;
     return this.header();
   }
 
@@ -111,12 +122,11 @@ class App extends React.Component {
 
 
 const mapStateToProps = state => state;
-const mapDispatchToProps = dispatch =>
-  bindActionCreators({
-    getUser,
-    getForexData,
-    setForexData,
-  }, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators({
+  getUser,
+  getForexData,
+  setForexData,
+}, dispatch);
 
 App.propTypes = {
   getUser: PropTypes.func.isRequired,

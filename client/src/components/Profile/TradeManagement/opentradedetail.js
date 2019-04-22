@@ -14,25 +14,27 @@ const generateEntryComments = (entryArr) => {
     return (
       <React.Fragment key={entry._id}>
         <div className="positionadded">{positionInfo}</div>
-        <p> {`${entry.comments}`}</p>
+        <p>
+          {`${entry.comments}`}
+        </p>
       </React.Fragment>
     );
   });
   return multipleEntryComments;
 };
 
-const OpenTradeDetail = (props) => {
+const OpenTradeDetail = ({ trade, fxLastPrices }) => {
   const {
     stop,
     entry,
-  } = props.trade;
+  } = trade;
 
   const {
     totalPips,
     totalDollars,
     openRiskPips,
     openRiskDollars,
-  } = getProfits([props.trade], props.fxLastPrices);
+  } = getProfits([trade], fxLastPrices);
 
   return (
     <div className="tradedetail">
@@ -51,7 +53,7 @@ const OpenTradeDetail = (props) => {
       <div className={`gainrisk ${totalDollars > 0 ? 'profitable' : 'loser'}`}>
         {
           `Stop: ${stop}
-          Last Price: ${props.fxLastPrices[props.trade.symbol]}
+          Last Price: ${fxLastPrices[trade.symbol]}
           Gain: ${totalPips} Pips, $${totalDollars}
           Open Risk: ${openRiskPips} Pips, $${openRiskDollars}`
         }

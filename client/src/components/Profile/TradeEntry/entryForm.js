@@ -8,7 +8,9 @@ import 'react-dates/lib/css/_datepicker.css';
 // bootstrap
 import { Input } from 'reactstrap';
 
-const EntryForm = props => (
+const EntryForm = ({
+  date, sendFormValue, focused, onDateFocus, currentState, validity, risk,
+}) => (
   <React.Fragment>
     <div className="formLabels">
       <span>Date</span>
@@ -17,10 +19,10 @@ const EntryForm = props => (
     <div className="dateSymbol">
       <div id="Trade_Entry_Date">
         <SingleDatePicker
-          date={props.date} // momentPropTypes.momentObj or null
-          onDateChange={date => props.sendFormValue(date)} // PropTypes.func.isRequired
-          focused={props.focused} // PropTypes.bool
-          onFocusChange={() => props.onDateFocus()} // PropTypes.func.isRequired
+          date={date} // momentPropTypes.momentObj or null
+          onDateChange={d => sendFormValue(d)} // PropTypes.func.isRequired
+          focused={focused} // PropTypes.bool
+          onFocusChange={() => onDateFocus()} // PropTypes.func.isRequired
           numberOfMonths={1}
           isOutsideRange={() => false}
           block
@@ -30,23 +32,26 @@ const EntryForm = props => (
         type="text"
         name="symbol"
         id="symbol"
-        value={props.currentState.symbol[0]}
-        onChange={event => props.sendFormValue(event)}
-        {...props.validity('symbol')}
+        value={currentState.symbol[0]}
+        onChange={event => sendFormValue(event)}
+        {...validity('symbol')}
         autoComplete="off"
       />
     </div>
     <div className="formLabels">
       <span>Direction</span>
-      <span>Price <strong>{props.currentState.lastPrice}</strong></span>
+      <span>
+        {'Price'}
+        <strong>{currentState.lastPrice}</strong>
+      </span>
     </div>
     <div className="directionPrice">
       <Input
         type="select"
         name="direction"
         id="direction"
-        value={props.currentState.direction[0]}
-        onChange={event => props.sendFormValue(event)}
+        value={currentState.direction[0]}
+        onChange={event => sendFormValue(event)}
       >
         <option>Long</option>
         <option>Short</option>
@@ -55,9 +60,9 @@ const EntryForm = props => (
         type="text"
         name="price"
         id="price"
-        value={props.currentState.price[0]}
-        onChange={event => props.sendFormValue(event)}
-        {...props.validity('price')}
+        value={currentState.price[0]}
+        onChange={event => sendFormValue(event)}
+        {...validity('price')}
         autoComplete="off"
       />
     </div>
@@ -70,18 +75,18 @@ const EntryForm = props => (
         type="text"
         name="size"
         id="positionsize"
-        value={props.currentState.size[0]}
-        onChange={event => props.sendFormValue(event)}
-        {...props.validity('size')}
+        value={currentState.size[0]}
+        onChange={event => sendFormValue(event)}
+        {...validity('size')}
         autoComplete="off"
       />
       <Input
         type="text"
         name="stop"
         id="stop"
-        value={props.currentState.stop[0]}
-        onChange={event => props.sendFormValue(event)}
-        {...props.validity('stop')}
+        value={currentState.stop[0]}
+        onChange={event => sendFormValue(event)}
+        {...validity('stop')}
         autoComplete="off"
       />
     </div>
@@ -93,19 +98,16 @@ const EntryForm = props => (
         type="textarea"
         name="comments"
         id="comments"
-        value={props.currentState.comments[0]}
-        onChange={event => props.sendFormValue(event)}
-        {...props.validity('comments')}
+        value={currentState.comments[0]}
+        onChange={event => sendFormValue(event)}
+        {...validity('comments')}
         autoComplete="off"
       />
     </div>
     <div className="riskDisplay">
       <strong>
         {
-          props.risk ?
-            `${props.risk}`
-            :
-            null
+          risk ? `${risk}` : null
         }
       </strong>
     </div>
