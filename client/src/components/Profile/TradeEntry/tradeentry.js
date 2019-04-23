@@ -100,9 +100,10 @@ class TradeEntry extends Component {
       // eslint-disable-next-line react/destructuring-assignment
       if (validatedInputs.includes(k) && !this.state[k][1]) buttonState = false;
     });
-    const { tradeModel, fxLastPrices } = this.state;
     if (buttonState) {
       await this.confirmTrade(false);
+      const { tradeModel } = this.state;
+      const { fxLastPrices } = this.props;
       const riskCalc = getProfits([tradeModel], fxLastPrices);
       const riskDisplay = `Risk: ${riskCalc.openRiskPips} Pips, $${riskCalc.openRiskDollars}`;
       this.setState({ readyToSubmit: true, risk: riskDisplay });
@@ -153,7 +154,7 @@ class TradeEntry extends Component {
   cancelTrade = () => {
     // if in confirmation mode no need to close the whole modal
     const { confirm } = this.state;
-    const { onToggle } = this.state;
+    const { onToggle } = this.props;
     if (!confirm) {
       this.setState({ confirm: false }, () => onToggle());
       return;
@@ -167,7 +168,9 @@ class TradeEntry extends Component {
     const { savedModels, confirmationModel } = this.state;
     if (!savedModels) {
       // nothing saved in local storage ... save first symbol
-      this.setState({ savedModels: [confirmationModel] }, () => localStorage.setItem('tradeideas', JSON.stringify(savedModels)));
+      this.setState({ savedModels: [confirmationModel] },
+        // eslint-disable-next-line react/destructuring-assignment
+        () => localStorage.setItem('tradeideas', JSON.stringify(this.state.savedModels)));
     } else {
       let copyOfSavedModels = JSON.parse(JSON.stringify(savedModels));
       const savedSymbolList = copyOfSavedModels.map(l => l.symbol);
@@ -180,7 +183,8 @@ class TradeEntry extends Component {
       }
       this.setState({
         savedModels: [...copyOfSavedModels, confirmationModel],
-      }, () => localStorage.setItem('tradeideas', JSON.stringify(savedModels)));
+      // eslint-disable-next-line react/destructuring-assignment
+      }, () => localStorage.setItem('tradeideas', JSON.stringify(this.state.savedModels)));
     }
     // this.cancelTrade(); // close modal after saving symbol
   }

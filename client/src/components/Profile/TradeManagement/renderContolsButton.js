@@ -4,7 +4,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Col, Button } from 'reactstrap';
 
-const RenderCondtrolsButton = ({
+const RenderControlsButton = ({
   controlButtons, handleButtonAction, moveStopButton, addPositionButton,
   exitButton,
 }) => {
@@ -90,8 +90,12 @@ const RenderCondtrolsButton = ({
   return null;
 };
 
-RenderCondtrolsButton.propTypes = {
-  controlButtons: PropTypes.objectOf(PropTypes.bool).isRequired,
+RenderControlsButton.defaultProps = {
+  controlButtons: null,
+};
+
+RenderControlsButton.propTypes = {
+  controlButtons: PropTypes.objectOf(PropTypes.bool),
   handleButtonAction: PropTypes.func.isRequired,
   moveStopButton: PropTypes.arrayOf(PropTypes.func).isRequired,
   addPositionButton: PropTypes.arrayOf(PropTypes.func).isRequired,
@@ -99,4 +103,4 @@ RenderCondtrolsButton.propTypes = {
 };
 
 
-export default RenderCondtrolsButton;
+export default RenderControlsButton;

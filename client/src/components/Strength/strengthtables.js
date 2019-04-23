@@ -54,7 +54,7 @@ class StrengthTables extends Component {
             role="presentation"
           >
             <div className="symbol">
-              {symbol}
+              {`${symbol} `}
               <span className="strength">
                 {strength}
               </span>
@@ -76,7 +76,7 @@ class StrengthTables extends Component {
           onMouseLeave={() => hovEnd()}
         >
           <div className="symbol">
-            {symbol}
+            {`${symbol} `}
             <span className="strength">
               {strength}
             </span>

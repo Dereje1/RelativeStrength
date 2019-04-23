@@ -41,7 +41,7 @@ const EntryForm = ({
     <div className="formLabels">
       <span>Direction</span>
       <span>
-        {'Price'}
+        {'Price '}
         <strong>{currentState.lastPrice}</strong>
       </span>
     </div>
