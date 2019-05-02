@@ -9,7 +9,7 @@ export const getPips = (symb, change) => {
   return (Math.round(change / 0.0001));
 };
 
-const getUSDPairPrices = (allPairPrices) => {
+export const getUSDPairPrices = (allPairPrices) => {
   const USDPairs = ['AUDUSD', 'EURUSD', 'USDJPY', 'GBPUSD', 'USDCAD', 'NZDUSD', 'USDCHF'];
   const USDPairPrices = {};
   USDPairs.forEach((USD) => {
