@@ -15,7 +15,7 @@ import AppRouter from './routers/AppRouter';
 import reducers from './reducers/index';
 
 // css
-import './stylesheets/style.css';
+import './index.scss';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 const middleware = applyMiddleware(thunk, logger);

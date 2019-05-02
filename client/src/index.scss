@@ -1,0 +1,93 @@
+//variable declaration in list form fot links only
+$a-tags: 'a, a:active, a:hover, a:visited, a:active, a:hover';
+
+body{
+    background: white;
+  }
+
+.header{
+  .description{
+    .title{
+      text-align: center;
+      font-weight: bold;
+      font-family: "Spectral SC";
+      &.valid{
+        color:#c45d1d;
+      }
+      &.expired{
+        color:red;
+      }
+    }
+    .forexHours{
+      display: flex;
+      flex-direction: row;
+      justify-content: space-around;
+      width: 100%;
+      background: yellow;
+      margin-bottom: 10px;
+      .center{
+        border: 1px solid #d8dcd8;
+        width: 25%;
+        height: 60px;
+        padding-top: 15px;
+        font-size: 1em;
+        font-weight: bold;
+        text-align: center;
+        color: #f1f0f0;
+        &.open{
+          background: #0faa0f;
+        }
+        &.closed{
+          background: #d54545;
+        }
+        @media screen and (max-width: 500px) {
+            font-size: .75em;
+            padding-top: 20px;
+        }
+      }
+    }
+  }
+}
+
+
+.Loading{
+    margin:0 auto;
+    border-radius: 50%;
+    animation-name: picloading;
+    animation-duration: 5s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    margin-top: 30px;
+    width:150px;
+    height: 150px;
+    border: 20px solid black;
+    border-top-color: #1a6aed;
+    border-bottom-color: #f49b42;
+    &.dataupdate{
+      margin-top: 10px;
+      margin-bottom: 10px;
+      width:15px;
+      height: 15px;
+      border: 20px solid black;
+      &.fx{
+        border-top-color: #049c2a;
+        border-bottom-color: #049c2a;
+      }
+      &.mt4Down{
+        border-top-color: #ed331a;
+        border-bottom-color: #ed331a;
+      }
+    }
+}
+  
+@keyframes picloading {
+  0%{
+    transform: rotate(0deg) scale(1);
+  }
+  50%{
+    transform: rotate(360deg) scale(1.05);
+  }
+  100%{
+    transform: rotate(720deg) scale(1);
+  }
+}

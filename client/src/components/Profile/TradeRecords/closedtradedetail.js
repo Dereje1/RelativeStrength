@@ -11,23 +11,25 @@ const generateEntryComments = (entryArr) => {
     return (
       <React.Fragment key={entry._id}>
         <div className="positionadded">{positionInfo}</div>
-        <p> {`${entry.comments}`}</p>
+        <p>
+          {`${entry.comments}`}
+        </p>
       </React.Fragment>
     );
   });
   return myParser;
 };
 
-const ClosedTradeDetail = (props) => {
+const ClosedTradeDetail = ({ trade, fxLastPrices }) => {
   const {
     entry,
     exit,
-  } = props.trade;
+  } = trade;
 
   const {
     totalPips,
     totalDollars,
-  } = getProfits([props.trade], props.fxLastPrices, true);
+  } = getProfits([trade], fxLastPrices, true);
 
   return (
     <div className="tradedetail">

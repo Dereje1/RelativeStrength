@@ -1,15 +1,27 @@
 const express = require('express');
 const path = require('path');
+const logger = require('morgan');
+const bodyParser = require('body-parser');
+const cookieSession = require('cookie-session');
 
 const app = express();
-const mainroute = require('./routes');
+// custom requirements
+const apiRoutes = require('./routes');
+const dbConnect = require('./models/db');
+const authentication = require('./Authentication/authserver');
 
-require('./models/db');
-require('./Authentication/authserver')(app); // add authentication
-
-app.use(mainroute);
-// server primary route
+// server primary build route
 app.use(express.static(path.join(__dirname, '../client/build')));
+app.use(logger('dev')); // log every request to the console
+app.use(bodyParser.json()); // get information from html forms
+app.use(cookieSession({
+  maxAge: 21 * 24 * 60 * 60 * 1000,
+  keys: [process.env.SESSION_SECRET],
+}));
+
+dbConnect(process.env.MONGOLAB_URI);
+authentication(app); // Pass app for authentication configuration
+app.use(apiRoutes);
 
 app.get('*', (req, res) => {
   res.sendFile(path.resolve(__dirname, '../client/build', 'index.html'));

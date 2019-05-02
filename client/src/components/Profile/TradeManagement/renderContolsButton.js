@@ -4,75 +4,84 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Col, Button } from 'reactstrap';
 
-const RenderCondtrolsButton = (props) => {
+const RenderControlsButton = ({
+  controlButtons, handleButtonAction, moveStopButton, addPositionButton,
+  exitButton,
+}) => {
   // conditionally render modal footer depending on stop move / exit or info
-  if (!props.controlButtons) return null;
-  else if (props.controlButtons.full) {
+  if (!controlButtons) return null;
+  if (controlButtons.full) {
     return (
       <React.Fragment>
         <div className="managementbuttons">
           <Button
             color="primary"
             className="managetradebutton"
-            onClick={() => props.handleButtonAction('moveStop')}
-          >Move Stop
+            onClick={() => handleButtonAction('moveStop')}
+          >
+            {'Move Stop'}
           </Button>
           <Button
             color="danger"
             className="managetradebutton"
-            onClick={() => props.handleButtonAction('addPoisition')}
-          >Add Position
+            onClick={() => handleButtonAction('addPoisition')}
+          >
+            {'Add Position'}
           </Button>
           <Button
             color="warning"
             className="managetradebutton"
-            onClick={() => props.handleButtonAction('exitTrade')}
-          >Close Trade
+            onClick={() => handleButtonAction('exitTrade')}
+          >
+            {'Close Trade'}
           </Button>
         </div>
       </React.Fragment>
     );
-  } else if (props.controlButtons.moveStop) {
+  } if (controlButtons.moveStop) {
     return (
       <React.Fragment>
         <Col sm={12}>
           <Button
             color="primary"
             className="float-left"
-            onClick={props.moveStopButton[1]}
-            {...props.moveStopButton[0]()}
+            onClick={moveStopButton[1]}
+            {...moveStopButton[0]()}
             block
-          >Move Stop
+          >
+            {'Move Stop'}
           </Button>
         </Col>
       </React.Fragment>
     );
-  } else if (props.controlButtons.addPoisition) {
+  } if (controlButtons.addPoisition) {
     return (
       <React.Fragment>
         <Col sm={12}>
           <Button
             color="danger"
             className="float-left"
-            onClick={props.addPositionButton[1]}
-            {...props.addPositionButton[0]()}
+            onClick={addPositionButton[1]}
+            {...addPositionButton[0]()}
             block
-          >Add Position
+          >
+            {'Add Position'}
           </Button>
         </Col>
       </React.Fragment>
     );
-  } else if (props.controlButtons.exitTrade) {
+  } if (controlButtons.exitTrade) {
     return (
       <React.Fragment>
         <Col sm={12}>
           <Button
             color="warning"
             className="float-right"
-            onClick={props.exitButton[1]}
-            {...props.exitButton[0]()}
+            onClick={exitButton[1]}
+            {...exitButton[0]()}
             block
-          >Close Trade
+          >
+            {'Close Trade'}
           </Button>
         </Col>
       </React.Fragment>
@@ -81,8 +90,12 @@ const RenderCondtrolsButton = (props) => {
   return null;
 };
 
-RenderCondtrolsButton.propTypes = {
-  controlButtons: PropTypes.objectOf(PropTypes.bool).isRequired,
+RenderControlsButton.defaultProps = {
+  controlButtons: null,
+};
+
+RenderControlsButton.propTypes = {
+  controlButtons: PropTypes.objectOf(PropTypes.bool),
   handleButtonAction: PropTypes.func.isRequired,
   moveStopButton: PropTypes.arrayOf(PropTypes.func).isRequired,
   addPositionButton: PropTypes.arrayOf(PropTypes.func).isRequired,
@@ -90,4 +103,4 @@ RenderCondtrolsButton.propTypes = {
 };
 
 
-export default RenderCondtrolsButton;
+export default RenderControlsButton;

@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import StrengthTables from './strengthtables'; // displays strenngth data for different tfs
 import Zoom from './zoom'; // modal zoom for
 
-import './css/strength.css';
+import './styles/strength.scss';
 
 const mapStateToProps = state => state;
 
@@ -31,16 +31,18 @@ class Strength extends Component {
   }
 
   setTables() {
+    const { forexData } = this.props;
+    const { hovered } = this.state;
     return ['Past 24 Hours', 'Past 10 Days', 'Past Year'].map((tf, idx) => {
       const eventDisplay = idx === 0;
       return (
         <StrengthTables
-          alldata={this.props.forexData}
+          alldata={forexData}
           key={tf}
           timeframe={tf}
           hovStart={d => this.startHover(d)}
           hovEnd={d => this.stopHover(d)}
-          hoveredSymbol={this.state.hovered}
+          hoveredSymbol={hovered}
           displayEvents={eventDisplay}
           zoomed={c => this.onZoom(c)}
         />
@@ -61,17 +63,19 @@ class Strength extends Component {
   }
 
   render() {
-    if (Object.keys(this.props.forexData).length) {
+    const { forexData } = this.props;
+    const { displayModal, currecnyInfo } = this.state;
+    if (Object.keys(forexData).length) {
       return (
         <div>
           <div id="all">
             {this.setTables()}
           </div>
           <Zoom
-            message={this.state.displayModal}
+            message={displayModal}
             reset={() => this.setState({ displayModal: false })}
-            currency={this.state.currecnyInfo}
-            zoomInfo={this.props.forexData.highImpact}
+            currency={currecnyInfo}
+            zoomInfo={forexData.highImpact}
           />
         </div>
       );

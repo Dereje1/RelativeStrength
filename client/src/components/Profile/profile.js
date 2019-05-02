@@ -3,14 +3,14 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 // redux read only
 import { connect } from 'react-redux';
+// bootstrap and css
+import { Button, ButtonGroup } from 'reactstrap';
 // custom components
 import TradeEntry from './TradeEntry/tradeentry';
 import TradeTable from './tradetable';
 // api calls
 import { getOpenTrades, getClosedTrades } from '../../utilitiy/api';
-// bootstrap and css
-import { Button, ButtonGroup } from 'reactstrap';
-import './css/profile.css';
+import './styles/profile.scss';
 
 const mapStateToProps = state => state;
 class Profile extends Component {
@@ -27,16 +27,18 @@ class Profile extends Component {
   }
 
   componentDidMount() {
-    if (this.props.user.authenticated && Object.keys(this.props.forexData).length) {
+    const { user, forexData } = this.props;
+    if (user.authenticated && Object.keys(forexData).length) {
       this.pullTradeData();
     }
   }
 
   componentDidUpdate(prevProps) {
     // on manual refresh of /profile route need to pull trade data again
+    const { user, forexData } = this.props;
     const prevFxData = Object.keys(prevProps.forexData).length;
-    const currFxData = Object.keys(this.props.forexData).length;
-    if (currFxData > prevFxData && this.props.user.authenticated) this.pullTradeData();
+    const currFxData = Object.keys(forexData).length;
+    if (currFxData > prevFxData && user.authenticated) this.pullTradeData();
   }
 
   pullTradeData = () => {
@@ -79,86 +81,102 @@ class Profile extends Component {
   }
 
   entryModal = () => {
+    const { showEntry } = this.state;
     this.setState({
-      showEntry: !this.state.showEntry,
+      showEntry: !showEntry,
     });
   }
 
-  dateSelector = () =>
-    (
+  dateSelector = () => {
+    const { dateSelection } = this.state;
+    return (
       <div className="dateSelection">
         <ButtonGroup>
           <Button
-            color={this.state.dateSelection === 'all' ? 'primary' : 'secondary'}
+            color={dateSelection === 'all' ? 'primary' : 'secondary'}
             onClick={() => this.selectDates('all')}
-          >All
+          >
+            {'All'}
           </Button>
           <Button
-            color={this.state.dateSelection === 'thismonth' ? 'primary' : 'secondary'}
+            color={dateSelection === 'thismonth' ? 'primary' : 'secondary'}
             onClick={() => this.selectDates('thismonth')}
-          >This Month
+          >
+            {'This Month'}
           </Button>
           <Button
-            color={this.state.dateSelection === 'lastten' ? 'primary' : 'secondary'}
+            color={dateSelection === 'lastten' ? 'primary' : 'secondary'}
             onClick={() => this.selectDates('lastten')}
-          >Last Ten
+          >
+            {'Last Ten'}
           </Button>
         </ButtonGroup>
       </div>
-    )
+    );
+  }
 
-  noTrades = () => (
-    !this.state.loading ?
-      <React.Fragment>
-        <div className="notrades">No Trades Found in Database!</div>
-        {this.dateSelector()}
-      </React.Fragment>
-      :
-      <div className="Loading" />
-  )
+  noTrades = () => {
+    const { loading } = this.state;
+    return (
+      !loading
+        ? (
+          <React.Fragment>
+            <div className="notrades">No Trades Found in Database!</div>
+            {this.dateSelector()}
+          </React.Fragment>
+        )
+        : <div className="Loading" />
+    );
+  }
 
   render() {
-    if (this.props.user.authenticated && Object.keys(this.props.forexData).length) {
+    const {
+      showEntry, openTrades, closedTrades, loading,
+    } = this.state;
+    const { user, forexData } = this.props;
+    if (user.authenticated && Object.keys(forexData).length) {
       return (
         <React.Fragment>
           <hr />
           <div className="profile_items">
-            <div className="profile_header">{`${this.props.user.displayname}`}</div>
+            <div className="profile_header">{`${user.displayname}`}</div>
             <div>
               <Button onClick={this.entryModal}>Trade</Button>
             </div>
           </div>
           <TradeEntry
-            show={this.state.showEntry}
+            show={showEntry}
             onToggle={() => this.setState({ showEntry: false })}
-            userId={this.props.user.username}
-            fxLastPrices={this.props.forexData.aws.lastPrices}
+            userId={user.username}
+            fxLastPrices={forexData.aws.lastPrices}
             refreshData={() => this.pullTradeData()}
           />
           {
-            this.state.openTrades.length ?
-              <TradeTable
-                trades={this.state.openTrades}
-                fxLastPrices={this.props.forexData.aws.lastPrices}
-                refreshData={() => this.pullTradeData()}
-                open
-              />
-              :
-              null
+            openTrades.length
+              ? (
+                <TradeTable
+                  trades={openTrades}
+                  fxLastPrices={forexData.aws.lastPrices}
+                  refreshData={() => this.pullTradeData()}
+                  open
+                />
+              )
+              : null
           }
           <hr />
           {
-            this.state.closedTrades.length && !this.state.loading ?
-              <React.Fragment>
-                <TradeTable
-                  trades={this.state.closedTrades}
-                  fxLastPrices={this.props.forexData.aws.lastPrices}
-                  open={false}
-                />
-                {this.dateSelector()}
-              </React.Fragment>
-              :
-              this.noTrades()
+            closedTrades.length && !loading
+              ? (
+                <React.Fragment>
+                  <TradeTable
+                    trades={closedTrades}
+                    fxLastPrices={forexData.aws.lastPrices}
+                    open={false}
+                  />
+                  {this.dateSelector()}
+                </React.Fragment>
+              )
+              : this.noTrades()
           }
         </React.Fragment>
       );

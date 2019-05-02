@@ -5,8 +5,8 @@ const checkValidity = (fieldName, value, long, price) => {
   let isValid = false;
   switch (fieldName) {
     case 'symbol':
-      if ((/^[a-zA-Z]+$/.test(value)) &&
-        symbolList.includes(value.toUpperCase())) {
+      if ((/^[a-zA-Z]+$/.test(value))
+      && symbolList.includes(value.toUpperCase())) {
         isValid = true;
       }
       break;

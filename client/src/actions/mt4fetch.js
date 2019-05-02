@@ -2,26 +2,26 @@
 import axios from 'axios';
 import { filterEvents } from '../utilitiy/fxAndMt4';
 
-export const getForexData = () =>
-  async (dispatch) => { // note async dispatch for better management on client
-    await axios.get('/api/getraw')
-      .then((response) => {
-        dispatch({
-          type: 'GET_FOREX_DATA',
-          payload:
+// note async dispatch for better management on client
+export const getForexData = () => async (dispatch) => {
+  await axios.get('/api/getraw')
+    .then((response) => {
+      dispatch({
+        type: 'GET_FOREX_DATA',
+        payload:
            {
              aws: response.data,
              highImpact: filterEvents(response.data.weeklyevents),
            },
-        });
-      })
-      .catch((err) => {
-        dispatch({
-          type: 'GET_FOREX_DATA_REJECTED',
-          payload: err,
-        });
       });
-  };
+    })
+    .catch((err) => {
+      dispatch({
+        type: 'GET_FOREX_DATA_REJECTED',
+        payload: err,
+      });
+    });
+};
 
 export const setForexData = () => (
   {

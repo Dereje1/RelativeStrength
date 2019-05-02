@@ -1,0 +1,40 @@
+
+.navigation{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+  .signin{
+    width: 200px;
+    cursor: pointer;
+    box-shadow: 5px 3px 3px 0px #978f8f;
+    outline: none;
+    border-radius: 3px;
+    &:hover{
+      transform: translateY(-2px);
+    }
+    &:active{
+      box-shadow: none;
+      transform: translateY(10px);
+    }
+    .google{
+      width:100%;
+      margin: 0;
+      
+    }
+  }
+  .navitem{
+    display: flex;
+    align-items: center;
+    height: 50px;
+    padding: 10px;
+    background: #e6d2d5;
+    font-size: 1.25em;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    color:#23265a;
+    text-decoration: none;
+  }
+  .active{
+    background: orange;
+  }
+}

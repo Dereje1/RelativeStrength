@@ -3,19 +3,21 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import { Badge } from 'reactstrap';
-import './css/rstrength.css';
+import './styles/rstrength.scss';
 
 class StrengthTables extends Component {
 
   findClass(d) { // sets className for hovered symbol
-    if (d[0] === this.props.hoveredSymbol) return 'cardx lit';
+    const { hoveredSymbol } = this.props;
+    if (d[0] === hoveredSymbol) return 'cardx lit';
     // USD is base so add different class
     if (d[0] === 'USD') return 'cardx usd';
     return 'cardx';
   }
 
   symbolEvents(symbol) { // returns all highimpact events for a particular symbol
-    const symbEvent = this.props.alldata.highImpact.filter(h => h.country === symbol);
+    const { alldata } = this.props;
+    const symbEvent = alldata.highImpact.filter(h => h.country === symbol);
     let soonEvent = false; // checks for events within the next 12 hours
     symbEvent.forEach((ev) => {
       if (!soonEvent) {
@@ -28,9 +30,13 @@ class StrengthTables extends Component {
   }
 
   buildData() {
+    const {
+      alldata, timeframe, displayEvents,
+      hovStart, hovEnd, zoomed,
+    } = this.props;
     // extract data for given time frame (tf)
-    const strengthData = this.props.alldata.aws[this.props.timeframe];
-    if (this.props.displayEvents) { // events are only displayed for shortest (24hr) tf
+    const strengthData = alldata.aws[timeframe];
+    if (displayEvents) { // events are only displayed for shortest (24hr) tf
       return (strengthData.map((d, idx) => { // parse thru each symbol
         const symbol = d['0'];
         const strength = `${(Number(d['1'])).toFixed(2)}%`;
@@ -41,14 +47,17 @@ class StrengthTables extends Component {
           <div
             key={`${symbol}${idx + 1}`}
             className={this.findClass(d)}
-            onMouseEnter={() => this.props.hovStart(d)}
-            onMouseLeave={() => this.props.hovEnd()}
-            onClick={() => this.props.zoomed([d[0], totalEvents])}
+            onMouseEnter={() => hovStart(d)}
+            onMouseLeave={() => hovEnd()}
+            onClick={() => zoomed([d[0], totalEvents])}
             onKeyDown={() => {}}
             role="presentation"
           >
-            <div className="symbol">{symbol}
-              <span className="strength"> {strength}</span>
+            <div className="symbol">
+              {`${symbol} `}
+              <span className="strength">
+                {strength}
+              </span>
             </div>
             <Badge className={eventClass}>{totalEvents || null}</Badge>
           </div>
@@ -63,11 +72,14 @@ class StrengthTables extends Component {
         <div
           key={`${symbol}${idx + 1}`}
           className={this.findClass(d)}
-          onMouseEnter={() => this.props.hovStart(d)}
-          onMouseLeave={() => this.props.hovEnd()}
+          onMouseEnter={() => hovStart(d)}
+          onMouseLeave={() => hovEnd()}
         >
-          <div className="symbol">{symbol}
-            <span className="strength"> {strength}</span>
+          <div className="symbol">
+            {`${symbol} `}
+            <span className="strength">
+              {strength}
+            </span>
           </div>
         </div>
       );
@@ -75,9 +87,10 @@ class StrengthTables extends Component {
   }
 
   render() {
+    const { timeframe } = this.props;
     return (
       <div>
-        <h6 className="title">{this.props.timeframe}</h6>
+        <h6 className="title">{timeframe}</h6>
         <div className="mainframe">
           {this.buildData()}
         </div>
