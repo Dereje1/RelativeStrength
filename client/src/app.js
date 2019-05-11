@@ -89,14 +89,15 @@ class App extends React.Component {
     return (
       <div className="header">
         <div className="description">
-          {secondsSinceUpdate < MT4_UPDATE_CYCLE
-            ? <div className={this.getLoadingClass()} />
-            : null
-          }
           {
             <div className="forexHours">
               <div className={`center ${fxOpenCenters.NEWYORK}`}>New York</div>
               <div className={`center ${fxOpenCenters.LONDON}`}>London</div>
+              {
+                secondsSinceUpdate < MT4_UPDATE_CYCLE
+                  ? <div className={this.getLoadingClass()} />
+                  : null
+              }
               <div className={`center ${fxOpenCenters.TOKYO}`}>Tokyo</div>
               <div className={`center ${fxOpenCenters.SYDNEY}`}>Sydney</div>
             </div>
